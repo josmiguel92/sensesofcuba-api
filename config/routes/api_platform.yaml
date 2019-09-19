@@ -2,3 +2,11 @@ api_platform:
     resource: .
     type: api_platform
     prefix: /api
+
+authentication_token:
+    path: /authentication_token
+    methods: ['POST']
+
+app_logout:
+    path: /logout
+    methods: GET

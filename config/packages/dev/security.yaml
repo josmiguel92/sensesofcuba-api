@@ -1,0 +1,8 @@
+# see https://github.com/symfony/recipes/blob/master/symfony/security-bundle/3.3/config/packages/security.yaml
+security:
+
+
+    firewalls:
+        admin_temp:
+            pattern: ^/(admin|wdt)
+            security: false
