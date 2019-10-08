@@ -35,6 +35,12 @@ class Product // The class name will be used to name exposed resources
      */
     public $offers;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="products")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $category;
+
     public function __construct()
     {
         $this->offers = new ArrayCollection(); // Initialize $offers as a Doctrine collection
@@ -57,6 +63,18 @@ class Product // The class name will be used to name exposed resources
     {
         $offer->product = null;
         $this->offers->removeElement($offer);
+    }
+
+    public function getCategory(): ?Categories
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Categories $category): self
+    {
+        $this->category = $category;
+
+        return $this;
     }
     
     // ...
