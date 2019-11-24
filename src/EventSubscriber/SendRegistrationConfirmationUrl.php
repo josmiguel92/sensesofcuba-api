@@ -39,6 +39,7 @@ final class SendRegistrationConfirmationUrl implements MessageHandlerInterface
             ->addTo($user->getEmail())
             ->htmlTemplate('@email/user/confirm_registration.html.twig')
             ->textTemplate('@email/user/confirm_registration.txt.twig')
+            ->context($params)
         ;
 
         $this->mailer->send($message);

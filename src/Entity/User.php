@@ -49,11 +49,6 @@ class User extends BaseUser implements DomainEventHandler
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $title;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
     private $travelAgency;
 
     /**
@@ -67,10 +62,20 @@ class User extends BaseUser implements DomainEventHandler
     private $web;
 
 
-    public function __construct(UserId $id, string $email, string $password)
+    public function __construct(UserId $id, string $email, string $password, string  $name, string  $lastName,
+                                string  $enterprise, string $travelAgency, string $country, string $web = null)
     {
         $this->id = $id;
         $this->credential = new EmailPassword($email, $password);
+        $this->createdAt = new \DateTimeImmutable();
+        $this->confirmationToken = bin2hex(random_bytes(32));
+
+        $this->name = $name;
+        $this->lastName = $lastName;
+        $this->enterprise = $enterprise;
+        $this->travelAgency = $travelAgency;
+        $this->country = $country;
+        $this->web = $web;
     }
 
     public function getId(): UserId
@@ -129,24 +134,6 @@ class User extends BaseUser implements DomainEventHandler
     public function setEnterprise($enterprise): User
     {
         $this->enterprise = $enterprise;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getTitle()
-    {
-        return $this->title;
-    }
-
-    /**
-     * @param mixed $title
-     * @return User
-     */
-    public function setTitle($title): User
-    {
-        $this->title = $title;
         return $this;
     }
 
