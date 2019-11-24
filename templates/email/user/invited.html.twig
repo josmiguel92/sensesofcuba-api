@@ -1,0 +1,6 @@
+{% extends '@email/email.html.twig' %}
+
+{% block body %}
+    {% set url = url('register', {token: invitation.token}) %}
+    <p>Complete your registration at <a href="{{ url }}">{{ url }}</a></p>
+{% endblock %}

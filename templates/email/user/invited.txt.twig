@@ -1,0 +1,5 @@
+{% extends '@email/email.txt.twig' %}
+
+{% block body %}
+Complete your registration at {{ url('register', {token: invitation.token}) }}
+{% endblock %}

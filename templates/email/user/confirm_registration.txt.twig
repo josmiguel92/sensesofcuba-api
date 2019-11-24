@@ -1,0 +1,5 @@
+{% extends '@email/email.txt.twig' %}
+
+{% block body %}
+Confirm your account at {{ url('confirm_registration', {token: user.confirmationToken}) }}
+{% endblock %}

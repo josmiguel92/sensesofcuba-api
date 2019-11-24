@@ -7,6 +7,9 @@ use MsgPhp\User\User as BaseUser;
 use MsgPhp\User\UserId;
 use MsgPhp\Domain\Event\DomainEventHandler;
 use MsgPhp\Domain\Event\DomainEventHandlerTrait;
+use MsgPhp\Domain\Model\CreatedAtField;
+use MsgPhp\Domain\Model\CanBeConfirmed;
+use MsgPhp\Domain\Model\CanBeEnabled;
 use MsgPhp\User\Credential\EmailPassword;
 use MsgPhp\User\Model\EmailPasswordCredential;
 use MsgPhp\User\Model\ResettablePassword;
@@ -21,6 +24,9 @@ class User extends BaseUser implements DomainEventHandler
     use EmailPasswordCredential;
     use ResettablePassword;
     use RolesField;
+    use CreatedAtField;
+    use CanBeEnabled;
+    use CanBeConfirmed;
 
     /** @ORM\Id() @ORM\GeneratedValue() @ORM\Column(type="msgphp_user_id", length=191) */
     private $id;
