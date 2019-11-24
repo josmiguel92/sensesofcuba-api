@@ -1,18 +1,12 @@
 # see https://github.com/symfony/recipes/blob/master/symfony/security-bundle/3.3/config/packages/security.yaml
 security:
     encoders:
-        App\Entity\User:
-            # Use native password encoder
-            # This value auto-selects the best possible hashing algorithm.
-            algorithm: auto
+        MsgPhp\User\Infrastructure\Security\UserIdentity: auto
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
-        # used to reload user from session & other features (e.g. switch_user)
-        app_user_provider:
-            entity:
-                class: App\Entity\User
-                property: email
-    
+        msgphp_user: { id: MsgPhp\User\Infrastructure\Security\UserIdentityProvider }
+        msgphp_user_jwt: { id: MsgPhp\User\Infrastructure\Security\Jwt\UserIdentityProvider }
+
     role_hierarchy:
         ROLE_ADMIN:       ROLE_USER
         ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
@@ -22,40 +16,58 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
-        admin_temp:
-            pattern: ^/admin
-            security: false
+        api_login:
+            pattern: ^/api/login
+            anonymous: true
+            stateless: true
+            provider: msgphp_user_jwt
+            json_login:
+                check_path: /api/login
+                username_path: email
+                password_path: password
+                success_handler: lexik_jwt_authentication.handler.authentication_success
+                failure_handler: lexik_jwt_authentication.handler.authentication_failure
 
         api:
-            pattern: ^/api/
-            stateless: true
+            pattern: ^/api
             anonymous: true
-            provider: app_user_provider
+            stateless: true
+            provider: msgphp_user_jwt
             guard:
                 authenticators:
                     - lexik_jwt_authentication.jwt_token_authenticator
 
         main:
-            stateless: true
             anonymous: true
-            provider: app_user_provider
-            json_login:
-                check_path: /authentication_token
-                username_path: email
-                password_path: password
-                success_handler: lexik_jwt_authentication.handler.authentication_success
-                failure_handler: lexik_jwt_authentication.handler.authentication_failure
-            guard:
-                authenticators:
-                    - lexik_jwt_authentication.jwt_token_authenticator
+            provider: msgphp_user
+            form_login:
+                login_path: login
+                check_path: login
+                default_target_path: home
+                username_parameter: email
+                password_parameter: password
+                remember_me: true
+            remember_me:
+                secret: '%kernel.secret%'
+                remember_me_parameter: remember_me
+            logout:
+                path: app_logout
+            switch_user:
+                role: ROLE_ADMIN
+
+
+            # activate different ways to authenticate
+
+            # http_basic: true
+            # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
+
+            # https://symfony.com/doc/current/security/form_login_setup.html
 
 
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/api,       roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/admin, roles: IS_AUTHENTICATED_ANONYMOUSLY } #TODO: set as ROLE_ADMIN
+        # - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api, roles: ROLE_USER }
-        - { path: ^/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
