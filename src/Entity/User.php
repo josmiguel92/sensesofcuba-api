@@ -25,6 +25,42 @@ class User extends BaseUser implements DomainEventHandler
     /** @ORM\Id() @ORM\GeneratedValue() @ORM\Column(type="msgphp_user_id", length=191) */
     private $id;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $name;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $lastName;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $enterprise;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $title;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $travelAgency;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $country;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $web;
+
+
     public function __construct(UserId $id, string $email, string $password)
     {
         $this->id = $id;
@@ -35,4 +71,132 @@ class User extends BaseUser implements DomainEventHandler
     {
         return $this->id;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param mixed $name
+     * @return User
+     */
+    public function setName($name): User
+    {
+        $this->name = $name;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLastName()
+    {
+        return $this->lastName;
+    }
+
+    /**
+     * @param mixed $lastName
+     * @return User
+     */
+    public function setLastName($lastName): User
+    {
+        $this->lastName = $lastName;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getEnterprise()
+    {
+        return $this->enterprise;
+    }
+
+    /**
+     * @param mixed $enterprise
+     * @return User
+     */
+    public function setEnterprise($enterprise): User
+    {
+        $this->enterprise = $enterprise;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * @param mixed $title
+     * @return User
+     */
+    public function setTitle($title): User
+    {
+        $this->title = $title;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTravelAgency()
+    {
+        return $this->travelAgency;
+    }
+
+    /**
+     * @param mixed $travelAgency
+     * @return User
+     */
+    public function setTravelAgency($travelAgency): User
+    {
+        $this->travelAgency = $travelAgency;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCountry()
+    {
+        return $this->country;
+    }
+
+    /**
+     * @param mixed $country
+     * @return User
+     */
+    public function setCountry($country): User
+    {
+        $this->country = $country;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getWeb()
+    {
+        return $this->web;
+    }
+
+    /**
+     * @param mixed $web
+     * @return User
+     */
+    public function setWeb($web): User
+    {
+        $this->web = $web;
+        return $this;
+    }
+
+
 }
