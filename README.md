@@ -7,7 +7,7 @@ This is a project from habana.tech
 
 Luego de pedir las credenciales al usuario, las envias como sigue:
 
-	url:		/authentication_token	
+	url:		/api/login	
 	method:		POST	
 	JSON:		{"email":"user@domain.com","password":"password"}
 
