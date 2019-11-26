@@ -1,0 +1,24 @@
+easy_admin:
+    entities:
+      Product:
+        class: App\Entity\Product
+        list:
+          fields:
+            - { property: 'title' }
+            - { property: 'getImageWebPath', type: 'file', template: 'admin/partial/image.html.twig' }
+            - { property: 'getFileWebPath',  type: 'file', template: 'admin/partial/file.html.twig' }
+        # ...
+        show:
+          fields:
+            - { property: 'title' }
+            - { property: 'getImageWebPath', type: 'file', template: 'admin/partial/image.html.twig' }
+            - { property: 'getFileWebPath',  type: 'file', template: 'admin/partial/file.html.twig' }
+        form:
+          fields:
+            - { property: 'title' }
+            - { property: 'file', type: 'file' }
+            - { property: 'image', type: 'file' }
+#        # List the entity class name you want to manage
+#        - App\Entity\Product
+#        - App\Entity\Category
+#        - App\Entity\User
