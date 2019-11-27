@@ -41,7 +41,6 @@ final class OnJWTAuthenticationSuccess implements EventSubscriberInterface
     }
 
 
-
     /**
      * @param AuthenticationSuccessEvent $event
      * Add to JWT response the user info on AuthenticationSuccessEvent
@@ -74,12 +73,13 @@ final class OnJWTAuthenticationSuccess implements EventSubscriberInterface
             $user = $event->getAuthenticationToken()->getUser();
             if($user instanceof UserInterface)
             {
+                $this->JWTTokenManager->setUserIdentityField('originUsername');
+
                 [$data['username'], $data['roles']] = $this->getUserDetails($user);
                 $data['token'] = $this->JWTTokenManager->create($user);
             }
 
-
-            dump($data);
+            setcookie('_socAuth', json_encode($data));
         }
 
     }
