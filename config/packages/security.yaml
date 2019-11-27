@@ -4,6 +4,9 @@ security:
         MsgPhp\User\Infrastructure\Security\UserIdentity: auto
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
+        chain_provider:
+            chain:
+                providers: [msgphp_user, msgphp_user_jwt]
         msgphp_user: { id: MsgPhp\User\Infrastructure\Security\UserIdentityProvider }
         msgphp_user_jwt: { id: MsgPhp\User\Infrastructure\Security\Jwt\UserIdentityProvider }
 
@@ -32,14 +35,14 @@ security:
             pattern: ^/api
             anonymous: true
             stateless: true
-            provider: msgphp_user_jwt
+            provider: chain_provider
             guard:
                 authenticators:
                     - lexik_jwt_authentication.jwt_token_authenticator
 
         main:
             anonymous: true
-            provider: msgphp_user
+            provider: chain_provider
             form_login:
                 login_path: login
                 check_path: login
@@ -67,7 +70,8 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/profile, roles: ROLE_USER }
         - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api, roles: ROLE_USER }

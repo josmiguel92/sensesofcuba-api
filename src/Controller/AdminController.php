@@ -17,4 +17,15 @@ class AdminController extends AbstractController
         ]);
     }
 
+
+    /**
+     * @Route("/", name="home")
+     */
+    public function home()
+    {
+        return $this->render('admin/index.html.twig', [
+            'controller_name' => 'AdminController',
+        ]);
+    }
+
 }
