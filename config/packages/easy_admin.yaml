@@ -4,20 +4,33 @@ easy_admin:
         class: App\Entity\Product
         list:
           fields:
+            - { property: 'id' }
             - { property: 'title' }
             - { property: 'getImageWebPath', type: 'file', template: 'admin/partial/image.html.twig' }
             - { property: 'getFileWebPath',  type: 'file', template: 'admin/partial/file.html.twig' }
+            - { property: 'category' }
         # ...
         show:
           fields:
             - { property: 'title' }
             - { property: 'getImageWebPath', type: 'file', template: 'admin/partial/image.html.twig' }
             - { property: 'getFileWebPath',  type: 'file', template: 'admin/partial/file.html.twig' }
+            - { property: 'category' }
         form:
           fields:
             - { property: 'title' }
             - { property: 'file', type: 'file' }
             - { property: 'image', type: 'file' }
+            - { property: 'category' }
+
+      Categories:
+        class: App\Entity\ProductCategory
+        form:
+          fields:
+            - { property: 'title' }
+#            - { property: 'ChildNodeOf', type: 'entity', type_options: { class:  'App\Entity\ProductCategory' } }
+            - { property: 'parent' }
+            - { property: 'childs' }
 #        # List the entity class name you want to manage
 #        - App\Entity\Product
 #        - App\Entity\Category

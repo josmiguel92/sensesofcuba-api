@@ -15,10 +15,9 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  * @ORM\HasLifecycleCallbacks
  */
 // The class name will be used to name exposed resources
-class Product implements ORMBehaviors\Tree\NodeInterface, \ArrayAccess
+class Product
 {
-    use ORMBehaviors\Tree\Node,
-        ORMBehaviors\Timestampable\Timestampable;
+    use ORMBehaviors\Timestampable\Timestampable;
 
     private $tempFile;
     private $tempImage;
@@ -74,7 +73,7 @@ class Product implements ORMBehaviors\Tree\NodeInterface, \ArrayAccess
         return $this->id;
     }
 
-    public function getImageAbsolutePath()
+    private function getImageAbsolutePath()
     {
         return null === $this->imagePath
             ? null
@@ -88,14 +87,14 @@ class Product implements ORMBehaviors\Tree\NodeInterface, \ArrayAccess
             : $this->getImageUploadDir().'/'.$this->imagePath;
     }
 
-    protected function getImageUploadRootDir()
+    private function getImageUploadRootDir()
     {
         // the absolute directory path where uploaded
         // documents should be saved
         return __DIR__.'/../../public/'.$this->getImageUploadDir();
     }
 
-    protected function getImageUploadDir()
+    private function getImageUploadDir()
     {
         // get rid of the __DIR__ so it doesn't screw up
         // when displaying uploaded doc/image in the view.
@@ -103,7 +102,7 @@ class Product implements ORMBehaviors\Tree\NodeInterface, \ArrayAccess
     }
 
 
-    public function getFileAbsolutePath()
+    private function getFileAbsolutePath()
     {
         return null === $this->filePath
             ? null
@@ -117,14 +116,14 @@ class Product implements ORMBehaviors\Tree\NodeInterface, \ArrayAccess
             : $this->getFileUploadDir().'/'.$this->filePath;
     }
 
-    protected function getFileUploadRootDir()
+    private function getFileUploadRootDir()
     {
         // the absolute directory path where uploaded
         // documents should be saved
         return __DIR__.'/../../public/'.$this->getFileUploadDir();
     }
 
-    protected function getFileUploadDir()
+    private function getFileUploadDir()
     {
         // get rid of the __DIR__ so it doesn't screw up
         // when displaying uploaded doc/image in the view.
@@ -168,6 +167,11 @@ class Product implements ORMBehaviors\Tree\NodeInterface, \ArrayAccess
      * @Assert\File(maxSize="6000000")
      */
     private $image;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\ProductCategory", inversedBy="products")
+     */
+    private $category;
 
     /**
      * Sets file.
@@ -282,4 +286,23 @@ class Product implements ORMBehaviors\Tree\NodeInterface, \ArrayAccess
         }
 
     }
+
+    public function getCategory(): ?ProductCategory
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?ProductCategory $category): self
+    {
+        $this->category = $category;
+
+        return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->title;
+    }
+
+
 }
