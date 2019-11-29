@@ -1,4 +1,17 @@
 easy_admin:
+    user:
+      name_property_path: 'originUsername'
+    site_name: 'Senses of Cuba Management'
+    list:
+      # hide actions by default in a dropdown menu...
+#      collapse_actions: true
+      actions: ['show', 'edit', 'delete']
+    design:
+        brand_color: '#fdc416'
+        #form_theme: ['@FOSCKEditor/Form/ckeditor_widget.html.twig']
+        form_theme:
+          - '@EasyAdmin/form/bootstrap_4.html.twig'
+          - '@FOSCKEditor/Form/ckeditor_widget.html.twig'
     entities:
       Product:
         class: App\Entity\Product
@@ -6,15 +19,15 @@ easy_admin:
           fields:
             - { property: 'id' }
             - { property: 'title' }
-            - { property: 'getImageWebPath', type: 'file', template: 'admin/partial/image.html.twig' }
-            - { property: 'getFileWebPath',  type: 'file', template: 'admin/partial/file.html.twig' }
+            - { property: 'getImageWebPath', type: 'file', template: 'admin/partial/image.html.twig',label: 'Image' }
+            - { property: 'getFileWebPath',  type: 'file', template: 'admin/partial/file.html.twig' , label: 'PDF'}
             - { property: 'category' }
         # ...
         show:
           fields:
             - { property: 'title' }
-            - { property: 'getImageWebPath', type: 'file', template: 'admin/partial/image.html.twig' }
-            - { property: 'getFileWebPath',  type: 'file', template: 'admin/partial/file.html.twig' }
+            - { property: 'getImageWebPath', type: 'file', template: 'admin/partial/image.html.twig', label: 'Image' }
+            - { property: 'getFileWebPath',  type: 'file', template: 'admin/partial/file.html.twig' , label: 'PDF'}
             - { property: 'category' }
         form:
           fields:
@@ -30,7 +43,8 @@ easy_admin:
             - { property: 'title' }
 #            - { property: 'ChildNodeOf', type: 'entity', type_options: { class:  'App\Entity\ProductCategory' } }
             - { property: 'parent' }
-            - { property: 'childs' }
+
+
 #        # List the entity class name you want to manage
 #        - App\Entity\Product
 #        - App\Entity\Category

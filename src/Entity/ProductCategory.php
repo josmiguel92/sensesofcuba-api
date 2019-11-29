@@ -2,14 +2,12 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Model as ORMBehaviors;
 
 /**
- * @ApiResource()
  * @ORM\Entity(repositoryClass="App\Repository\ProductCategoryRepository")
  * @ORM\HasLifecycleCallbacks()
  */
@@ -35,19 +33,19 @@ class ProductCategory implements ORMBehaviors\Tree\NodeInterface, \ArrayAccess
     private $products;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\ProductCategory", inversedBy="childs")
+     * @ORM\ManyToOne(targetEntity="App\Entity\ProductCategory", inversedBy="children")
      */
     private $parent;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\ProductCategory", mappedBy="parent")
      */
-    private $childs;
+    private $children;
 
     public function __construct()
     {
         $this->products = new ArrayCollection();
-        $this->childs = new ArrayCollection();
+        $this->children = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -100,11 +98,12 @@ class ProductCategory implements ORMBehaviors\Tree\NodeInterface, \ArrayAccess
 
     public function __toString()
     {
-        return $this->parent ? $this->parent . " / ". $this->title : $this->title;
+        return $this->parent ? $this->parent . " »» ". $this->title : $this->title;
+//        return $this->title;
     }
 
     public function getParent(): ?self
-    {
+    {;
         return $this->parent;
     }
 
@@ -118,25 +117,25 @@ class ProductCategory implements ORMBehaviors\Tree\NodeInterface, \ArrayAccess
     /**
      * @return Collection|self[]
      */
-    public function getChilds(): Collection
+    public function getChildren(): Collection
     {
-        return $this->childs;
+        return $this->children;
     }
 
-    public function addChild(self $child): self
+    public function addChildren(self $child): self
     {
-        if (!$this->childs->contains($child)) {
-            $this->childs[] = $child;
+        if (!$this->children->contains($child)) {
+            $this->children[] = $child;
             $child->setParent($this);
         }
 
         return $this;
     }
 
-    public function removeChild(self $child): self
+    public function removeChildren(self $child): self
     {
-        if ($this->childs->contains($child)) {
-            $this->childs->removeElement($child);
+        if ($this->children->contains($child)) {
+            $this->children->removeElement($child);
             // set the owning side to null (unless already changed)
             if ($child->getParent() === $this) {
                 $child->setParent(null);
@@ -152,8 +151,9 @@ class ProductCategory implements ORMBehaviors\Tree\NodeInterface, \ArrayAccess
      */
     public function updateParentNode()
     {
-        if($this->getParent())
+        if($this->getParent()) {
             $this->setChildNodeOf($this->getParent());
+        }
     }
 
 

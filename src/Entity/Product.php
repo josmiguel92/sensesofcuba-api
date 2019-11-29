@@ -3,14 +3,13 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Knp\DoctrineBehaviors\Model as ORMBehaviors;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use App\Entity\User;
 
 /**
- * @ApiResource
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks
  */

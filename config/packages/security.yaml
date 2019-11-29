@@ -41,6 +41,7 @@ security:
                     - lexik_jwt_authentication.jwt_token_authenticator
 
         main:
+            pattern: ^/
             anonymous: true
             provider: chain_provider
             form_login:
@@ -55,9 +56,6 @@ security:
                 remember_me_parameter: remember_me
             logout:
                 path: app_logout
-            switch_user:
-                role: ROLE_ADMIN
-
 
             # activate different ways to authenticate
 
