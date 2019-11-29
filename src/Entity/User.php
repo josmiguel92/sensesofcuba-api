@@ -14,6 +14,7 @@ use MsgPhp\User\Credential\EmailPassword;
 use MsgPhp\User\Model\EmailPasswordCredential;
 use MsgPhp\User\Model\ResettablePassword;
 use MsgPhp\User\Model\RolesField;
+use phpDocumentor\Reflection\Types\Boolean;
 
 /**
  * @ORM\Entity()
@@ -191,5 +192,45 @@ class User extends BaseUser implements DomainEventHandler
         return $this;
     }
 
+    public function getAllRolesAsString(){
+        $roles = [];
+        foreach ($this->getRoles() as $role)
+            $roles[] = $role->getRoleName();
 
+        return $roles;
+    }
+
+    public function setEnabled(bool $enabled)
+    {
+        if($enabled)
+            $this->enable();
+        else
+            $this->disable();
+    }
+    
+    public function isAdmin():bool
+    {
+        return in_array('ROLE_ADMIN', array_values($this->getAllRolesAsString()), true);
+    }
+
+    public function getUserRoles()
+    {
+        if($this->isAdmin()) {
+            return 'ADMIN';
+        }
+        return 'USER';
+
+    }
+//
+//    public function setUserRoles($role)
+//    {
+//        if($role === 'ADMIN'){
+//            if(!$this->isAdmin()){
+//                $this->getRoles()->
+//            }
+//
+//        }
+//
+//
+//    }
 }

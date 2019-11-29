@@ -44,7 +44,41 @@ easy_admin:
 #            - { property: 'ChildNodeOf', type: 'entity', type_options: { class:  'App\Entity\ProductCategory' } }
             - { property: 'parent' }
 
-
+      Users:
+        class: App\Entity\User
+        show:
+          fields:
+            - { property: 'id' }
+            - { property: 'enabled' }
+            - { property: 'email' }
+            - { property: 'name' }
+            - { property: 'lastName' }
+            - { property: 'enterprise' }
+            - { property: 'travelAgency' }
+            - { property: 'country' }
+            - { property: 'web' }
+            - { property: 'getAllRolesAsString', type: 'array' }
+        form:
+          fields:
+            - { property: 'enabled' }
+            - { property: 'name' }
+            - { property: 'lastName' }
+            - { property: 'enterprise' }
+            - { property: 'travelAgency' }
+            - { property: 'country' }
+            - { property: 'web' }
+            - { property: 'userRoles', type: 'choice', type_options: {choices: {ADMIN: 'ADMIN', USER: 'USER'}}}
+        list:
+          fields:
+            - { property: 'enabled' }
+            - { property: 'name' }
+            - { property: 'lastName' }
+            - { property: 'enterprise' }
+            - { property: 'travelAgency' }
+            - { property: 'Admin', type: 'boolean' }
+#            - { property: 'web' }
+#      UserRoles:
+#        class: App\Entity\UserRole
 #        # List the entity class name you want to manage
 #        - App\Entity\Product
 #        - App\Entity\Category
