@@ -6,6 +6,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Model as ORMBehaviors;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ProductCategoryRepository")
@@ -15,6 +17,9 @@ class ProductCategory implements ORMBehaviors\Tree\NodeInterface, \ArrayAccess
 {
     use ORMBehaviors\Tree\Node,
         ORMBehaviors\Timestampable\Timestampable;
+
+    private $tempImage;
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -42,11 +47,50 @@ class ProductCategory implements ORMBehaviors\Tree\NodeInterface, \ArrayAccess
      */
     private $children;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    public $imagePath;
+
     public function __construct()
     {
         $this->products = new ArrayCollection();
         $this->children = new ArrayCollection();
     }
+
+     private function getImageAbsolutePath()
+    {
+        return null === $this->imagePath
+            ? null
+            : $this->getImageUploadRootDir().'/'.$this->imagePath;
+    }
+
+    public function getImageWebPath()
+    {
+        return null === $this->imagePath
+            ? null
+            : $this->getImageUploadDir().'/'.$this->imagePath;
+    }
+
+    private function getImageUploadRootDir()
+    {
+        // the absolute directory path where uploaded
+        // documents should be saved
+        return __DIR__.'/../../public/'.$this->getImageUploadDir();
+    }
+
+    private function getImageUploadDir()
+    {
+        // get rid of the __DIR__ so it doesn't screw up
+        // when displaying uploaded doc/image in the view.
+        return 'uploads/images';
+    }
+
+
+    /**
+     * @Assert\File(maxSize="6000000")
+     */
+    private $image;
 
     public function getId(): ?int
     {
@@ -156,5 +200,92 @@ class ProductCategory implements ORMBehaviors\Tree\NodeInterface, \ArrayAccess
         }
     }
 
+
+      /**
+     * Sets file.
+     *
+     * @param UploadedFile|null $image
+     */
+    public function setImage(UploadedFile $image = null)
+    {
+        $this->image = $image;
+        // check if we have an old image path
+        if (isset($this->imagePath)) {
+            // store the old name to delete after the update
+            $this->temp = $this->imagePath;
+            $this->imagePath = null;
+        } else {
+            $this->imagePath = 'initial';
+        }
+    }
+
+    /**
+     * Get file.
+     *
+     * @return UploadedFile
+     */
+    public function getImage(): ?UploadedFile
+    {
+        return $this->image;
+    }
+
+     /**
+     * @ORM\PostPersist()
+     * @ORM\PostUpdate()
+     */
+    public function upload()
+    {
+        // the file property can be empty if the field is not required
+        if (null === $this->getImage()) {
+            return;
+        }
+
+        // use the original file name here but you should
+        // sanitize it at least to avoid any security issues
+
+        // move takes the target directory and then the
+        // target filename to move to
+
+        if($this->getImage()){
+            $this->getImage()->move(
+                $this->getImageUploadRootDir(),
+                $this->imagePath
+            );
+
+            if (isset($this->tempImage)) {
+                // delete the old image
+                unlink($this->getImageUploadRootDir().'/'.$this->tempImage);
+                // clear the temp image path
+                $this->tempImage = null;
+            }
+            $this->image = null;
+        }
+    }
+
+     /**
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     */
+    public function preUpload()
+    {
+
+        if (null !== $this->getImage()) {
+            // do whatever you want to generate a unique name
+            $filename = uniqid(mt_rand());
+            $this->imagePath = $filename.'.'.$this->getImage()->guessExtension();
+        }
+    }
+
+      /**
+     * @ORM\PostRemove()
+     */
+    public function removeUpload()
+    {
+        $file = $this->getImageAbsolutePath();
+        if ($file) {
+            @unlink($file);
+        }
+
+    }
 
 }

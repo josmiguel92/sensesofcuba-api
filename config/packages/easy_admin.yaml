@@ -42,6 +42,17 @@ easy_admin:
           fields:
             - { property: 'title' }
 #            - { property: 'ChildNodeOf', type: 'entity', type_options: { class:  'App\Entity\ProductCategory' } }
+            - { property: 'image', type: 'file' }
+            - { property: 'parent' }
+        show:
+          fields:
+            - { property: 'title' }
+            - { property: 'getImageWebPath', type: 'file', template: 'admin/partial/image.html.twig', label: 'Image' }
+            - { property: 'parent' }
+        list:
+          fields:
+            - { property: 'title' }
+            - { property: 'getImageWebPath', type: 'file', template: 'admin/partial/image.html.twig',label: 'Image' }
             - { property: 'parent' }
 
       Users:

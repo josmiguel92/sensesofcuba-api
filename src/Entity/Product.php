@@ -206,7 +206,6 @@ class Product
      */
     public function upload()
     {
-        var_dump([$this->getFileUploadRootDir(), $this->getImageUploadRootDir()]);
         // the file property can be empty if the field is not required
         if (null === $this->getFile() && null === $this->getImage()) {
             return;

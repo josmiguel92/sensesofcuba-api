@@ -6,4 +6,5 @@ knp_doctrine_behaviors:
     soft_deletable: true
     translatable: true
     tree: true
+    timestampable: true
     # All others behaviors are disabled
