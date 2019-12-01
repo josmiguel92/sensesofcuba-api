@@ -50,7 +50,10 @@ final class OnJWTAuthenticationSuccess implements EventSubscriberInterface
         $user = $event->getUser();
         $data = $event->getData();
 
-        [$data['username'], $data['roles']] = $this->getUserDetails($user);
+        foreach ($this->getUserDetails($user) as $key => $value){
+            $data[$key] = $value;
+        }
+        
 //        $data['username']  = $user->getOriginUsername();
 //        $data['roles']  = array_values($user->getRoles());
 
@@ -61,7 +64,12 @@ final class OnJWTAuthenticationSuccess implements EventSubscriberInterface
 
     private function getUserDetails(UserInterface $user): array
     {
-        return [$user->getOriginUsername(),  array_values($user->getRoles())];
+        //TODO: send id the user is aprobed...
+        $roleAdmin = in_array('ROLE_ADMIN', $user->getRoles(), true) ? 0 : null;
+        return [
+            'username' => $user->getOriginUsername(),
+            'roles' => $roleAdmin,
+            ];
     }
 
     public function addUserInfoOnSymfonyAuthenticationSuccess(SecurityAuthenticationSuccessEvent $event): void
@@ -69,13 +77,13 @@ final class OnJWTAuthenticationSuccess implements EventSubscriberInterface
         if($event->getAuthenticationToken()->getRoleNames())
         {
             $data = [];
-
             $user = $event->getAuthenticationToken()->getUser();
+
             if($user instanceof UserInterface)
             {
                 $this->JWTTokenManager->setUserIdentityField('originUsername');
 
-                [$data['username'], $data['roles']] = $this->getUserDetails($user);
+                $data = $this->getUserDetails($user);
                 $data['token'] = $this->JWTTokenManager->create($user);
             }
 

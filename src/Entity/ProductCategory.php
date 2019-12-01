@@ -13,10 +13,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity(repositoryClass="App\Repository\ProductCategoryRepository")
  * @ORM\HasLifecycleCallbacks()
  */
-class ProductCategory implements ORMBehaviors\Tree\NodeInterface, \ArrayAccess
+class ProductCategory
 {
-    use ORMBehaviors\Tree\Node,
-        ORMBehaviors\Timestampable\Timestampable;
+    use ORMBehaviors\Timestampable\Timestampable;
 
     private $tempImage;
 
@@ -189,16 +188,6 @@ class ProductCategory implements ORMBehaviors\Tree\NodeInterface, \ArrayAccess
         return $this;
     }
 
-    /**
-     * @ORM\PrePersist()
-     * @ORM\PreUpdate()
-     */
-    public function updateParentNode()
-    {
-        if($this->getParent()) {
-            $this->setChildNodeOf($this->getParent());
-        }
-    }
 
 
       /**

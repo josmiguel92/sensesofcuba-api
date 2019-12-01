@@ -18,7 +18,7 @@ class AdminController extends AbstractController
      */
     public function homepage(): \Symfony\Component\HttpFoundation\Response
     {
-        return new RedirectResponse("index.html");
+        return new RedirectResponse('index.html');
     }
 
 
@@ -33,9 +33,16 @@ class AdminController extends AbstractController
     /**
      * @Route("/logout", name="app_logout")
      */
-    public function logout()
+    public function logout(): RedirectResponse
     {
-        return new RedirectResponse("index.html");
+        return new RedirectResponse('index.html');
+    }
+    /**
+     * @Route("/api/login", name="app_login")
+     */
+    public function login(): JsonResponse
+    {
+        return new JsonResponse([]);
     }
 
 
@@ -76,7 +83,7 @@ class AdminController extends AbstractController
                     'created_on' =>  $product->getCreatedAt(),
                     'modified_on' =>  $product->getUpdatedAt(),
                     'image' => $product->getImageWebPath(),
-                    'child_of' => $product->getCategory() ? $product.$product->getCategory()->getId() : null,
+                    'child_of' => $product->getCategory() ? $category_id_str.$product->getCategory()->getId() : null,
                 ];
             }
         }
@@ -85,10 +92,9 @@ class AdminController extends AbstractController
     }
 
 
-
     /**
      * @Route("/api/documents", name="api_document")
-     * @param ProductCategoryRepository $categoryRepository
+     * @param DocumentRepository $documentRepository
      * @return JsonResponse
      */
     public function api_document(DocumentRepository $documentRepository): JsonResponse
