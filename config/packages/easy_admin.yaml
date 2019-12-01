@@ -55,6 +55,29 @@ easy_admin:
             - { property: 'getImageWebPath', type: 'file', template: 'admin/partial/image.html.twig',label: 'Image' }
             - { property: 'parent' }
 
+      Documents:
+        class: App\Entity\Document
+        list:
+          fields:
+            - { property: 'id' }
+            - { property: 'title' }
+            - { property: 'getImageWebPath', type: 'file', template: 'admin/partial/image.html.twig',label: 'Image' }
+            - { property: 'getFileWebPath',  type: 'file', template: 'admin/partial/file.html.twig' , label: 'PDF'}
+
+        # ...
+        show:
+          fields:
+            - { property: 'title' }
+            - { property: 'getImageWebPath', type: 'file', template: 'admin/partial/image.html.twig', label: 'Image' }
+            - { property: 'getFileWebPath',  type: 'file', template: 'admin/partial/file.html.twig' , label: 'PDF'}
+
+        form:
+          fields:
+            - { property: 'title' }
+            - { property: 'file', type: 'file' }
+            - { property: 'image', type: 'file' }
+
+
       Users:
         class: App\Entity\User
         show:
