@@ -10,6 +10,7 @@ security:
         msgphp_user: { id: MsgPhp\User\Infrastructure\Security\UserIdentityProvider }
         msgphp_user_jwt: { id: MsgPhp\User\Infrastructure\Security\Jwt\UserIdentityProvider }
 
+
     role_hierarchy:
         ROLE_ADMIN:       ROLE_USER
         ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
@@ -23,7 +24,7 @@ security:
             pattern: ^/api/login
             anonymous: true
             stateless: true
-            provider: msgphp_user_jwt
+            provider: chain_provider
             json_login:
                 check_path: /api/login
                 username_path: email
@@ -45,7 +46,7 @@ security:
             anonymous: true
             provider: chain_provider
             form_login:
-                login_path: login
+                login_path: /
                 check_path: login
                 default_target_path: home
                 username_parameter: email

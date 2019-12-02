@@ -34,9 +34,9 @@ final class OnJWTAuthenticationSuccess implements EventSubscriberInterface
             AuthenticationEvents::AUTHENTICATION_SUCCESS => [
                 ['addUserInfoOnJWTAuthenticationSuccess', 0],
             ],
-            SecurityAuthEvents::AUTHENTICATION_SUCCESS => [
-                ['addUserInfoOnSymfonyAuthenticationSuccess', 0]
-            ]
+//            SecurityAuthEvents::AUTHENTICATION_SUCCESS => [
+//                ['addUserInfoOnSymfonyAuthenticationSuccess', 0]
+//            ]
         ];
     }
 

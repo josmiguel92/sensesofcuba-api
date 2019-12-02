@@ -1,19 +1,44 @@
 easy_admin:
     user:
       name_property_path: 'originUsername'
-    site_name: 'Senses of Cuba Management'
+    site_name: 'Senses of Cuba <em style="font-size: 80%;">Management</em>'
     list:
       # hide actions by default in a dropdown menu...
 #      collapse_actions: true
       actions: ['show', 'edit', 'delete']
     design:
         brand_color: '#fdc416'
+        menu:
+          - { entity: 'Categories', label: 'Kind of products' }
+          - Products
+          - { entity: 'Documents', label: 'Documents About Cuba' }
+          - Users
         #form_theme: ['@FOSCKEditor/Form/ckeditor_widget.html.twig']
         form_theme:
           - '@EasyAdmin/form/bootstrap_4.html.twig'
           - '@FOSCKEditor/Form/ckeditor_widget.html.twig'
     entities:
-      Product:
+
+      Categories:
+        class: App\Entity\ProductCategory
+        form:
+          fields:
+            - { property: 'title' }
+            #            - { property: 'ChildNodeOf', type: 'entity', type_options: { class:  'App\Entity\ProductCategory' } }
+            - { property: 'image', type: 'file' }
+            - { property: 'parent' }
+        show:
+          fields:
+            - { property: 'title' }
+            - { property: 'getImageWebPath', type: 'file', template: 'admin/partial/image.html.twig', label: 'Image' }
+            - { property: 'parent' }
+        list:
+          fields:
+            - { property: 'title' }
+            - { property: 'getImageWebPath', type: 'file', template: 'admin/partial/image.html.twig',label: 'Image' }
+            - { property: 'parent' }
+
+      Products:
         class: App\Entity\Product
         list:
           fields:
@@ -35,25 +60,6 @@ easy_admin:
             - { property: 'file', type: 'file' }
             - { property: 'image', type: 'file' }
             - { property: 'category' }
-
-      Categories:
-        class: App\Entity\ProductCategory
-        form:
-          fields:
-            - { property: 'title' }
-#            - { property: 'ChildNodeOf', type: 'entity', type_options: { class:  'App\Entity\ProductCategory' } }
-            - { property: 'image', type: 'file' }
-            - { property: 'parent' }
-        show:
-          fields:
-            - { property: 'title' }
-            - { property: 'getImageWebPath', type: 'file', template: 'admin/partial/image.html.twig', label: 'Image' }
-            - { property: 'parent' }
-        list:
-          fields:
-            - { property: 'title' }
-            - { property: 'getImageWebPath', type: 'file', template: 'admin/partial/image.html.twig',label: 'Image' }
-            - { property: 'parent' }
 
       Documents:
         class: App\Entity\Document

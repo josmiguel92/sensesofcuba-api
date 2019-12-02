@@ -45,7 +45,7 @@ class ControllerSubscriber implements  EventSubscriberInterface{
 
     public function addContentAllowHeader(ResponseEvent $event)
     {
-        $event->getResponse()->headers->set("Access-Control-Allow-Origin", '192.168.43.139');
+//        $event->getResponse()->headers->set("Access-Control-Allow-Origin", '192.168.43.139');
         $event->getResponse()->headers->set("Access-Control-Allow-Methods", 'POST, GET, OPTIONS');
         //$event->getResponse()->headers->set("Access-Control-Allow-Headers", 'X-PINGOTHER');
     }
