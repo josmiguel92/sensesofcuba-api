@@ -34,7 +34,6 @@
         "twig/markdown-extra": "^3.0"
     },
     "require-dev": {
-        "api-platform/schema-generator": "^2.1",
         "symfony/maker-bundle": "^1.13"
     },
     "config": {
