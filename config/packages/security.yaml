@@ -51,12 +51,11 @@ security:
                 default_target_path: home
                 username_parameter: email
                 password_parameter: password
-                remember_me: true
-            remember_me:
-                secret: '%kernel.secret%'
-                remember_me_parameter: remember_me
             logout:
                 path: app_logout
+            guard:
+                authenticators:
+                    - lexik_jwt_authentication.jwt_token_authenticator
 
             # activate different ways to authenticate
 

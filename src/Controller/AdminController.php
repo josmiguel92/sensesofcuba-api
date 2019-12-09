@@ -23,14 +23,6 @@ class AdminController extends AbstractController
 
 
     /**
-     * @Route("/test", name="test")
-     */
-    public function test(): \Symfony\Component\HttpFoundation\Response
-    {
-        return $this->render("admin/index.html.twig");
-    }
-
-    /**
      * @Route("/logout", name="app_logout")
      */
     public function logout(): RedirectResponse
