@@ -37,10 +37,10 @@ class User extends BaseUser implements DomainEventHandler
      */
     private $name;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $lastName;
+//    /**
+//     * @ORM\Column(type="string", length=255)
+//     */
+//    private $lastName;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -63,7 +63,7 @@ class User extends BaseUser implements DomainEventHandler
     private $web;
 
 
-    public function __construct(UserId $id, string $email, string $password, string  $name, string  $lastName,
+    public function __construct(UserId $id, string $email, string $password, string  $name,
                                 string  $enterprise, string $travelAgency, string $country, string $web = null)
     {
         $this->id = $id;
@@ -72,7 +72,7 @@ class User extends BaseUser implements DomainEventHandler
         $this->confirmationToken = bin2hex(random_bytes(32));
 
         $this->name = $name;
-        $this->lastName = $lastName;
+
         $this->enterprise = $enterprise;
         $this->travelAgency = $travelAgency;
         $this->country = $country;
@@ -102,23 +102,23 @@ class User extends BaseUser implements DomainEventHandler
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getLastName()
-    {
-        return $this->lastName;
-    }
-
-    /**
-     * @param mixed $lastName
-     * @return User
-     */
-    public function setLastName($lastName): User
-    {
-        $this->lastName = $lastName;
-        return $this;
-    }
+//    /**
+//     * @return mixed
+//     */
+//    public function getLastName()
+//    {
+//        return $this->lastName;
+//    }
+//
+//    /**
+//     * @param mixed $lastName
+//     * @return User
+//     */
+//    public function setLastName($lastName): User
+//    {
+//        $this->lastName = $lastName;
+//        return $this;
+//    }
 
     /**
      * @return mixed
