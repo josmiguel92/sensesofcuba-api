@@ -1,0 +1,91 @@
+{#{% extends '@EasyAdmin/default/layout.html.twig' %}#}
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ product.id ? 'Edit' : 'Create new'}} Product{% endblock %}
+
+{% block body %}
+
+
+{#{% form_theme form '@EasyAdminBundle:form:bootstrap_4.html.twig' %}#}
+
+    <style>
+        .card .vich-image img{
+            display: none;
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
+          bsCustomFileInput.init()
+        })
+    </script>
+    <h2>{{ block('title') }}</h2>
+
+        {{ form_start(form) }}
+    <div class="row">
+        <div class="col-md-3">
+            Reference Name of the product
+        </div>
+        <div class="col-md-7">
+            {{ form_widget(form.referenceName) }}
+        </div>
+        <div class="col-md-2">
+            {{ form_widget(form.enabled) }}
+        </div>
+
+    </div>
+<hr>
+    <div class="row">
+        <div class="col-md-3">
+            Parent in the Product tree
+        </div>
+        <div class="col-md-7">
+            {{ form_widget(form.parent) }}
+        </div>
+    </div>
+<hr>
+    <div class="row">
+        <div class="col-md-3">
+            Translations
+        </div>
+        <div class="col-md-9">
+            {{ form_widget(form.translations) }}
+        </div>
+    </div>
+<hr>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                {% if product.image %}
+                <img src="{{ asset('uploads/images/' ~ product.image.imageName)}}" class="card-img-top" style="max-height: 20vh; min-width: 25vw;">
+                {% endif %}
+                <div class="card-body">
+                    <h5>Product Image</h5>
+                    <div class="form-group">
+                        {{ form_row(form.image.title) }}
+                        {{ form_row(form.image.imageFile) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card"  >
+                {% if product.file %}
+                <img src="placeholder" class="card-img-top" style="max-height: 20vh; min-width: 25vw;">
+                {% endif %}
+                <div class="card-body">
+                    <h5>Product PDF File</h5>
+                    <div class="form-group">
+                        {{ form_row(form.file.title) }}
+                        {{ form_row(form.file.file) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    {{ form(form) }}
+
+    <div class="record_actions">
+        {% if product.id %}{{ form(deleteForm) }}{% endif %}
+        <a class="btn btn-outline-primary btn-lg btn-block" href="{{ path('soc_product_index') }}">Back to list</a>
+    </div>
+{% endblock %}

@@ -16,6 +16,7 @@ easy_admin:
           - Products
           - { entity: 'Documents', label: 'Documents About Cuba' }
           - Users
+          - SocProducts
         #form_theme: ['@FOSCKEditor/Form/ckeditor_widget.html.twig']
         form_theme:
           - '@EasyAdmin/form/bootstrap_4.html.twig'
@@ -120,6 +121,10 @@ easy_admin:
             - { property: 'travelAgency' }
             - { property: 'Admin', type: 'boolean' }
 #            - { property: 'web' }
+      SocProducts:
+        class: App\Entity\SocProduct
+        form:
+          - { property: product, type: 'App\Form\SocProductType'}
 #      UserRoles:
 #        class: App\Entity\UserRole
 #        # List the entity class name you want to manage
