@@ -7,6 +7,9 @@ easy_admin:
 #      collapse_actions: true
       actions: ['show', 'edit', 'delete']
     design:
+        assets:
+          css:
+            - '/admin/css/rewrite.css'
         brand_color: '#fdc416'
         menu:
           - { entity: 'Categories', label: 'Kind of products' }
@@ -92,7 +95,7 @@ easy_admin:
             - { property: 'enabled' }
             - { property: 'email' }
             - { property: 'name' }
-            - { property: 'lastName' }
+#            - { property: 'lastName' }
             - { property: 'enterprise' }
             - { property: 'travelAgency' }
             - { property: 'country' }
@@ -102,7 +105,7 @@ easy_admin:
           fields:
             - { property: 'enabled' }
             - { property: 'name' }
-            - { property: 'lastName' }
+#            - { property: 'lastName' }
             - { property: 'enterprise' }
             - { property: 'travelAgency' }
             - { property: 'country' }
@@ -112,7 +115,7 @@ easy_admin:
           fields:
             - { property: 'enabled' }
             - { property: 'name' }
-            - { property: 'lastName' }
+#            - { property: 'lastName' }
             - { property: 'enterprise' }
             - { property: 'travelAgency' }
             - { property: 'Admin', type: 'boolean' }
