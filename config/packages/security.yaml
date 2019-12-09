@@ -10,7 +10,6 @@ security:
         msgphp_user: { id: MsgPhp\User\Infrastructure\Security\UserIdentityProvider }
         msgphp_user_jwt: { id: MsgPhp\User\Infrastructure\Security\Jwt\UserIdentityProvider }
 
-
     role_hierarchy:
         ROLE_ADMIN:       ROLE_USER
         ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
@@ -31,6 +30,12 @@ security:
                 password_path: password
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
+
+        api_register:
+            pattern: ^/api/register
+            anonymous: true
+            stateless: true
+            provider: chain_provider
 
         api:
             pattern: ^/api
@@ -57,19 +62,11 @@ security:
                 authenticators:
                     - lexik_jwt_authentication.jwt_token_authenticator
 
-            # activate different ways to authenticate
-
-            # http_basic: true
-            # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
-
-            # https://symfony.com/doc/current/security/form_login_setup.html
-
-
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
+        - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/profile, roles: ROLE_USER }
-        - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api, roles: ROLE_USER }

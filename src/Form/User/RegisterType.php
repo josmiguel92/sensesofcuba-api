@@ -22,15 +22,15 @@ final class RegisterType extends AbstractType
                 'constraints' => [new NotBlank(), new Email(), new UniqueUsername()],
             ])
             ->add('password', HashedPasswordType::class, [
-                'password_confirm' => true,
+                'password_confirm' => false,
                 'password_options' => ['constraints' => new NotBlank()],
             ])
             ->add('name', TextType::class, [
                 'constraints' => [new NotBlank()],
             ])
-            ->add('lastName', TextType::class, [
-                'constraints' => [new NotBlank()],
-            ])
+//            ->add('lastName', TextType::class, [
+//                'constraints' => [new NotBlank()],
+//            ])
             ->add('travelAgency', TextType::class, [
                 'constraints' => [new NotBlank()],
             ])
