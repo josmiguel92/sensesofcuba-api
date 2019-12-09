@@ -28,8 +28,6 @@ final class ConfirmRegistrationController
     ): Response {
         $bus->dispatch(new ConfirmUser($user->getId()));
 
-        return $responder->respond((new RespondRouteRedirect('login'))->withFlashes([
-            'success' => sprintf('Hi %s, your registration is confirmed. You can now login.', $user->getEmail()),
-        ]));
+        return $responder->respond((new RespondRouteRedirect('homepage')));
     }
 }
