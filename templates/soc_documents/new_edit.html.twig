@@ -2,7 +2,7 @@
 {% extends '@EasyAdmin/page/content.html.twig' %}
 {#{% extends 'base.html.twig' %}#}
 
-{% block title %}{{ product.id ? 'Edit' : 'Create new'}} Product{% endblock %}
+{% block title %}{{ document.id ? 'Edit' : 'Create new'}} document{% endblock %}
 
 
 {% block content %}
@@ -34,7 +34,7 @@
              {{ form_start(form) }}
     <div class="row">
         <div class="col-md-3">
-            Reference Name of the product
+            Reference Name of the document
         </div>
         <div class="col-md-7">
             {{ form_widget(form.referenceName) }}
@@ -45,17 +45,7 @@
 
     </div>
 <hr>
-    <div class="row">
-        <div class="col-md-3">
-            Parent in the Product tree
-            <br>
-            <small>Empty for show it at home</small>
-        </div>
-        <div class="col-md-7">
-            {{ form_widget(form.parent) }}
-        </div>
-    </div>
-<hr>
+
     <div class="row">
         <div class="col-md-3">
             Translations
@@ -68,11 +58,11 @@
     <div class="row">
         <div class="col-md-6">
             <div class="card">
-                {% if product.image %}
-                <img src="{{ asset('uploads/images/' ~ product.image.imageName)}}" class="card-img-top" style="max-height: 20vh; min-width: 25vw;">
+                {% if document.image %}
+                <img src="{{ asset('uploads/images/' ~ document.image.imageName)}}" class="card-img-top" style="max-height: 20vh; min-width: 25vw;">
                 {% endif %}
                 <div class="card-body">
-                    <h5>Product Image</h5>
+                    <h5>Document Image</h5>
                     <div class="form-group">
                         {{ form_row(form.image.title) }}
                         {{ form_row(form.image.imageFile) }}
@@ -82,11 +72,11 @@
         </div>
         <div class="col-md-6">
             <div class="card"  >
-                {% if product.file %}
+                {% if document.file %}
                 <img src="placeholder" class="card-img-top" style="max-height: 20vh; min-width: 25vw;">
                 {% endif %}
                 <div class="card-body">
-                    <h5>Product PDF File</h5>
+                    <h5>Document PDF File</h5>
                     <div class="form-group">
                         {{ form_row(form.file.title) }}
                         {{ form_row(form.file.file) }}
@@ -104,12 +94,11 @@
                         <span class="btn-label">Save changes</span>
                     </button>
                     {{ form(form) }}
-
-                    {% if product.id %}{{ form_widget(deleteForm) }}{% endif %}
-
+                    {% if document.id %}{{ form(deleteForm) }}{% endif %}
 
 
-                    <a class=" btn btn-link pr-0 action-list" title="" href="{{ path('soc_product_index') }}" target="_self">Back to listing</a>
+
+                    <a class=" btn btn-link pr-0 action-list" title="" href="{{ path('soc_document_index') }}" target="_self">Back to listing</a>
 
 
                 </div>

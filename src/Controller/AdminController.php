@@ -4,12 +4,13 @@ namespace App\Controller;
 
 use App\Repository\DocumentRepository;
 use App\Repository\ProductCategoryRepository;
+use App\Repository\SocProductRepository;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use function MongoDB\BSON\fromJSON;
 
 class AdminController extends AbstractController
 {
@@ -40,44 +41,30 @@ class AdminController extends AbstractController
 
     /**
      * @Route("/api/products", name="api_products")
-     * @param ProductCategoryRepository $categoryRepository
+     * @param SocProductRepository $productRepository
+     * @param Request $request
      * @return JsonResponse
      */
-    public function api_products(ProductCategoryRepository $categoryRepository): JsonResponse
+    public function api_products(SocProductRepository $productRepository, Request $request): JsonResponse
     {
-        $categories = $categoryRepository->findAll();
+        $products = $productRepository->findAll();
         //dump($categories);
+        $lang = substr($request->headers->get('Accept-Language'), 0, 2);
+        $lang = in_array($lang, ['en', 'es', 'de', 'fr']) ? $lang : 'en';
 
         $items = [];
-        $category_id_str = 'cat-';
-        $product_id_str = 'prod-';
 
-        foreach ($categories as $category)
+        foreach ($products as $product)
         {
-
-
             $items[] = [
-                'id' => $category_id_str.$category->getId(),
-                'title' => $category->getTitle(),
-                'file' => null,
-                'created_on' =>  $category->getCreatedAt(),
-                'modified_on' =>  $category->getUpdatedAt(),
-                'image' => $category->getImageWebPath(),
-                'child_of' => $category->getParent() ? $category_id_str.$category->getParent()->getId() : null
+                'id' => $product->getId(),
+                'title' => $product->translate($lang)->getName(),
+                'description' => $product->translate($lang)->getDescription(),
+                'file' => $product->getFile() ? '/uploads/files/'.$product->getFile()->getFileName() :  null,
+                'modified_on' =>  $product->getUpdatedAt(),
+                'image' => $product->getImage() ? '/uploads/images/'.$product->getImage()->getImageName() : null,
+                'child_of' => $product->getParent() ? $product->getParent()->getId() : null,
             ];
-
-            foreach ($products = $category->getProducts() as $product)
-            {
-                $items[] = [
-                    'id' => $product_id_str.$product->getId(),
-                    'title' => $product->getTitle(),
-                    'file' => $product->getFileWebPath(),
-                    'created_on' =>  $product->getCreatedAt(),
-                    'modified_on' =>  $product->getUpdatedAt(),
-                    'image' => $product->getImageWebPath(),
-                    'child_of' => $product->getCategory() ? $category_id_str.$product->getCategory()->getId() : null,
-                ];
-            }
         }
 
         return new JsonResponse($items);
@@ -89,26 +76,28 @@ class AdminController extends AbstractController
      * @param DocumentRepository $documentRepository
      * @return JsonResponse
      */
-    public function api_document(DocumentRepository $documentRepository): JsonResponse
+    public function api_document(DocumentRepository $documentRepository, Request $request): JsonResponse
     {
-        $docs = $documentRepository->findAll();
+
+        $lang = substr($request->headers->get('Accept-Language'), 0, 2);
+        $lang = in_array($lang, ['en', 'es', 'de', 'fr']) ? $lang : 'en';
+
+        $docs = $documentRepository->findBy(['enabled'=>true]);
 
 
         $items = [];
 
         foreach ($docs as $doc)
         {
-
-
             $items[] = [
                 'id' => $doc->getId(),
-                'title' => $doc->getTitle(),
-                'file' => $doc->getFileWebPath(),
+                'title' => $doc->translate($lang)->getName(),
+                'description' => $doc->translate($lang)->getDescription(),
+                'file' => $doc->getFile() ? '/uploads/files/'.$doc->getFile()->getFileName() :  null,
                 'created_on' =>  $doc->getCreatedAt(),
                 'modified_on' =>  $doc->getUpdatedAt(),
-                'image' => $doc->getImageWebPath()
+                'image' => $doc->getImage() ? '/uploads/images/'.$doc->getImage()->getImageName() : null
             ];
-
         }
 
         return new JsonResponse($items);

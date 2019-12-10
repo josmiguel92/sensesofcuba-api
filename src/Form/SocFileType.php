@@ -15,7 +15,8 @@ class SocFileType extends AbstractType
     {
         $builder
             ->add('title', null,  [
-                'required' => false
+                'required' => false,
+
             ])
 //            ->add('fileName')
 //            ->add('fileSize')

@@ -2,15 +2,15 @@
 {% extends easyadmin_config('design.templates.layout') %}
 
 
-{% block card_product %}
-    <div class="accordion" id="accordion-{{ product.id }}">
+{% block card_document %}
+    <div class="accordion" id="accordion-{{ document.id }}">
         <div class="card">
-        <div class="card-header" id="product-{{ product.id }}">
-            <h4>{{ product.referenceName }} <small class="badge badge-pill badge-secondary">     <a class="  action-edit" title="" href="{{ path('soc_product_edit', {'id': product.id}) }}" target="_self">Edit</a>
+        <div class="card-header" id="document-{{ document.id }}">
+            <h4>{{ document.referenceName }} <small class="badge badge-pill badge-secondary">     <a class="  action-edit" title="" href="{{ path('soc_document_edit', {'id': document.id}) }}" target="_self">Edit</a>
         </small></h4>
              <div class="checkbox-switch" data-propertyname="enabled" style="display: block;position: absolute;right: 1em;top: 1em;">
                     <label>
-                        <input type="checkbox" {% if product.enabled %}checked=""{% endif %}>
+                        <input type="checkbox" {% if document.enabled %}checked=""{% endif %}>
                         <span></span>
                     </label>
             </div>
@@ -19,80 +19,71 @@
             </div>
 
             <div class="col-md-6">
-                   {% if product.image is not null and product.image.imageName is not null %}
-                <img src="{{ asset('uploads/images/' ~ product.image.imageName)}}" style="max-height: 6em; max-width: 8em">
+                   {% if document.image is not null and document.image.imageName is not null %}
+                <img src="{{ asset('uploads/images/' ~ document.image.imageName)}}" style="max-height: 6em; max-width: 8em">
             {% endif %}
 
             </div>
             <div class="col-md-6">
-                {% if product.file is not null and product.file.fileName is not null %}
-                <a href="{{ asset('uploads/files/' ~ product.file.fileName)}}">Download PDF file</a>
+                {% if document.file is not null and document.file.fileName is not null %}
+                <a href="{{ asset('uploads/files/' ~ document.file.fileName)}}">Download PDF file</a>
             {% endif %}
             </div>
-            {% if product.socProducts | length > 0 %}
-            <h3 class="mb-0">
-                <span class="btn btn-link" type="button" data-toggle="collapse" data-target="#children_of-{{ product.id }}"><i class="fa fa-list"></i> View {{ product.socProducts | length }} products</span>
-            </h3>
-            {% endif %}
+
         </div>
-        <div class="collapse collapsed" id="children_of-{{ product.id }}" data-parent="#accordion-{{ product.id }}">
-            <div class="card-body">
-                {% for product in product.SocProducts %}
-                    {{ block('card_product') }}
-                {% endfor %}
-            </div>
-        </div>
+
 
     </div>
     </div>
 {% endblock %}
-{% block row_product %}
-     <div class="row {% if product.parent %}nested{% endif %}  {% if product.socProducts | length > 0 %}caret{% endif %}" data-id="{{product.id}}">
 
-        <div class="col-md-12 row">
+{#{% block row_product %}#}
+{#     <div class="row {% if product.parent %}nested{% endif %}  {% if product.socProducts | length > 0 %}caret{% endif %}" data-id="{{product.id}}">#}
 
-         <div class="col-md-1">
-                <div class="checkbox-switch" data-propertyname="enabled">
-                    <label>
-                        <input type="checkbox" {% if product.enabled %}checked=""{% endif %}>
-                        <span></span>
-                    </label>
-                </div>
-        </div>
+{#        <div class="col-md-12 row">#}
 
-         <div class="col-md-2">
-            <span title="{{ product.referenceName}}">{{ product.referenceName}}</span>
-         </div>
+{#         <div class="col-md-1">#}
+{#                <div class="checkbox-switch" data-propertyname="enabled">#}
+{#                    <label>#}
+{#                        <input type="checkbox" {% if product.enabled %}checked=""{% endif %}>#}
+{#                        <span></span>#}
+{#                    </label>#}
+{#                </div>#}
+{#        </div>#}
+
+{#         <div class="col-md-2">#}
+{#            <span title="{{ product.referenceName}}">{{ product.referenceName}}</span>#}
+{#         </div>#}
 
 
-        <div class="col-md-2">
-            <span title="{{ product.parent}}">{{ product.parent}}</span>
+{#        <div class="col-md-2">#}
+{#            <span title="{{ product.parent}}">{{ product.parent}}</span>#}
 
-        </div>
+{#        </div>#}
 
-        <div class="col-md-3">
+{#        <div class="col-md-3">#}
 
-            {% if product.image is not null and product.image.imageName is not null %}
-                <img src="{{ asset('uploads/images/' ~ product.image.imageName)}}" style="max-height: 6em; max-width: 8em">
-            {% endif %}
-            {% if product.file is not null and product.file.fileName is not null %}
-                <a href="{{ asset('uploads/files/' ~ product.file.fileName)}}">Download PDF file</a>
-            {% endif %}
-        </div>
+{#            {% if product.image is not null and product.image.imageName is not null %}#}
+{#                <img src="{{ asset('uploads/images/' ~ product.image.imageName)}}" style="max-height: 6em; max-width: 8em">#}
+{#            {% endif %}#}
+{#            {% if product.file is not null and product.file.fileName is not null %}#}
+{#                <a href="{{ asset('uploads/files/' ~ product.file.fileName)}}">Download PDF file</a>#}
+{#            {% endif %}#}
+{#        </div>#}
 
-        <div class="col-md-3">
-            <a class="  action-edit" title="" href="{{ path('soc_product_edit', {'id': product.id}) }}" target="_self">Edit</a>
-            <a class=" text-danger action-delete" title="" href="/admin/?entity=SocProduct&amp;action=delete&amp;menuIndex=3&amp;submenuIndex=-1&amp;sortField=id&amp;sortDirection=DESC&amp;page=1&amp;referer=%252Fadmin%252F%253Fentity%253DUsers%2526action%253Dlist%2526menuIndex%253D3%2526submenuIndex%253D-1%2526sortField%253Did%2526sortDirection%253DDESC%2526page%253D1&amp;id=10" target="_self">Delete</a>
+{#        <div class="col-md-3">#}
+{#            <a class="  action-edit" title="" href="{{ path('soc_product_edit', {'id': product.id}) }}" target="_self">Edit</a>#}
+{#            <a class=" text-danger action-delete" title="" href="/admin/?entity=SocProduct&amp;action=delete&amp;menuIndex=3&amp;submenuIndex=-1&amp;sortField=id&amp;sortDirection=DESC&amp;page=1&amp;referer=%252Fadmin%252F%253Fentity%253DUsers%2526action%253Dlist%2526menuIndex%253D3%2526submenuIndex%253D-1%2526sortField%253Did%2526sortDirection%253DDESC%2526page%253D1&amp;id=10" target="_self">Delete</a>#}
 
-        </div>
-        </div>
-        <div class="col-md-12 row">
-            {% for product in product.SocProducts %}
-                {{ block('row_product') }}
-            {% endfor %}
-        </div>
-     </div>
-{% endblock %}
+{#        </div>#}
+{#        </div>#}
+{#        <div class="col-md-12 row">#}
+{#            {% for product in product.SocProducts %}#}
+{#                {{ block('row_product') }}#}
+{#            {% endfor %}#}
+{#        </div>#}
+{#     </div>#}
+{#{% endblock %}#}
 
 {% block body_class 'page-blank' %}
 
@@ -101,14 +92,14 @@
         <section class="content-header ">
             <div class="d-flex flex-row justify-content-between align-content-center w-100">
                 <div class="content-header-title">
-                    <h1 class="title">    Products</h1>
+                    <h1 class="title">    Documents</h1>
                 </div>
 
                 <div class="global-actions">
                     <div class="form-action form-action-search  action-search">
                         <form method="get" action="/admin/">
                             <input type="hidden" name="action" value="search">
-                            <input type="hidden" name="entity" value="SocProducts">
+                            <input type="hidden" name="entity" value="Documents">
                             <input type="hidden" name="menuIndex" value="3">
                             <input type="hidden" name="submenuIndex" value="-1">
                             <div class="form-group">
@@ -121,8 +112,8 @@
 
 
                     <div class="button-action">
-                        <a class="btn btn-primary action-new" href="{{ path('soc_product_new') }}" target="_self">
-                            Add Product
+                        <a class="btn btn-primary action-new" href="{{ path('soc_document_new') }}" target="_self">
+                            Add Document
                         </a>
                     </div>
                 </div>
@@ -188,8 +179,8 @@
 {#            </table>#}
 
             <div class="container">
-                 {% for product in products %}
-                    {{ block('card_product') }}
+                 {% for document in documents %}
+                    {{ block('card_document') }}
                 {% endfor %}
             </div>
 
@@ -198,7 +189,7 @@
 
 
 
-            <form name="delete_form" method="post" action="/admin/?action=delete&amp;entity=SocProducts&amp;id=__id__" id="delete-form" style="display: none"><input type="hidden" name="_method" value="DELETE"><div id="delete_form" style="display: none"><div><button type="submit" id="delete_form_submit" name="delete_form[submit]">Delete</button></div><input type="hidden" id="delete_form__easyadmin_delete_flag" name="delete_form[_easyadmin_delete_flag]" value="1"><input type="hidden" id="delete_form__token" name="delete_form[_token]" value="aaZg0Sl1Gq9j2FD4xDQRDRzl0Q1e1YNvNhq5V291MUQ"></div></form>
+            <form name="delete_form" method="post" action="/admin/?action=delete&amp;entity=Documents&amp;id=__id__" id="delete-form" style="display: none"><input type="hidden" name="_method" value="DELETE"><div id="delete_form" style="display: none"><div><button type="submit" id="delete_form_submit" name="delete_form[submit]">Delete</button></div><input type="hidden" id="delete_form__easyadmin_delete_flag" name="delete_form[_easyadmin_delete_flag]" value="1"><input type="hidden" id="delete_form__token" name="delete_form[_token]" value="aaZg0Sl1Gq9j2FD4xDQRDRzl0Q1e1YNvNhq5V291MUQ"></div></form>
 
             <div id="modal-delete" class="modal fade">
                 <div class="modal-dialog">
@@ -227,7 +218,7 @@
 
             <div class="list-pagination">
                 <div class="list-pagination-counter">
-                    <strong>{{ products | length }}</strong> results
+                    <strong>{{ documents | length }}</strong> results
                 </div>
 
 {#                <nav class="pager list-pagination-paginator first-page last-page">#}
@@ -261,7 +252,7 @@
                     const oldValue = !newValue;
                     const propertyName = this.closest('.checkbox-switch').dataset.propertyname;
 
-                    const toggleUrl = "/admin/?action=edit&entity=SocProducts&view=list"
+                    const toggleUrl = "/admin/?action=edit&entity=Document&view=list"
                         + "&id=" + this.closest('tr').dataset.id
                         + "&property=" + propertyName
                         + "&newValue=" + newValue.toString();
