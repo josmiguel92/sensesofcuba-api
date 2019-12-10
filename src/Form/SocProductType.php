@@ -4,7 +4,10 @@ namespace App\Form;
 
 use A2lix\TranslationFormBundle\Form\Type\TranslationsType;
 use App\Entity\SocProduct;
+use EasyCorp\Bundle\EasyAdminBundle\Form\Type\Configurator\EntityTypeConfigurator;
+use EasyCorp\Bundle\EasyAdminBundle\Form\Type\EasyAdminAutocompleteType;
 use EasyCorp\Bundle\EasyAdminBundle\Form\Type\EasyAdminFormType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -26,7 +29,6 @@ class SocProductType extends EasyAdminFormType
             ->add('file', SocFileType::class)
             ->add('image', SocImageType::class)
             ->add('translations', TranslationsType::class)
-            ->add('submit', SubmitType::class)
         ;
     }
 

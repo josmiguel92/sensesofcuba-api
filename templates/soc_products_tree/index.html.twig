@@ -1,6 +1,96 @@
 {% trans_default_domain easyadmin_config('translation_domain') %}
 {% extends easyadmin_config('design.templates.layout') %}
 
+
+{% block card_product %}
+    <div class="accordion" id="accordion-{{ product.id }}">
+        <div class="card">
+        <div class="card-header" id="product-{{ product.id }}">
+            <h3>{{ product.referenceName }} <small class="badge badge-pill badge-secondary">     <a class="  action-edit" title="" href="{{ path('soc_product_edit', {'id': product.id}) }}" target="_self">Edit</a>
+        </small></h3>
+             <div class="checkbox-switch" data-propertyname="enabled" style="display: block;position: absolute;right: 1em;top: 1em;">
+                    <label>
+                        <input type="checkbox" {% if product.enabled %}checked=""{% endif %}>
+                        <span></span>
+                    </label>
+            </div>
+
+            <div class="col-md-6">
+                   {% if product.image is not null and product.image.imageName is not null %}
+                <img src="{{ asset('uploads/images/' ~ product.image.imageName)}}" style="max-height: 6em; max-width: 8em">
+            {% endif %}
+
+            </div>
+            <div class="col-md-6">
+                {% if product.file is not null and product.file.fileName is not null %}
+                <a href="{{ asset('uploads/files/' ~ product.file.fileName)}}">Download PDF file</a>
+            {% endif %}
+            </div>
+            {% if product.socProducts | length > 0 %}
+            <h3 class="mb-0">
+                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#children_of-{{ product.id }}">View products</button>
+            </h3>
+            {% endif %}
+        </div>
+        <div class="collapse show" id="children_of-{{ product.id }}" data-parent="#accordion-{{ product.id }}">
+            <div class="card-body">
+                {% for product in product.SocProducts %}
+                    {{ block('card_product') }}
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+    </div>
+{% endblock %}
+{% block row_product %}
+     <div class="row {% if product.parent %}nested{% endif %}  {% if product.socProducts | length > 0 %}caret{% endif %}" data-id="{{product.id}}">
+
+        <div class="col-md-12 row">
+
+         <div class="col-md-1">
+                <div class="checkbox-switch" data-propertyname="enabled">
+                    <label>
+                        <input type="checkbox" {% if product.enabled %}checked=""{% endif %}>
+                        <span></span>
+                    </label>
+                </div>
+        </div>
+
+         <div class="col-md-2">
+            <span title="{{ product.referenceName}}">{{ product.referenceName}}</span>
+         </div>
+
+
+        <div class="col-md-2">
+            <span title="{{ product.parent}}">{{ product.parent}}</span>
+
+        </div>
+
+        <div class="col-md-3">
+
+            {% if product.image is not null and product.image.imageName is not null %}
+                <img src="{{ asset('uploads/images/' ~ product.image.imageName)}}" style="max-height: 6em; max-width: 8em">
+            {% endif %}
+            {% if product.file is not null and product.file.fileName is not null %}
+                <a href="{{ asset('uploads/files/' ~ product.file.fileName)}}">Download PDF file</a>
+            {% endif %}
+        </div>
+
+        <div class="col-md-3">
+            <a class="  action-edit" title="" href="{{ path('soc_product_edit', {'id': product.id}) }}" target="_self">Edit</a>
+            <a class=" text-danger action-delete" title="" href="/admin/?entity=SocProduct&amp;action=delete&amp;menuIndex=3&amp;submenuIndex=-1&amp;sortField=id&amp;sortDirection=DESC&amp;page=1&amp;referer=%252Fadmin%252F%253Fentity%253DUsers%2526action%253Dlist%2526menuIndex%253D3%2526submenuIndex%253D-1%2526sortField%253Did%2526sortDirection%253DDESC%2526page%253D1&amp;id=10" target="_self">Delete</a>
+
+        </div>
+        </div>
+        <div class="col-md-12 row">
+            {% for product in product.SocProducts %}
+                {{ block('row_product') }}
+            {% endfor %}
+        </div>
+     </div>
+{% endblock %}
+
 {% block body_class 'page-blank' %}
 
 {% block content %}
@@ -28,7 +118,7 @@
 
 
                     <div class="button-action">
-                        <a class="btn btn-primary action-new" href="/admin/?entity=Users&amp;action=new&amp;menuIndex=3&amp;submenuIndex=-1&amp;sortField=id&amp;sortDirection=DESC&amp;page=1&amp;referer=%252Fadmin%252F%253Fentity%253DUsers%2526action%253Dlist%2526menuIndex%253D3%2526submenuIndex%253D-1%2526sortField%253Did%2526sortDirection%253DDESC%2526page%253D1" target="_self">
+                        <a class="btn btn-primary action-new" href="{{ path('soc_product_new') }}" target="_self">
                             Add Product
                         </a>
                     </div>
@@ -41,117 +131,71 @@
 
         <section id="main" class="content-body">
 
-            <table class="table datagrid">
-                <thead>
-                <tr>
+{#            <table class="table datagrid">#}
+{#                <thead>#}
+{#                <tr>#}
+{#                    <th class="   ">#}
+{#                        <a href="#">#}
+
+{#                        </a>#}
+{#                    </th>#}
+
+{#                    <th class="  toggle ">#}
+{#                        <a href="#">#}
+{#                            Enabled#}
+{#                        </a>#}
+{#                    </th>#}
+
+{#                    <th class="  string ">#}
+{#                        <a href="#">#}
+{#                            Reference </i>#}
+{#                        </a>#}
+{#                    </th>#}
+
+{#                    <th class="  string ">#}
+{#                        <a href="#">#}
+{#                            Parent <i class="fa fa-fw fa-sort"></i>#}
+{#                        </a>#}
+{#                    </th>#}
+
+{#                    <th class="  string ">#}
+{#                        <a href="#">#}
+{#                            Image <i class="fa fa-fw fa-sort"></i>#}
+{#                        </a>#}
+{#                    </th>#}
 
 
-                    <th class="  toggle ">
-                        <a href="#">
-                            Enabled
-                        </a>
-                    </th>
-
-                    <th class="  string ">
-                        <a href="#">
-                            Reference </i>
-                        </a>
-                    </th>
-
-                    <th class="  string ">
-                        <a href="#">
-                            Parent <i class="fa fa-fw fa-sort"></i>
-                        </a>
-                    </th>
-
-                    <th class="  string ">
-                        <a href="#">
-                            Image <i class="fa fa-fw fa-sort"></i>
-                        </a>
-                    </th>
-
-
-                    <th class="  string ">
-                        <a href="#">
-                            PDF File <i class="fa fa-fw fa-sort"></i>
-                        </a>
-                    </th>
-
-
-
-                    <th>
-                        <span class="sr-only">Actions</span>
-                    </th>
-                </tr>
-                </thead>
-
-                <tbody>
-
-                {% for product in products %}
-                    <tr data-id="{{product.id}}">
-
-
-                    <td class=" toggle ">
-
-                        <div class="checkbox-switch" data-propertyname="enabled">
-                            <label>
-                                <input type="checkbox" {% if product.enabled %}checked=""{% endif %}>
-                                <span></span>
-                            </label>
-                        </div>
-
-                    </td>
-
-                    <td class=" string ">
-                        <span title="{{ product.referenceName}}">{{ product.referenceName}}</span>
-
-                    </td>
-
-                    <td class=" string ">
-                        <span title="{{ product.parent}}">{{ product.parent}}</span>
-
-                    </td>
-
-                    <td class=" string ">
-
-                        {% if product.image is not null and product.image.imageName is not null %}
-                            <img src="{{ asset('uploads/images/' ~ product.image.imageName)}}">
-                        {% endif %}
-
-                    </td>
-
-                    <td class=" string ">
-
-                    {% if product.file is not null and product.file.fileName is not null %}
-                        <a href="{{ asset('uploads/files/' ~ product.file.fileName)}}">Download</a>
-                    {% endif %}
-
-                    </td>
+{#                    <th class="  string ">#}
+{#                        <a href="#">#}
+{#                            PDF File <i class="fa fa-fw fa-sort"></i>#}
+{#                        </a>#}
+{#                    </th>#}
 
 
 
-                    <td class="actions">
+{#                    <th>#}
+{#                        <span class="sr-only">Actions</span>#}
+{#                    </th>#}
+{#                </tr>#}
+{#                </thead>#}
 
-                        <a class="  action-show" title="" href="/admin/?entity=Users&amp;action=show&amp;menuIndex=3&amp;submenuIndex=-1&amp;sortField=id&amp;sortDirection=DESC&amp;page=1&amp;referer=%252Fadmin%252F%253Fentity%253DUsers%2526action%253Dlist%2526menuIndex%253D3%2526submenuIndex%253D-1%2526sortField%253Did%2526sortDirection%253DDESC%2526page%253D1&amp;id=10" target="_self">Show</a>
+{#                <tbody>#}
 
+{#                </tbody>#}
+{#            </table>#}
 
-                        <a class="  action-edit" title="" href="/admin/?entity=Users&amp;action=edit&amp;menuIndex=3&amp;submenuIndex=-1&amp;sortField=id&amp;sortDirection=DESC&amp;page=1&amp;referer=%252Fadmin%252F%253Fentity%253DUsers%2526action%253Dlist%2526menuIndex%253D3%2526submenuIndex%253D-1%2526sortField%253Did%2526sortDirection%253DDESC%2526page%253D1&amp;id=10" target="_self">Edit</a>
-
-
-                        <a class=" text-danger action-delete" title="" href="/admin/?entity=Users&amp;action=delete&amp;menuIndex=3&amp;submenuIndex=-1&amp;sortField=id&amp;sortDirection=DESC&amp;page=1&amp;referer=%252Fadmin%252F%253Fentity%253DUsers%2526action%253Dlist%2526menuIndex%253D3%2526submenuIndex%253D-1%2526sortField%253Did%2526sortDirection%253DDESC%2526page%253D1&amp;id=10" target="_self">Delete</a>
-
-
-                    </td>
-                </tr>
+            <div class="container">
+                 {% for product in products %}
+                    {{ block('card_product') }}
                 {% endfor %}
+            </div>
 
 
 
-                </tbody>
-            </table>
 
 
-            <form name="delete_form" method="post" action="/admin/?action=delete&amp;entity=Users&amp;id=__id__&amp;referer=%2Fadmin%2F%3Fentity%3DUsers%26action%3Dlist%26menuIndex%3D3%26submenuIndex%3D-1" id="delete-form" style="display: none"><input type="hidden" name="_method" value="DELETE"><div id="delete_form" style="display: none"><div><button type="submit" id="delete_form_submit" name="delete_form[submit]">Delete</button></div><input type="hidden" id="delete_form__easyadmin_delete_flag" name="delete_form[_easyadmin_delete_flag]" value="1"><input type="hidden" id="delete_form__token" name="delete_form[_token]" value="aaZg0Sl1Gq9j2FD4xDQRDRzl0Q1e1YNvNhq5V291MUQ"></div></form>
+
+            <form name="delete_form" method="post" action="/admin/?action=delete&amp;entity=SocProducts&amp;id=__id__" id="delete-form" style="display: none"><input type="hidden" name="_method" value="DELETE"><div id="delete_form" style="display: none"><div><button type="submit" id="delete_form_submit" name="delete_form[submit]">Delete</button></div><input type="hidden" id="delete_form__easyadmin_delete_flag" name="delete_form[_easyadmin_delete_flag]" value="1"><input type="hidden" id="delete_form__token" name="delete_form[_token]" value="aaZg0Sl1Gq9j2FD4xDQRDRzl0Q1e1YNvNhq5V291MUQ"></div></form>
 
             <div id="modal-delete" class="modal fade">
                 <div class="modal-dialog">
@@ -180,27 +224,91 @@
 
             <div class="list-pagination">
                 <div class="list-pagination-counter">
-                    <strong>11</strong> results
+                    <strong>{{ products | length }}</strong> results
                 </div>
 
-                <nav class="pager list-pagination-paginator first-page last-page">
-                    <ul class="pagination">
-                        <li class="page-item disabled">
-                            <a class="page-link" href="#">
-                                <i class="fa fa-angle-left mx-1"></i> <span class="btn-label">Previous</span>
-                            </a>
-                        </li>
+{#                <nav class="pager list-pagination-paginator first-page last-page">#}
+{#                    <ul class="pagination">#}
+{#                        <li class="page-item disabled">#}
+{#                            <a class="page-link" href="#">#}
+{#                                <i class="fa fa-angle-left mx-1"></i> <span class="btn-label">Previous</span>#}
+{#                            </a>#}
+{#                        </li>#}
 
-                        <li class="page-item disabled">
-                            <a class="page-link" href="#">
-                                <span class="btn-label">Next</span> <i class="fa fa-angle-right mx-1"></i>
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
+{#                        <li class="page-item disabled">#}
+{#                            <a class="page-link" href="#">#}
+{#                                <span class="btn-label">Next</span> <i class="fa fa-angle-right mx-1"></i>#}
+{#                            </a>#}
+{#                        </li>#}
+{#                    </ul>#}
+{#                </nav>#}
             </div>
 
         </section>
 
     </div>
+
+        <script type="text/javascript">
+        $(function() {
+            const toggles = document.querySelectorAll('.checkbox-switch input[type="checkbox"]');
+            for (i = 0; i < toggles.length; i++) {
+                toggles[i].addEventListener('change', function () {
+                    const toggle = this;
+                    const newValue = this.checked;
+                    const oldValue = !newValue;
+                    const propertyName = this.closest('.checkbox-switch').dataset.propertyname;
+
+                    const toggleUrl = "/admin/?action=edit&entity=SocProducts&view=list"
+                        + "&id=" + this.closest('tr').dataset.id
+                        + "&property=" + propertyName
+                        + "&newValue=" + newValue.toString();
+
+                    let toggleRequest = $.ajax({ type: "GET", url: toggleUrl, data: {} });
+
+                    toggleRequest.done(function(result) {});
+
+                    toggleRequest.fail(function() {
+                        // in case of error, restore the original value and disable the toggle
+                        toggle.checked = oldValue;
+                        toggle.disabled = true;
+                        toggle.closest('.checkbox-switch').classList.add('disabled');
+                    });
+                });
+            }
+
+
+                    });
+    </script>
+        <script src="{{ asset('bundles/vendor/bootstrap-treeview.js') }}"></script>
+    <style>
+        .nested{
+            display: none;
+        }
+        .active{
+            display: block;
+        }
+        .caret::before{
+            content: "\25B6";
+            color: black;
+            display: inline-block;
+            margin-right: 6px;
+        }
+        .caret-down::before{
+            transform: rotate(90deg);
+        }
+
+    </style>
+
+    <script>
+        var toggler = document.getElementsByClassName("caret");
+        var i;
+
+        for(i = 0; i < toggler.length; i++){
+            toggler[i].addEventListener("click", function () {
+                this.parentElement.querySelector(".nested").classList.toggle("active");
+                this.classList.toggle("caret-down")
+            })
+        }
+    </script>
+
 {% endblock %}

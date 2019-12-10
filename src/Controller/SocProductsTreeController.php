@@ -6,6 +6,7 @@ use App\Entity\SocProduct;
 use App\Form\SocProductType;
 use App\Repository\SocProductRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,7 +27,7 @@ class SocProductsTreeController extends AbstractController
     {
         return $this->render('soc_products_tree/index.html.twig', [
             'controller_name' => 'SocProductsTreeController',
-            'products' => $productRepository->findAll()
+            'products' => $productRepository->findBy(['parent'=>null])
         ]);
     }
 
@@ -105,6 +106,7 @@ class SocProductsTreeController extends AbstractController
     {
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('soc_product_delete', array('id' => $product->getId())))
+            ->add('Delete', SubmitType::class, ['attr' => ['class' => 'btn btn-danger btn-delete']])
             ->setMethod('DELETE')
             ->getForm()
         ;

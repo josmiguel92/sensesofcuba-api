@@ -33,12 +33,12 @@ class SocProduct
     private $socProducts;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\SocFile", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\SocFile", cascade={"persist","remove"})
      */
     private $file;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\SocImage", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\SocImage", cascade={"persist", "remove"})
      */
     private $image;
 

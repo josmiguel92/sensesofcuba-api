@@ -12,12 +12,13 @@ easy_admin:
             - '/admin/css/rewrite.css'
         brand_color: '#fdc416'
         menu:
-          - { entity: 'Categories', label: 'Kind of products' }
-          - Products
+#          - { entity: 'Categories', label: 'Kind of products' }
+#          - Products
+          - { label: 'Your Products', icon: 'receipt',  route: 'soc_product_index' }
           - { entity: 'Documents', label: 'Documents About Cuba' }
-          - Users
-          - SocProducts
-        #form_theme: ['@FOSCKEditor/Form/ckeditor_widget.html.twig']
+          - { entity: 'Users', icon: 'users', label: 'Users and clients' }
+
+      #form_theme: ['@FOSCKEditor/Form/ckeditor_widget.html.twig']
         form_theme:
           - '@EasyAdmin/form/bootstrap_4.html.twig'
           - '@FOSCKEditor/Form/ckeditor_widget.html.twig'
