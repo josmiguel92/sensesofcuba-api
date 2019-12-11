@@ -67,9 +67,9 @@ class AdminController extends AbstractController
                 'id' => $product->getId(),
                 'title' => $product->translate($lang)->getName(),
                 'description' => $product->translate($lang)->getDescription(),
-                'file' => $product->getFile() ? '/sensesofcuba/uploads/files/'.$product->getFile()->getFileName() :  null,
+                'file' => $product->getFile() ? '/uploads/files/'.$product->getFile()->getFileName() :  null,
                 'modified_on' =>  $product->getUpdatedAt(),
-                'image' => $product->getImage() ? '/sensesofcuba/uploads/images/'.$product->getImage()->getImageName() : null,
+                'image' => $product->getImage() ? '/uploads/images/'.$product->getImage()->getImageName() : null,
                 'child_of' => $product->getParent() ? $product->getParent()->getId() : null,
             ];
         }
@@ -100,10 +100,10 @@ class AdminController extends AbstractController
                 'id' => $doc->getId(),
                 'title' => $doc->translate($lang)->getName(),
                 'description' => $doc->translate($lang)->getDescription(),
-                'file' => $doc->getFile() ? '/sensesofcuba/uploads/files/'.$doc->getFile()->getFileName() :  null,
+                'file' => $doc->getFile() ? '/uploads/files/'.$doc->getFile()->getFileName() :  null,
                 'created_on' =>  $doc->getCreatedAt(),
                 'modified_on' =>  $doc->getUpdatedAt(),
-                'image' => $doc->getImage() ? '/sensesofcuba/uploads/images/'.$doc->getImage()->getImageName() : null
+                'image' => $doc->getImage() ? '/uploads/images/'.$doc->getImage()->getImageName() : null
             ];
         }
 
