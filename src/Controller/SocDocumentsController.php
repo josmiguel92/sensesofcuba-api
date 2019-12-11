@@ -44,11 +44,6 @@ class SocDocumentsController extends AbstractController
         if($form->isSubmitted() && $form->isValid()){
             $em = $this->getDoctrine()->getManager();
 
-            if($document->getFile() && $document->getFile()->getFileName() === null)
-                $document->setFile(null);
-
-            if($document->getImage() && $document->getImage()->getImageName() === null)
-                $document->setImage(null);
             $em->persist($document);
             $em->flush();
 
