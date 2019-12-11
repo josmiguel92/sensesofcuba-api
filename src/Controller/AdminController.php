@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class AdminController extends AbstractController
 {
     /**
-     * @Route("/home", name="homepage")
+     * @Route("/", name="homepage")
      */
     public function homepage(): \Symfony\Component\HttpFoundation\Response
     {
