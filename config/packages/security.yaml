@@ -19,10 +19,6 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
-        html_proxy:
-            pattern: ^/
-            security: false
-
         api_login:
             pattern: ^/api/login
             anonymous: true
@@ -65,6 +61,9 @@ security:
             guard:
                 authenticators:
                     - lexik_jwt_authentication.jwt_token_authenticator
+        html_proxy:
+            pattern: ^/
+            security: false
 
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
