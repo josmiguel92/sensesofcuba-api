@@ -39,7 +39,7 @@ class Document
     private $image;
 
      /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=180)
      */
     private $referenceName;
 

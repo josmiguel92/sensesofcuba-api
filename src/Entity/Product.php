@@ -37,12 +37,12 @@ class Product
     public $title;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=180, nullable=true)
      */
     public $imagePath;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=180, nullable=true)
      */
     public $filePath;
 

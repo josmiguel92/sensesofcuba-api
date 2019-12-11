@@ -14,7 +14,7 @@ class DocumentTranslation
      use ORMBehaviors\Translatable\Translation;
 
      /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=180)
      */
     private $name;
 

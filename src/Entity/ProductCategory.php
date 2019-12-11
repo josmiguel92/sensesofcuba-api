@@ -27,7 +27,7 @@ class ProductCategory
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=180)
      */
     private $title;
 
@@ -47,7 +47,7 @@ class ProductCategory
     private $children;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string",length=180, nullable=true)
      */
     public $imagePath;
 

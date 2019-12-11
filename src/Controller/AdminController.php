@@ -21,7 +21,7 @@ class AdminController extends AbstractController
     {
      //   return new RedirectResponse('index.html');
          $file = __DIR__."/../../public/index.html";
-         
+
     if (file_exists($file)) {
         return new Response(file_get_contents($file));
     } else {

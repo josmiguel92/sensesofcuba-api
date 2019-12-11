@@ -22,7 +22,7 @@ class SocFile
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=180)
      */
     private $title;
 
@@ -32,7 +32,7 @@ class SocFile
     private $file;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=180, nullable=true)
      */
     private $fileName;
 

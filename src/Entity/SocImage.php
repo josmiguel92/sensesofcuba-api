@@ -23,7 +23,7 @@ class SocImage
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=180)
      */
     private $title;
 
@@ -34,7 +34,7 @@ class SocImage
     private $imageFile;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=180, nullable=true)
      */
     private $imageName;
 
