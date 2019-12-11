@@ -20721,7 +20721,7 @@ render._withStripped = true
       }
     })();
 },{"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"assets/images/hero.jpg":[function(require,module,exports) {
-module.exports = "sensesofcuba/hero.8c0ebdb4.jpg";
+module.exports = "/sensesofcuba/hero.8c0ebdb4.jpg";
 },{}],"components/Hero.vue":[function(require,module,exports) {
 "use strict";
 
@@ -24334,7 +24334,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53981" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55181" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
@@ -24511,4 +24511,4 @@ function hmrAcceptRun(bundle, id) {
   }
 }
 },{}]},{},["../node_modules/parcel-bundler/src/builtins/hmr-runtime.js","main.js"], null)
-//# sourceMappingURL=sensesofcuba/main.1f19ae8e.js.map
+//# sourceMappingURL=/sensesofcuba/main.1f19ae8e.js.map
