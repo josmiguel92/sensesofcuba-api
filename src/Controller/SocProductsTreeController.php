@@ -26,7 +26,6 @@ class SocProductsTreeController extends AbstractController
     public function index(SocProductRepository $productRepository)
     {
         return $this->render('soc_products_tree/index.html.twig', [
-            'controller_name' => 'SocProductsTreeController',
             'products' => $productRepository->findBy(['parent'=>null])
         ]);
     }
