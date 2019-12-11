@@ -9734,9 +9734,6 @@ exports.default = void 0;
 //
 //
 //
-//
-//
-//
 var _default = {
   name: 'pdf-modal',
   components: {},
@@ -9809,18 +9806,6 @@ exports.default = _default;
           _vm._v(" "),
           _c("div", { staticClass: "modal-body" }, [
             _c("iframe", { attrs: { src: _vm.src } })
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "modal-footer" }, [
-            _c(
-              "button",
-              {
-                staticClass: "btn btn-secondary",
-                attrs: { type: "button", "data-dismiss": "modal" },
-                on: { click: _vm.close }
-              },
-              [_vm._v("Close")]
-            )
           ])
         ])
       ])
@@ -20736,7 +20721,7 @@ render._withStripped = true
       }
     })();
 },{"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"../node_modules/vue-hot-reload-api/dist/index.js","vue":"../node_modules/vue/dist/vue.runtime.esm.js"}],"assets/images/hero.jpg":[function(require,module,exports) {
-module.exports = "/hero.8c0ebdb4.jpg";
+module.exports = "sensesofcuba/hero.8c0ebdb4.jpg";
 },{}],"components/Hero.vue":[function(require,module,exports) {
 "use strict";
 
@@ -20991,7 +20976,10 @@ exports.default = _default;
                   _vm._v(" "),
                   _c(
                     "a",
-                    { attrs: { href: "/" + _vm.item.file, download: "" } },
+                    {
+                      staticClass: "btn",
+                      attrs: { href: _vm.item.file, download: "" }
+                    },
                     [
                       _c("i", { staticClass: "fa fa-download" }),
                       _vm._v(" Download")
@@ -23446,21 +23434,14 @@ var _default = {
       credentials: {
         name: '',
         enterprise: '',
-        travelAgency: undefined,
+        travelAgency: "travel_agency",
         web: '',
         country: '',
         email: '',
         password: '',
         passwordRepeat: '',
         _token: undefined
-      },
-      selectOptions: [{
-        title: 'Travel Agency',
-        value: 'travel_agency'
-      }, {
-        title: 'Tour Operator',
-        value: 'tour_operator'
-      }]
+      }
     };
   },
   methods: _objectSpread({}, (0, _vuex.mapActions)(['signUp', 'getCSFRCode']), {
@@ -23556,26 +23537,54 @@ exports.default = _default;
         }
       }),
       _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "select form-group w-100" },
-        [
-          _c("b-select", {
-            attrs: {
-              placeholder: "Select your company type",
-              options: _vm.selectOptions
-            },
-            model: {
-              value: _vm.credentials.companyType,
-              callback: function($$v) {
-                _vm.$set(_vm.credentials, "companyType", $$v)
-              },
-              expression: "credentials.companyType"
+      _c("div", { staticClass: "select form-group input-group w-100" }, [
+        _c("div", { staticClass: "input-group-prepend" }, [
+          _c("span", { staticClass: "input-group-text" }, [
+            _c("i", { staticClass: "fa fa-user" })
+          ])
+        ]),
+        _vm._v(" "),
+        _c(
+          "select",
+          {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.credentials.travelAgency,
+                expression: "credentials.travelAgency"
+              }
+            ],
+            staticClass: "form-control",
+            on: {
+              change: function($event) {
+                var $$selectedVal = Array.prototype.filter
+                  .call($event.target.options, function(o) {
+                    return o.selected
+                  })
+                  .map(function(o) {
+                    var val = "_value" in o ? o._value : o.value
+                    return val
+                  })
+                _vm.$set(
+                  _vm.credentials,
+                  "travelAgency",
+                  $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+                )
+              }
             }
-          })
-        ],
-        1
-      ),
+          },
+          [
+            _c("option", { attrs: { value: "travel_agency", selected: "" } }, [
+              _vm._v("Travel Agency")
+            ]),
+            _vm._v(" "),
+            _c("option", { attrs: { value: "tour_operator" } }, [
+              _vm._v("Tour Operator")
+            ])
+          ]
+        )
+      ]),
       _vm._v(" "),
       _c("form-input", {
         attrs: { placeholder: "Company Website", addonLeftIcon: "fa fa-link" },
@@ -24325,7 +24334,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49653" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53981" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
@@ -24502,4 +24511,4 @@ function hmrAcceptRun(bundle, id) {
   }
 }
 },{}]},{},["../node_modules/parcel-bundler/src/builtins/hmr-runtime.js","main.js"], null)
-//# sourceMappingURL=/main.1f19ae8e.js.map
+//# sourceMappingURL=sensesofcuba/main.1f19ae8e.js.map
