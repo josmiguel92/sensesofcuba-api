@@ -64,7 +64,7 @@ class User extends BaseUser implements DomainEventHandler
 
 
     public function __construct(UserId $id, string $email, string $password, string  $name,
-                                string  $enterprise, string $travelAgency, string $country, string $web = null)
+                                string  $enterprise, string $travelAgency, string $country, string $web)
     {
         $this->id = $id;
         $this->credential = new EmailPassword($email, $password);
