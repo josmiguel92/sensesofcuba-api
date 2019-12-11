@@ -13,9 +13,9 @@ class SocImageType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title', null, [
-                'required' => false
-            ])
+//            ->add('title', null, [
+//                'required' => false
+//            ])
 //            ->add('imageName')
 //            ->add('imageSize')
 //            ->add('createdAt')

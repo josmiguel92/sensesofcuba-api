@@ -23,48 +23,48 @@ easy_admin:
           - '@EasyAdmin/form/bootstrap_4.html.twig'
           - '@FOSCKEditor/Form/ckeditor_widget.html.twig'
     entities:
-
-      Categories:
-        class: App\Entity\ProductCategory
-        form:
-          fields:
-            - { property: 'title' }
-            #            - { property: 'ChildNodeOf', type: 'entity', type_options: { class:  'App\Entity\ProductCategory' } }
-            - { property: 'image', type: 'file' }
-            - { property: 'parent' }
-        show:
-          fields:
-            - { property: 'title' }
-            - { property: 'getImageWebPath', type: 'file', template: 'admin/partial/image.html.twig', label: 'Image' }
-            - { property: 'parent' }
-        list:
-          fields:
-            - { property: 'title' }
-            - { property: 'getImageWebPath', type: 'file', template: 'admin/partial/image.html.twig',label: 'Image' }
-            - { property: 'parent' }
-
-      Products:
-        class: App\Entity\Product
-        list:
-          fields:
-            - { property: 'id' }
-            - { property: 'title' }
-            - { property: 'getImageWebPath', type: 'file', template: 'admin/partial/image.html.twig',label: 'Image' }
-            - { property: 'getFileWebPath',  type: 'file', template: 'admin/partial/file.html.twig' , label: 'PDF'}
-            - { property: 'category' }
-        # ...
-        show:
-          fields:
-            - { property: 'title' }
-            - { property: 'getImageWebPath', type: 'file', template: 'admin/partial/image.html.twig', label: 'Image' }
-            - { property: 'getFileWebPath',  type: 'file', template: 'admin/partial/file.html.twig' , label: 'PDF'}
-            - { property: 'category' }
-        form:
-          fields:
-            - { property: 'title' }
-            - { property: 'file', type: 'file' }
-            - { property: 'image', type: 'file' }
-            - { property: 'category' }
+#
+#      Categories:
+#        class: App\Entity\ProductCategory
+#        form:
+#          fields:
+#            - { property: 'title' }
+#            #            - { property: 'ChildNodeOf', type: 'entity', type_options: { class:  'App\Entity\ProductCategory' } }
+#            - { property: 'image', type: 'file' }
+#            - { property: 'parent' }
+#        show:
+#          fields:
+#            - { property: 'title' }
+#            - { property: 'getImageWebPath', type: 'file', template: 'admin/partial/image.html.twig', label: 'Image' }
+#            - { property: 'parent' }
+#        list:
+#          fields:
+#            - { property: 'title' }
+#            - { property: 'getImageWebPath', type: 'file', template: 'admin/partial/image.html.twig',label: 'Image' }
+#            - { property: 'parent' }
+#
+#      Products:
+#        class: App\Entity\Product
+#        list:
+#          fields:
+#            - { property: 'id' }
+#            - { property: 'title' }
+#            - { property: 'getImageWebPath', type: 'file', template: 'admin/partial/image.html.twig',label: 'Image' }
+#            - { property: 'getFileWebPath',  type: 'file', template: 'admin/partial/file.html.twig' , label: 'PDF'}
+#            - { property: 'category' }
+#        # ...
+#        show:
+#          fields:
+#            - { property: 'title' }
+#            - { property: 'getImageWebPath', type: 'file', template: 'admin/partial/image.html.twig', label: 'Image' }
+#            - { property: 'getFileWebPath',  type: 'file', template: 'admin/partial/file.html.twig' , label: 'PDF'}
+#            - { property: 'category' }
+#        form:
+#          fields:
+#            - { property: 'title' }
+#            - { property: 'file', type: 'file' }
+#            - { property: 'image', type: 'file' }
+#            - { property: 'category' }
 
       Documents:
         class: App\Entity\Document
