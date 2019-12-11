@@ -43,12 +43,12 @@ class SocProductsTreeController extends AbstractController
 
         if($form->isSubmitted() && $form->isValid()){
             $em = $this->getDoctrine()->getManager();
-//
-//            if($product->getFile() && $product->getFile()->getFileName() === null)
-//                $product->setFile(null);
-//
-//            if($product->getImage() && $product->getImage()->getImageName() === null)
-//                $product->setImage(null);
+
+            if($product->getFile() && $product->getFile()->getFile() === null)
+                $product->setFile(null);
+
+            if($product->getImage() && $product->getImage()->getImageFile() === null)
+                $product->setImage(null);
             $em->persist($product);
             $em->flush();
 
