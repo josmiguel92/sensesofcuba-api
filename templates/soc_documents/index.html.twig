@@ -1,0 +1,308 @@
+{% trans_default_domain easyadmin_config('translation_domain') %}
+{% extends easyadmin_config('design.templates.layout') %}
+
+
+{% block card_document %}
+    <div class="accordion" id="accordion-{{ document.id }}">
+        <div class="card">
+        <div class="card-header" id="document-{{ document.id }}">
+            <h4>{{ document.referenceName }} <small class="badge badge-pill badge-secondary">     <a class="  action-edit" title="" href="{{ path('soc_document_edit', {'id': document.id}) }}" target="_self">Edit</a>
+        </small></h4>
+             <div class="checkbox-switch" data-propertyname="enabled" style="display: block;position: absolute;right: 1em;top: 1em;">
+                    <label>
+                        <input type="checkbox" {% if document.enabled %}checked=""{% endif %}>
+                        <span></span>
+                    </label>
+            </div>
+            <div class="row">
+
+            </div>
+
+            <div class="col-md-6">
+                   {% if document.image is not null and document.image.imageName is not null %}
+                <img src="{{ asset('uploads/images/' ~ document.image.imageName)}}" style="max-height: 6em; max-width: 8em">
+            {% endif %}
+
+            </div>
+            <div class="col-md-6">
+                {% if document.file is not null and document.file.fileName is not null %}
+                <a href="{{ asset('uploads/files/' ~ document.file.fileName)}}">Download PDF file</a>
+            {% endif %}
+            </div>
+
+        </div>
+
+
+    </div>
+    </div>
+{% endblock %}
+
+{#{% block row_product %}#}
+{#     <div class="row {% if product.parent %}nested{% endif %}  {% if product.socProducts | length > 0 %}caret{% endif %}" data-id="{{product.id}}">#}
+
+{#        <div class="col-md-12 row">#}
+
+{#         <div class="col-md-1">#}
+{#                <div class="checkbox-switch" data-propertyname="enabled">#}
+{#                    <label>#}
+{#                        <input type="checkbox" {% if product.enabled %}checked=""{% endif %}>#}
+{#                        <span></span>#}
+{#                    </label>#}
+{#                </div>#}
+{#        </div>#}
+
+{#         <div class="col-md-2">#}
+{#            <span title="{{ product.referenceName}}">{{ product.referenceName}}</span>#}
+{#         </div>#}
+
+
+{#        <div class="col-md-2">#}
+{#            <span title="{{ product.parent}}">{{ product.parent}}</span>#}
+
+{#        </div>#}
+
+{#        <div class="col-md-3">#}
+
+{#            {% if product.image is not null and product.image.imageName is not null %}#}
+{#                <img src="{{ asset('uploads/images/' ~ product.image.imageName)}}" style="max-height: 6em; max-width: 8em">#}
+{#            {% endif %}#}
+{#            {% if product.file is not null and product.file.fileName is not null %}#}
+{#                <a href="{{ asset('uploads/files/' ~ product.file.fileName)}}">Download PDF file</a>#}
+{#            {% endif %}#}
+{#        </div>#}
+
+{#        <div class="col-md-3">#}
+{#            <a class="  action-edit" title="" href="{{ path('soc_product_edit', {'id': product.id}) }}" target="_self">Edit</a>#}
+{#            <a class=" text-danger action-delete" title="" href="/admin/?entity=SocProduct&amp;action=delete&amp;menuIndex=3&amp;submenuIndex=-1&amp;sortField=id&amp;sortDirection=DESC&amp;page=1&amp;referer=%252Fadmin%252F%253Fentity%253DUsers%2526action%253Dlist%2526menuIndex%253D3%2526submenuIndex%253D-1%2526sortField%253Did%2526sortDirection%253DDESC%2526page%253D1&amp;id=10" target="_self">Delete</a>#}
+
+{#        </div>#}
+{#        </div>#}
+{#        <div class="col-md-12 row">#}
+{#            {% for product in product.SocProducts %}#}
+{#                {{ block('row_product') }}#}
+{#            {% endfor %}#}
+{#        </div>#}
+{#     </div>#}
+{#{% endblock %}#}
+
+{% block body_class 'page-blank' %}
+
+{% block content %}
+    <div class="content">
+        <section class="content-header ">
+            <div class="d-flex flex-row justify-content-between align-content-center w-100">
+                <div class="content-header-title">
+                    <h1 class="title">    Documents</h1>
+                </div>
+
+                <div class="global-actions">
+                    <div class="form-action form-action-search  action-search">
+                        <form method="get" action="/admin/">
+                            <input type="hidden" name="action" value="search">
+                            <input type="hidden" name="entity" value="Documents">
+                            <input type="hidden" name="menuIndex" value="3">
+                            <input type="hidden" name="submenuIndex" value="-1">
+                            <div class="form-group">
+                                <div class="form-widget">
+                                    <input class="form-control" type="search" name="query" value="" placeholder="Search">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+
+                    <div class="button-action">
+                        <a class="btn btn-primary action-new" href="{{ path('soc_document_new') }}" target="_self">
+                            Add Document
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </section>
+
+        <section id="main" class="content-body">
+
+{#            <table class="table datagrid">#}
+{#                <thead>#}
+{#                <tr>#}
+{#                    <th class="   ">#}
+{#                        <a href="#">#}
+
+{#                        </a>#}
+{#                    </th>#}
+
+{#                    <th class="  toggle ">#}
+{#                        <a href="#">#}
+{#                            Enabled#}
+{#                        </a>#}
+{#                    </th>#}
+
+{#                    <th class="  string ">#}
+{#                        <a href="#">#}
+{#                            Reference </i>#}
+{#                        </a>#}
+{#                    </th>#}
+
+{#                    <th class="  string ">#}
+{#                        <a href="#">#}
+{#                            Parent <i class="fa fa-fw fa-sort"></i>#}
+{#                        </a>#}
+{#                    </th>#}
+
+{#                    <th class="  string ">#}
+{#                        <a href="#">#}
+{#                            Image <i class="fa fa-fw fa-sort"></i>#}
+{#                        </a>#}
+{#                    </th>#}
+
+
+{#                    <th class="  string ">#}
+{#                        <a href="#">#}
+{#                            PDF File <i class="fa fa-fw fa-sort"></i>#}
+{#                        </a>#}
+{#                    </th>#}
+
+
+
+{#                    <th>#}
+{#                        <span class="sr-only">Actions</span>#}
+{#                    </th>#}
+{#                </tr>#}
+{#                </thead>#}
+
+{#                <tbody>#}
+
+{#                </tbody>#}
+{#            </table>#}
+
+            <div class="container">
+                 {% for document in documents %}
+                    {{ block('card_document') }}
+                {% endfor %}
+            </div>
+
+
+
+
+
+
+            <form name="delete_form" method="post" action="/admin/?action=delete&amp;entity=Documents&amp;id=__id__" id="delete-form" style="display: none"><input type="hidden" name="_method" value="DELETE"><div id="delete_form" style="display: none"><div><button type="submit" id="delete_form_submit" name="delete_form[submit]">Delete</button></div><input type="hidden" id="delete_form__easyadmin_delete_flag" name="delete_form[_easyadmin_delete_flag]" value="1"><input type="hidden" id="delete_form__token" name="delete_form[_token]" value="aaZg0Sl1Gq9j2FD4xDQRDRzl0Q1e1YNvNhq5V291MUQ"></div></form>
+
+            <div id="modal-delete" class="modal fade">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <h4>Do you really want to delete this item?</h4>
+                            <p>There is no undo for this operation.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" data-dismiss="modal" class="btn btn-secondary">
+                                <span class="btn-label">Cancel</span>
+                            </button>
+
+                            <button type="button" data-dismiss="modal" class="btn btn-danger" id="modal-delete-button" formtarget="_self">
+                                <span class="btn-label">Delete</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <section class="content-footer">
+
+
+            <div class="list-pagination">
+                <div class="list-pagination-counter">
+                    <strong>{{ documents | length }}</strong> results
+                </div>
+
+{#                <nav class="pager list-pagination-paginator first-page last-page">#}
+{#                    <ul class="pagination">#}
+{#                        <li class="page-item disabled">#}
+{#                            <a class="page-link" href="#">#}
+{#                                <i class="fa fa-angle-left mx-1"></i> <span class="btn-label">Previous</span>#}
+{#                            </a>#}
+{#                        </li>#}
+
+{#                        <li class="page-item disabled">#}
+{#                            <a class="page-link" href="#">#}
+{#                                <span class="btn-label">Next</span> <i class="fa fa-angle-right mx-1"></i>#}
+{#                            </a>#}
+{#                        </li>#}
+{#                    </ul>#}
+{#                </nav>#}
+            </div>
+
+        </section>
+
+    </div>
+
+        <script type="text/javascript">
+        $(function() {
+            const toggles = document.querySelectorAll('.checkbox-switch input[type="checkbox"]');
+            for (i = 0; i < toggles.length; i++) {
+                toggles[i].addEventListener('change', function () {
+                    const toggle = this;
+                    const newValue = this.checked;
+                    const oldValue = !newValue;
+                    const propertyName = this.closest('.checkbox-switch').dataset.propertyname;
+
+                    const toggleUrl = "/admin/?action=edit&entity=Document&view=list"
+                        + "&id=" + this.closest('tr').dataset.id
+                        + "&property=" + propertyName
+                        + "&newValue=" + newValue.toString();
+
+                    let toggleRequest = $.ajax({ type: "GET", url: toggleUrl, data: {} });
+
+                    toggleRequest.done(function(result) {});
+
+                    toggleRequest.fail(function() {
+                        // in case of error, restore the original value and disable the toggle
+                        toggle.checked = oldValue;
+                        toggle.disabled = true;
+                        toggle.closest('.checkbox-switch').classList.add('disabled');
+                    });
+                });
+            }
+
+
+                    });
+    </script>
+        <script src="{{ asset('bundles/vendor/bootstrap-treeview.js') }}"></script>
+    <style>
+        .nested{
+            display: none;
+        }
+        .active{
+            display: block;
+        }
+        .caret::before{
+            content: "\25B6";
+            color: black;
+            display: inline-block;
+            margin-right: 6px;
+        }
+        .caret-down::before{
+            transform: rotate(90deg);
+        }
+
+    </style>
+
+    <script>
+        var toggler = document.getElementsByClassName("caret");
+        var i;
+
+        for(i = 0; i < toggler.length; i++){
+            toggler[i].addEventListener("click", function () {
+                this.parentElement.querySelector(".nested").classList.toggle("active");
+                this.classList.toggle("caret-down")
+            })
+        }
+    </script>
+
+{% endblock %}

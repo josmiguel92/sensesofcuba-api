@@ -1,12 +1,34 @@
+{#{% extends '@EasyAdmin/default/layout.html.twig' %}#}
 <!DOCTYPE html>
 <html>
     <head>
         <meta charset="UTF-8">
         <title>{% block title %}Welcome!{% endblock %}</title>
         {% block stylesheets %}{% endblock %}
+        <link rel="stylesheet" href="{{ asset('bundles/vendor/bootstrap.min.css') }}">
+
+        <script src="{{ asset('bundles/vendor/jquery.slim.min.js') }}"></script>
+        <script src="{{ asset('bundles/vendor/popper.min.js') }}"></script>
+        <script src="{{ asset('bundles/vendor/bootstrap.min.js') }}"></script>
+        <script src="{{ asset('bundles/vendor/bs-custom-file-input.min.js') }}"></script>
     </head>
     <body>
-        {% block body %}{% endblock %}
+<div class="content-wrapper">
+                {% block flash_messages %}
+                    {{ include(_entity_config is defined ? _entity_config.templates.flash_messages : '@EasyAdmin/default/flash_messages.html.twig') }}
+                {% endblock flash_messages %}
+
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-9">
+                        {% block body %}
+                        {% endblock %}
+                    </div>
+                </div>
+            </div>
+
+</div>
         {% block javascripts %}{% endblock %}
     </body>
 </html>

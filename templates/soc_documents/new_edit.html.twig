@@ -1,0 +1,199 @@
+{#{% extends '@EasyAdmin/default/layout.html.twig' %}#}
+{% extends '@EasyAdmin/page/content.html.twig' %}
+{#{% extends 'base.html.twig' %}#}
+
+{% block title %}{{ document.id ? 'Edit' : 'Create new'}} document{% endblock %}
+
+
+{% block content %}
+
+{#{% form_theme form '@EasyAdminBundle:form:bootstrap_4.html.twig' %}#}
+
+    <script src="{{ asset('bundles/vendor/bs-custom-file-input.min.js') }}"></script>
+    <style>
+        .form-group label{
+            text-align: left;
+        }
+        .btn-delete{
+            float: left;
+        }
+    </style>
+    <div class="content">
+        <section class="content-header ">
+            <div class="d-flex flex-row justify-content-between align-content-center w-100">
+                <div class="content-header-title">
+                    <h1 class="title">    {{ block('title') }}</h1>
+                </div>
+
+                <div class="global-actions"></div>
+            </div>
+
+        </section>
+
+        <section id="main" class="content-body">
+             {{ form_start(form) }}
+    <div class="row">
+        <div class="col-md-3">
+            Reference Name of the document
+        </div>
+        <div class="col-md-7">
+            {{ form_widget(form.referenceName) }}
+        </div>
+        <div class="col-md-2">
+            {{ form_widget(form.enabled) }}
+        </div>
+
+    </div>
+<hr>
+
+    <div class="row">
+        <div class="col-md-3">
+            Translations
+        </div>
+        <div class="col-md-9">
+            {{ form_widget(form.translations) }}
+        </div>
+    </div>
+<hr>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                {% if document.image %}
+                <img src="{{ asset('uploads/images/' ~ document.image.imageName)}}" class="card-img-top" style="max-height: 20vh; min-width: 25vw;">
+                {% endif %}
+                <div class="card-body">
+                    <h5>Document Image</h5>
+                    <div class="form-group">
+                        {{ form_row(form.image.title) }}
+                        {{ form_row(form.image.imageFile) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card"  >
+                {% if document.file %}
+                <img src="placeholder" class="card-img-top" style="max-height: 20vh; min-width: 25vw;">
+                {% endif %}
+                <div class="card-body">
+                    <h5>Document PDF File</h5>
+                    <div class="form-group">
+                        {{ form_row(form.file.title) }}
+                        {{ form_row(form.file.file) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+
+
+            <section class="content-footer" style="position: relative;">
+                <div class="form-actions">
+
+                    <button type="submit" class="btn btn-primary action-save">
+                        <span class="btn-label">Save changes</span>
+                    </button>
+                    {{ form(form) }}
+                    {% if document.id %}{{ form(deleteForm) }}{% endif %}
+
+
+
+                    <a class=" btn btn-link pr-0 action-list" title="" href="{{ path('soc_document_index') }}" target="_self">Back to listing</a>
+
+
+                </div>
+
+
+            </section>
+
+
+{#            <form name="products" method="post" id="new-products-form" class="new-form" data-view="new" data-entity="Products" data-entity-id="" enctype="multipart/form-data"><input type="hidden" name="referer" value="%2Fadmin%2F%3Fentity%3DProducts%26action%3Dlist%26menuIndex%3D1%26submenuIndex%3D-1%26sortField%3Did%26sortDirection%3DDESC%26page%3D1">        <div class="row">#}
+{#                    <div class="col-12 ">#}
+{#                        <div class="form-group  field-text"><label for="products_title" class="form-control-label required">Title</label><div class="form-widget">#}
+
+{#                                <input type="text" id="products_title" name="products[title]" required="required" class="form-control">#}
+
+
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                    <div class="col-12 ">#}
+{#                        <div class="form-group  field-file"><label for="products_file" class="form-control-label">File</label><div class="form-widget">#}
+
+{#                                <div class="custom-file"><input type="file" id="products_file" name="products[file]" class="custom-file-input"><label for="products_file" class="custom-file-label"></label>#}
+{#                                </div>#}
+{#                                <script>#}
+{#                                    document.querySelector('#products_file').addEventListener('change', function() {#}
+{#                                        const fileName = this.value.replace('C:\\fakepath\\', '');#}
+{#                                        const customInputFileLabel = document.querySelector('#products_file ~ .custom-file-label');#}
+{#                                        customInputFileLabel.classList.add('selected');#}
+{#                                        customInputFileLabel.innerHTML = fileName;#}
+{#                                    });#}
+{#                                </script>#}
+
+
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                    <div class="col-12 ">#}
+{#                        <div class="form-group  field-file"><label for="products_image" class="form-control-label">Image</label><div class="form-widget">#}
+
+{#                                <div class="custom-file"><input type="file" id="products_image" name="products[image]" class="custom-file-input"><label for="products_image" class="custom-file-label"></label>#}
+{#                                </div>#}
+{#                                <script>#}
+{#                                    document.querySelector('#products_image').addEventListener('change', function() {#}
+{#                                        const fileName = this.value.replace('C:\\fakepath\\', '');#}
+{#                                        const customInputFileLabel = document.querySelector('#products_image ~ .custom-file-label');#}
+{#                                        customInputFileLabel.classList.add('selected');#}
+{#                                        customInputFileLabel.innerHTML = fileName;#}
+{#                                    });#}
+{#                                </script>#}
+
+
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                    <div class="col-12 ">#}
+{#                        <div class="form-group  field-entity"><label class="form-control-label" for="products_category">Category</label><div class="form-widget">#}
+
+{#                                <select id="products_category" name="products[category]" data-widget="select2" class="form-control select2-hidden-accessible" data-select2-id="products_category" tabindex="-1" aria-hidden="true"><option value="" data-select2-id="2">None</option><option value="9">base</option><option value="10">hoteles</option><option value="11">casas de alquiler</option><option value="12">hoteles »» hoteles maluchos</option><option value="13">hoteles »» hoteles maluchos »» hoteles mas malos</option><option value="14">Excursiones</option><option value="15">Excursiones »» Excursiones urbanas</option><option value="16">Excursiones »» Excursiones rurales</option></select><span class="select2 select2-container select2-container--bootstrap" dir="ltr" data-select2-id="1" style="width: 350px;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-disabled="false" aria-labelledby="select2-products_category-container"><span class="select2-selection__rendered" id="select2-products_category-container" role="textbox" aria-readonly="true" title="None">None</span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>#}
+
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+
+{#                </div>#}
+{#                <input type="hidden" id="products__token" name="products[_token]" value="rfcI8FlB2ajRy_Epf-5a4B82SRBNlEBKijXYYtaeWSk"><section class="content-footer">#}
+{#                    <div class="form-actions">#}
+{#                        <button type="submit" class="btn btn-primary action-save">#}
+{#                            <span class="btn-label">Save changes</span>#}
+{#                        </button>#}
+
+
+
+
+
+{#                        <a class=" btn btn-link pr-0 action-list" title="" href="/admin/?entity=Products&amp;action=list&amp;menuIndex=1&amp;submenuIndex=-1&amp;sortField=id&amp;sortDirection=DESC&amp;page=1" target="_self">Back to listing</a>#}
+
+
+{#                    </div>#}
+{#                </section>#}
+{#            </form>#}
+        </section>
+
+    </div>
+
+    <style>
+        .card .vich-image img{
+            display: none;
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
+          bsCustomFileInput.init()
+        })
+    </script>
+    <h2></h2>
+
+
+{% endblock %}

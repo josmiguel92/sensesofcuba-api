@@ -12,11 +12,13 @@ easy_admin:
             - '/admin/css/rewrite.css'
         brand_color: '#fdc416'
         menu:
-          - { entity: 'Categories', label: 'Kind of products' }
-          - Products
-          - { entity: 'Documents', label: 'Documents About Cuba' }
-          - Users
-        #form_theme: ['@FOSCKEditor/Form/ckeditor_widget.html.twig']
+#          - { entity: 'Categories', label: 'Kind of products' }
+#          - Products
+          - { label: 'Your Products', icon: 'receipt',  route: 'soc_product_index' }
+          - { label: 'Documents About Cuba',  icon: 'book',  route: 'soc_document_index'}
+          - { entity: 'Users', icon: 'users', label: 'Users and clients' }
+
+      #form_theme: ['@FOSCKEditor/Form/ckeditor_widget.html.twig']
         form_theme:
           - '@EasyAdmin/form/bootstrap_4.html.twig'
           - '@FOSCKEditor/Form/ckeditor_widget.html.twig'
@@ -66,25 +68,7 @@ easy_admin:
 
       Documents:
         class: App\Entity\Document
-        list:
-          fields:
-            - { property: 'id' }
-            - { property: 'title' }
-            - { property: 'getImageWebPath', type: 'file', template: 'admin/partial/image.html.twig',label: 'Image' }
-            - { property: 'getFileWebPath',  type: 'file', template: 'admin/partial/file.html.twig' , label: 'PDF'}
 
-        # ...
-        show:
-          fields:
-            - { property: 'title' }
-            - { property: 'getImageWebPath', type: 'file', template: 'admin/partial/image.html.twig', label: 'Image' }
-            - { property: 'getFileWebPath',  type: 'file', template: 'admin/partial/file.html.twig' , label: 'PDF'}
-
-        form:
-          fields:
-            - { property: 'title' }
-            - { property: 'file', type: 'file' }
-            - { property: 'image', type: 'file' }
 
 
       Users:
@@ -120,6 +104,10 @@ easy_admin:
             - { property: 'travelAgency' }
             - { property: 'Admin', type: 'boolean' }
 #            - { property: 'web' }
+      SocProducts:
+        class: App\Entity\SocProduct
+        form:
+          - { property: product, type: 'App\Form\SocProductType'}
 #      UserRoles:
 #        class: App\Entity\UserRole
 #        # List the entity class name you want to manage
