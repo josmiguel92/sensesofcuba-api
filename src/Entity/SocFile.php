@@ -22,11 +22,6 @@ class SocFile
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=180)
-     */
-    private $title;
-
-    /**
     * @Vich\UploadableField(mapping="files", fileNameProperty="fileName", size="fileSize")
     */
     private $file;
@@ -45,18 +40,6 @@ class SocFile
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getTitle(): ?string
-    {
-        return $this->title;
-    }
-
-    public function setTitle(string $title): self
-    {
-        $this->title = $title;
-
-        return $this;
     }
 
     public function getFileName(): ?string

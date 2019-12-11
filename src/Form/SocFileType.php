@@ -14,10 +14,10 @@ class SocFileType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title', null,  [
-                'required' => false,
-
-            ])
+//            ->add('title', null,  [
+//                'required' => false,
+//
+//            ])
 //            ->add('fileName')
 //            ->add('fileSize')
 //            ->add('createdAt')
