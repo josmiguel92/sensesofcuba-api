@@ -83,7 +83,7 @@ class SocDocumentsController extends AbstractController
 
             if($document->getImage() && $document->getImage()->getImageFile() === null)
                 $document->setImage(null);
-            
+
             $this->getDoctrine()->getManager()->flush();
 
             $this->addFlash('success', 'Document updated!');
