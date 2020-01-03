@@ -36,6 +36,12 @@ security:
             anonymous: true
             stateless: true
             provider: chain_provider
+        
+        api_reset_password:
+            pattern: ^/api/reset-password
+            anonymous: true
+            stateless: true
+            provider: chain_provider
 
         api:
             pattern: ^/api
