@@ -4,10 +4,21 @@
 
 {% block card_product %}
     <div class="accordion" id="accordion-{{ product.id }}">
-        <div class="card">
+        <div class="card" data-id="{{ product.id }}">
         <div class="card-header" id="product-{{ product.id }}">
-            <h4>{{ product.referenceName }} <small class="badge badge-pill badge-secondary">     <a class="  action-edit" title="" href="{{ path('soc_product_edit', {'id': product.id}) }}" target="_self">Edit</a>
-        </small></h4>
+            <h4>{{ product.referenceName }}
+                {% if product.socProducts | length > 0 %}
+                    <small class="badge-primary badge-pill">
+                        {{ product.socProducts | length }}
+                    </small>
+                {% endif %}
+                <small style="float: right;right: 4em;position: relative; font-size: .6em">
+                    <a class="  action-edit" title="" href="{{ path('soc_product_edit', {'id': product.id}) }}" target="_self">
+                    <i class="fa fa-edit"></i>    Edit
+                    </a>
+                </small>
+
+            </h4>
              <div class="checkbox-switch" data-propertyname="enabled" style="display: block;position: absolute;right: 1em;top: 1em;">
                     <label>
                         <input type="checkbox" {% if product.enabled %}checked=""{% endif %}>
@@ -26,14 +37,15 @@
             </div>
             <div class="col-md-6">
                 {% if product.file is not null and product.file.fileName is not null %}
-                <a href="{{ asset('uploads/files/' ~ product.file.fileName)}}">Download PDF file</a>
-            {% endif %}
+                    <a href="{{ asset('uploads/files/' ~ product.file.fileName)}}">Download PDF file</a>
+                {% endif %}
             </div>
             {% if product.socProducts | length > 0 %}
             <h3 class="mb-0">
                 <span class="btn btn-link" type="button" data-toggle="collapse" data-target="#children_of-{{ product.id }}"><i class="fa fa-list"></i> View {{ product.socProducts | length }} products</span>
             </h3>
             {% endif %}
+
         </div>
         <div class="collapse collapsed" id="children_of-{{ product.id }}" data-parent="#accordion-{{ product.id }}">
             <div class="card-body">
@@ -82,7 +94,7 @@
 
         <div class="col-md-3">
             <a class="  action-edit" title="" href="{{ path('soc_product_edit', {'id': product.id}) }}" target="_self">Edit</a>
-            <a class=" text-danger action-delete" title="" href="/admin/?entity=SocProduct&amp;action=delete&amp;menuIndex=3&amp;submenuIndex=-1&amp;sortField=id&amp;sortDirection=DESC&amp;page=1&amp;referer=%252Fadmin%252F%253Fentity%253DUsers%2526action%253Dlist%2526menuIndex%253D3%2526submenuIndex%253D-1%2526sortField%253Did%2526sortDirection%253DDESC%2526page%253D1&amp;id=10" target="_self">Delete</a>
+            <a class=" text-danger action-delete" title="" href="{{path('easyadmin')}}?entity=SocProduct&amp;action=delete&amp;menuIndex=3&amp;submenuIndex=-1&amp;sortField=id&amp;sortDirection=DESC&amp;page=1&amp;referer=%252Fadmin%252F%253Fentity%253DUsers%2526action%253Dlist%2526menuIndex%253D3%2526submenuIndex%253D-1%2526sortField%253Did%2526sortDirection%253DDESC%2526page%253D1&amp;id=10" target="_self">Delete</a>
 
         </div>
         </div>
@@ -106,7 +118,7 @@
 
                 <div class="global-actions">
                     <div class="form-action form-action-search  action-search">
-                        <form method="get" action="/admin/">
+                        <form method="get" action="{{ path('easyadmin') }}">
                             <input type="hidden" name="action" value="search">
                             <input type="hidden" name="entity" value="SocProducts">
                             <input type="hidden" name="menuIndex" value="3">
@@ -198,7 +210,7 @@
 
 
 
-            <form name="delete_form" method="post" action="/admin/?action=delete&amp;entity=SocProducts&amp;id=__id__" id="delete-form" style="display: none"><input type="hidden" name="_method" value="DELETE"><div id="delete_form" style="display: none"><div><button type="submit" id="delete_form_submit" name="delete_form[submit]">Delete</button></div><input type="hidden" id="delete_form__easyadmin_delete_flag" name="delete_form[_easyadmin_delete_flag]" value="1"><input type="hidden" id="delete_form__token" name="delete_form[_token]" value="aaZg0Sl1Gq9j2FD4xDQRDRzl0Q1e1YNvNhq5V291MUQ"></div></form>
+            <form name="delete_form" method="post" action="{{ path('easyadmin') }}?action=delete&amp;entity=SocProducts&amp;id=__id__" id="delete-form" style="display: none"><input type="hidden" name="_method" value="DELETE"><div id="delete_form" style="display: none"><div><button type="submit" id="delete_form_submit" name="delete_form[submit]">Delete</button></div><input type="hidden" id="delete_form__easyadmin_delete_flag" name="delete_form[_easyadmin_delete_flag]" value="1"><input type="hidden" id="delete_form__token" name="delete_form[_token]" value="aaZg0Sl1Gq9j2FD4xDQRDRzl0Q1e1YNvNhq5V291MUQ"></div></form>
 
             <div id="modal-delete" class="modal fade">
                 <div class="modal-dialog">
@@ -260,9 +272,8 @@
                     const newValue = this.checked;
                     const oldValue = !newValue;
                     const propertyName = this.closest('.checkbox-switch').dataset.propertyname;
-
-                    const toggleUrl = "/admin/?action=edit&entity=SocProducts&view=list"
-                        + "&id=" + this.closest('tr').dataset.id
+                    const toggleUrl = "{{ path('easyadmin') }}?action=edit&entity=SocProducts&view=list"
+                        + "&id=" + this.closest('div.card').dataset.id
                         + "&property=" + propertyName
                         + "&newValue=" + newValue.toString();
 

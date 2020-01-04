@@ -6,7 +6,7 @@
 parameters:
     default_locale: en
     locale: '%default_locale%'
-    app_locales: en|fr|de|es
+    app_locales: en|de|es
     google_recaptcha_site_key: '%env(GOOGLE_RECAPTCHA_SITE_KEY)%'
     mailer.sender.address: 'web@sensesofcuba.com'
     knp.doctrine_behaviors.blameable_subscriber.user_entity: App\Entity\User
