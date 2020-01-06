@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use A2lix\TranslationFormBundle\Form\Type\TranslationsType;
+use App\Entity\SocFile;
 use App\Entity\SocProduct;
 use EasyCorp\Bundle\EasyAdminBundle\Form\Type\Configurator\EntityTypeConfigurator;
 use EasyCorp\Bundle\EasyAdminBundle\Form\Type\EasyAdminAutocompleteType;
@@ -13,6 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Vich\UploaderBundle\Form\Type\VichFileType;
 
 class SocProductType extends EasyAdminFormType
 {
@@ -26,9 +28,17 @@ class SocProductType extends EasyAdminFormType
                 'required' => false
             ])
             ->add('parent')
-            ->add('file', SocFileType::class)
+//            ->add('file', SocFileType::class)
             ->add('image', SocImageType::class)
-            ->add('translations', TranslationsType::class)
+            ->add('translations', TranslationsType::class, [
+//                'fields'=>[
+//                    'pdfFile'=>[
+//                        'field_type' => VichFileType::class,
+//                        'label'=>'PDF File'
+//                    ]
+//                ]
+            ])
+            ->add('translatedDocument', TranslatedDocumentType::class)
         ;
     }
 

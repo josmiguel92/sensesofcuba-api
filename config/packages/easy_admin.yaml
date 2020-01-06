@@ -94,7 +94,7 @@ easy_admin:
             - { property: 'travelAgency' }
             - { property: 'country' }
             - { property: 'web' }
-            - { property: 'userRoles', type: 'choice', type_options: {choices: {ADMIN: 'ADMIN', USER: 'USER'}}}
+            - { property: 'userRoles', type: 'entity', type_options:{ class: 'App\Entity\Role'}}
         list:
           fields:
             - { property: 'enabled' }

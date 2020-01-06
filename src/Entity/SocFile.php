@@ -22,7 +22,7 @@ class SocFile
     private $id;
 
     /**
-    * @Vich\UploadableField(mapping="files", fileNameProperty="fileName", size="fileSize")
+    * @Vich\UploadableField(mapping="files", fileNameProperty="fileName")
     */
     private $file;
 
@@ -30,11 +30,6 @@ class SocFile
      * @ORM\Column(type="string", length=180, nullable=true)
      */
     private $fileName;
-
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    private $fileSize;
 
     
     public function getId(): ?int
@@ -50,18 +45,6 @@ class SocFile
     public function setFileName(string $fileName = null): self
     {
         $this->fileName = $fileName;
-
-        return $this;
-    }
-
-    public function getFileSize(): ?int
-    {
-        return $this->fileSize;
-    }
-
-    public function setFileSize(int $fileSize = null): self
-    {
-        $this->fileSize = $fileSize;
 
         return $this;
     }

@@ -6,7 +6,12 @@
     <div class="accordion" id="accordion-{{ document.id }}">
         <div class="card" data-id="{{ document.id }}">
         <div class="card-header" id="document-{{ document.id }}">
-            <h4>{{ document.referenceName }}
+            <h4>
+                {% if document.image %}
+                 <img src="{{ asset('uploads/images/' ~ document.image.imageName)}}" class="img-thumbnail" style="max-width: 3em; max-height: 3em; border-radius: 50%">
+                {% endif %}
+
+                {{ document.referenceName }}
 
                 <small style="float: right;right: 4em;position: relative; font-size: .6em">
                     <a class="  action-edit" title="" href="{{ path('soc_document_edit', {'id': document.id}) }}" target="_self">
@@ -21,21 +26,24 @@
                         <span></span>
                     </label>
             </div>
-            <div class="row">
+            {% if document.translatedDocument is not null %}
+                <div class="container">
 
-            </div>
-
-            <div class="col-md-6">
-                   {% if document.image is not null and document.image.imageName is not null %}
-                <img src="{{ asset('uploads/images/' ~ document.image.imageName)}}" style="max-height: 6em; max-width: 8em">
+                        {% for doc in document.translatedDocument.getDocuments %}
+                            {% if not loop.first %}
+                            |
+                            {% endif %}
+                        <small>
+                            <a href="{{ asset('uploads/files/' ~ doc.file.fileName)}}" download="download"><i class="fa fa-download"></i> Download {{ doc.lang }} file</a>
+                        </small>
+                        {% else %}
+                            <small>
+                                <span class="text-warning"><i class="fa fa-warning"></i>This document doesn't contain a downloadable file.</span>
+                            </small>
+                        {% endfor %}
+                </div>
             {% endif %}
 
-            </div>
-            <div class="col-md-6">
-                {% if document.file is not null and document.file.fileName is not null %}
-                <a href="{{ asset('uploads/files/' ~ document.file.fileName)}}">Download PDF file</a>
-            {% endif %}
-            </div>
 
         </div>
 

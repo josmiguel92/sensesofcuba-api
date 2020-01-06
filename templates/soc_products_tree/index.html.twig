@@ -6,7 +6,14 @@
     <div class="accordion" id="accordion-{{ product.id }}">
         <div class="card" data-id="{{ product.id }}">
         <div class="card-header" id="product-{{ product.id }}">
-            <h4>{{ product.referenceName }}
+
+            <h4>
+                {% if product.image and product.image.imageName %}
+                 <img src="{{ asset('uploads/images/' ~ product.image.imageName)}}" class="img-thumbnail" style="max-width: 3em; border-radius: 50%">
+                {% else %}
+                    <i class="fa fa-image"></i>
+                {% endif %}
+                {{ product.referenceName }}
                 {% if product.socProducts | length > 0 %}
                     <small class="badge-primary badge-pill">
                         {{ product.socProducts | length }}
@@ -25,24 +32,29 @@
                         <span></span>
                     </label>
             </div>
-            <div class="row">
+            {% if product.translatedDocument is not null %}
+                <div class="container">
 
-            </div>
-
-            <div class="col-md-6">
-                   {% if product.image is not null and product.image.imageName is not null %}
-                <img src="{{ asset('uploads/images/' ~ product.image.imageName)}}" style="max-height: 6em; max-width: 8em">
+                        {% for doc in product.translatedDocument.getDocuments %}
+                            {% if not loop.first %}
+                            |
+                            {% endif %}
+                            <small>
+                                <a href="{{ asset('uploads/files/' ~ doc.file.fileName)}}" download="download"><i class="fa fa-download"></i> Download {{ doc.lang }} file</a>
+                            </small>
+                        {% else %}
+                            {% if product.socProducts | length == 0 %}
+                                <small>
+                                    <span class="text-warning"><i class="fa fa-warning"></i>This product doesn't contain a downloadable file.</span>
+                                </small>
+                            {% endif %}
+                        {% endfor %}
+                </div>
             {% endif %}
 
-            </div>
-            <div class="col-md-6">
-                {% if product.file is not null and product.file.fileName is not null %}
-                    <a href="{{ asset('uploads/files/' ~ product.file.fileName)}}">Download PDF file</a>
-                {% endif %}
-            </div>
             {% if product.socProducts | length > 0 %}
             <h3 class="mb-0">
-                <span class="btn btn-link" type="button" data-toggle="collapse" data-target="#children_of-{{ product.id }}"><i class="fa fa-list"></i> View {{ product.socProducts | length }} products</span>
+                <span class="btn btn-link" type="button" data-toggle="collapse" data-target="#children_of-{{ product.id }}"><i class="fa fa-list"></i> View {{ product.socProducts | length }} products inside</span>
             </h3>
             {% endif %}
 

@@ -26,4 +26,11 @@ class Role extends BaseRole
     {
         return $this->name;
     }
+
+    public function __toString()
+    {
+        return $this->name;
+    }
+
+
 }
