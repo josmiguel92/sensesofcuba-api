@@ -17,6 +17,8 @@ easy_admin:
           - { label: 'Your Products', icon: 'receipt',  route: 'soc_product_index' }
           - { label: 'Documents About Cuba',  icon: 'book',  route: 'soc_document_index'}
           - { entity: 'Users', icon: 'users', label: 'Users and clients' }
+          - { entity: 'Role', icon: 'users', label: 'Roles' }
+          - { label: 'Public Homepage', route: 'homepage' }
 
       #form_theme: ['@FOSCKEditor/Form/ckeditor_widget.html.twig']
         form_theme:
@@ -73,6 +75,7 @@ easy_admin:
 
       Users:
         class: App\Entity\User
+        disabled_actions: ['new']
         show:
           fields:
             - { property: 'id' }
@@ -95,6 +98,7 @@ easy_admin:
             - { property: 'country' }
             - { property: 'web' }
             - { property: 'userRoles', type: 'entity', type_options:{ class: 'App\Entity\Role'}}
+#            - { property: 'userRolesCollection', label: 'Add roles to user',  help: 'Select one or more roles', type: 'entity',  type_options: { class: 'App\Entity\Role', multiple: true, attr: {'data-widget': 'select2'} } }
         list:
           fields:
             - { property: 'enabled' }
@@ -104,12 +108,20 @@ easy_admin:
             - { property: 'travelAgency' }
             - { property: 'Admin', type: 'boolean' }
 #            - { property: 'web' }
+
+
       SocProducts:
         class: App\Entity\SocProduct
         form:
           - { property: product, type: 'App\Form\SocProductType'}
 #      UserRoles:
 #        class: App\Entity\UserRole
+      Role:
+        class: App\Entity\Role
+        form:
+          fields:
+            - { property: 'name' }
+
 #        # List the entity class name you want to manage
 #        - App\Entity\Product
 #        - App\Entity\Category
