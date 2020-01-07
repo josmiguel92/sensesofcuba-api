@@ -91,6 +91,11 @@
                         <button class="btn btn-primary mt-3" type="submit">{{ $t('general.register') }}</button>
                         <br>
                     </div>
+                    <div class="d-flex flex-column align-items-center flex-grow-1">
+                        <img src="~/assets/images/logo.png" class="img-fluid mb-2" alt="" style="max-width: 150px">
+                        <h3 class="mb-3">{{ $t('register.title') }}</h3>
+                        
+                    </div>
                     <div class="d-flex align-items-center mt-4 justify-content-center">
                         <span class="mr-2">{{ $t('register.have_account') }}</span>
                         <router-link to="/login" tag="button" class="btn btn-secondary">{{ $t('general.login') }}</router-link>
@@ -150,10 +155,12 @@ export default {
         }
     },
     mounted() {
-        this.getCSFRToken().then(token => {
-            this.credentials.csfrToken = token;
-        }).catch(e => {
-            console.error('Error getting the CSFR token for this form.')
+        this.$nextTick(() => {
+            this.getCSFRToken('register').then(token => {
+                this.credentials.csfrToken = token;
+            }).catch(e => {
+                console.error('Error getting the CSFR token for this form.')
+            });
         });
     }
 }

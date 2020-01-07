@@ -70,8 +70,8 @@ const store = new Vuex.Store({
                 return Promise.reject(e);
             })
         },
-        resetUserPassword(email) {
-            return API.resetPassword(email).then(() => {
+        resetUserPassword({commit}, data) {
+            return API.resetPassword(data.email, data.token).then(() => {
                 return Promise.resolve();
             }).catch(e => {
                 return Promise.reject(e);
@@ -101,8 +101,8 @@ const store = new Vuex.Store({
                     return Promise.reject(e);
                 })
         },
-        getCSFRToken() {
-            return API.getCsfrToken().then(res => {
+        getCSFRToken({commit}, route) {
+            return API.getCsfrToken(route).then(res => {
                 return Promise.resolve(res.data._token);
             }).catch(e => {
                 return Promise.reject(e);

@@ -48,18 +48,19 @@ export default {
             email: '',
             inProgress: false,
             error: null,
-            done: false
+            done: false,
+            csfrToken: ''
         }
     },
     components: {
         Loader
     },
     methods: {
-        ...mapActions(['resetUserPassword']),
+        ...mapActions(['resetUserPassword', 'getCSFRToken']),
         handleSubmit() {
             this.inProgress = true;
             this.error = null;
-            this.resetUserPassword(this.email).then(() => {
+            this.resetUserPassword({email: this.email, token: this.csfrToken}).then(() => {
                 this.inProgress = false;
                 this.done = true;
             }).catch(e => {
@@ -67,6 +68,15 @@ export default {
                 this.error = e.message;
             });
         }
+    },
+    mounted() {
+        this.$nextTick(() => {
+            this.getCSFRToken('reset-password').then(token => {
+                this.csfrToken = token;
+            }).catch(e => {
+                console.error('Error getting the CSFR token for this form.')
+            });
+        });
     }
 }
 </script>
