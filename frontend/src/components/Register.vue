@@ -92,7 +92,7 @@
                         <br>
                     </div>
                     <div class="d-flex align-items-center mt-4">
-                        <span class="mr-2">{{ $t('login.have_account') }}</span>
+                        <span class="mr-2">{{ $t('register.have_account') }}</span>
                         <router-link to="/login" tag="button" class="btn btn-secondary">{{ $t('general.login') }}</router-link>
                     </div>
                 </form>
