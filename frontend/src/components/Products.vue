@@ -12,9 +12,9 @@
                 <div class="panel p-4" v-active="currentItem === i">
                     <div class="d-flex align-items-center mb-4">
                         <h3 class="panel-title text-dark mr-2">{{ item.title }}</h3>
-                        <!--<button class="btn btn-primary"><i class="fa fa-download mr-1"></i>
-                            <span class="d-none d-md-inline">Download All</span>
-                        </button>-->
+                        <a role="button" v-if="item.file" :href="`${item.file}`" class="btn btn-primary" :download="item.title"><i class="fa fa-download mr-1"></i>
+                            <span class="d-none d-md-inline">Download</span>
+                        </a>
                     </div>
                     <TreeItem v-for="(child, i) in item.children" :key="i" :item="child"></TreeItem>
                 </div>
