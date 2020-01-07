@@ -64,11 +64,15 @@ class AdminController extends AbstractController
 
         foreach ($products as $product)
         {
+            $file = null;
+            if($product->getTranslatedDocument() && $product->getTranslatedDocument()->translate($lang)) {
+                $file = $product->getTranslatedDocument()->translate($lang)->getFileName();
+            }
             $items[] = [
                 'id' => $product->getId(),
                 'title' => $product->translate($lang)->getName(),
                 'description' => $product->translate($lang)->getDescription(),
-                'file' => $product->getTranslatedDocument() ? 'uploads/files/'.$product->getTranslatedDocument()->translate($lang)->getFileName() :  null,
+                'file' => $file,
                 'modified_on' =>  $product->getUpdatedAt(),
                 'image' => $product->getImage() ? 'uploads/images/'.$product->getImage()->getImageName() : null,
                 'child_of' => $product->getParent() ? $product->getParent()->getId() : null,
@@ -97,11 +101,17 @@ class AdminController extends AbstractController
 
         foreach ($docs as $doc)
         {
+
+            $file = null;
+            if($doc->getTranslatedDocument() && $doc->getTranslatedDocument()->translate($lang)) {
+                $file = $doc->getTranslatedDocument()->translate($lang)->getFileName();
+            }
+
             $items[] = [
                 'id' => $doc->getId(),
                 'title' => $doc->translate($lang)->getName(),
                 'description' => $doc->translate($lang)->getDescription(),
-                'file' => $doc->getFile() ? 'uploads/files/'.$doc->getFile()->getFileName() :  null,
+                'file' => $file,
                 'created_on' =>  $doc->getCreatedAt(),
                 'modified_on' =>  $doc->getUpdatedAt(),
                 'image' => $doc->getImage() ? 'uploads/images/'.$doc->getImage()->getImageName() : null
