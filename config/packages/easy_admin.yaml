@@ -67,10 +67,10 @@ easy_admin:
 #            - { property: 'file', type: 'file' }
 #            - { property: 'image', type: 'file' }
 #            - { property: 'category' }
-
-      Documents:
-        class: App\Entity\Document
-
+#
+#      Documents:
+#        class: App\Entity\Document
+#
 
 
       Users:
