@@ -18,6 +18,8 @@ class TranslatedDocument
      */
     private $id;
 
+    private $lang = 'en';
+
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\SocFile", cascade={"persist", "remove"})
      */
@@ -97,6 +99,30 @@ class TranslatedDocument
         return $docs;
 
 
-
     }
+
+
+    public function getTranlation($lang)
+    {
+        if(!in_array($lang, ['en', 'es', 'de']))
+            return null;
+
+        switch ($lang)
+        {
+            case 'es' : return $this->esFile;
+            case 'de' : return $this->deFile;
+            default : return $this->enFile;
+        }
+    }
+
+    /**
+     * @return string
+     */
+    public function translate($lang): SocFile
+    {
+        if(in_array($lang, ['en', 'es', 'de']))
+            $this->lang = $lang;
+        return $this->getTranlation($lang);
+    }
+
 }

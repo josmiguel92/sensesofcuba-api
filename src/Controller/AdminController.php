@@ -68,7 +68,7 @@ class AdminController extends AbstractController
                 'id' => $product->getId(),
                 'title' => $product->translate($lang)->getName(),
                 'description' => $product->translate($lang)->getDescription(),
-                'file' => $product->getFile() ? 'uploads/files/'.$product->getFile()->getFileName() :  null,
+                'file' => $product->getTranslatedDocument() ? 'uploads/files/'.$product->getTranslatedDocument()->translate($lang)->getFileName() :  null,
                 'modified_on' =>  $product->getUpdatedAt(),
                 'image' => $product->getImage() ? 'uploads/images/'.$product->getImage()->getImageName() : null,
                 'child_of' => $product->getParent() ? $product->getParent()->getId() : null,
@@ -121,65 +121,6 @@ class AdminController extends AbstractController
             return new JsonResponse(null, 200);
         }
     }
-
-    /**
-     * @Route("/api/contact", name="api_contact")
-     * @return JsonResponse
-     */
-    public function api_contact(): JsonResponse
-    {
-
-        $contactInfo = <<<EOF
-{
-    "opening_times": [
-        {
-            "day_range": "Monday - Friday",
-            "hour_range": "09:00 - 17:00"
-        },
-        {
-            "day_range": "Saturday - Sunday (and public holidays)",
-            "hour_range": "10:00 - 16:00"
-        }
-    ],
-    "emails": [
-        {
-            "label": "General Contact",
-            "address": "info@sensesofcuba.com"
-        },
-        {
-            "label": "Sales",
-            "address": "info@sensesofcuba.com"
-        },
-        {
-            "label": "Product Management",
-            "address": "info@sensesofcuba.com"
-        }
-    ],
-    "phones": [
-        {
-            "label": "General",
-            "number": "+53 7866 4734"
-        },
-        {
-            "label": "Emergency",
-            "number": "+53 7866 4734"
-        }
-    ],
-    "addresses": [
-        {
-            "address": "Edificio Bacardi, Oficina 404, Calle Monserrate 261, CP 10100, La Habana Vieja, Habana, Cuba"
-        }
-    ]
-}
-EOF;
-
-        return JsonResponse::fromJsonString($contactInfo)
-            ->setSharedMaxAge(300);
-
-    }
-
-
-
 
 
 }
