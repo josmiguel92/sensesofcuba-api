@@ -66,7 +66,9 @@ export default {
     register: {
         title: 'Ein neues Konto eröffnen',
         no_confirm_email: "Sie erhalten keine Bestätigungsmail?",
-        have_account: 'Ein Konto haben?'
+        have_account: 'Ein Konto haben?',
+        done_title: 'Registration Done',
+        done_text: 'Now wait until we approve your request, we will send you a confirmation email.'
     },
     password_reset: {
         title: 'Setze dein Passwort zurück',

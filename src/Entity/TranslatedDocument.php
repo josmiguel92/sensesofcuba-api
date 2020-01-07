@@ -125,4 +125,7 @@ class TranslatedDocument
         return $this->getTranlation($lang);
     }
 
+    public function __toString() {
+        return "{". $this->id ."}";
+    }
 }

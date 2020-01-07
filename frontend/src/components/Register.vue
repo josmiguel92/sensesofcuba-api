@@ -1,9 +1,9 @@
 <template>
-    <div id="register-page" class="d-flex flex-column align-items-center justify-content-center bg-primary pt-4 pb-4">
+    <div id="register-page" :class="{'h-100': done}" class="d-flex flex-column align-items-center justify-content-center bg-primary pt-4 pb-4">
         <div class="container d-flex flex-column align-items-center">
             <div class="card p-4 shadow w-30">
-                <form @submit.prevent="handleSubmit" class="d-flex flex-column">
-                    <div class="d-flex flex-column align-items-center flex-grow-1">
+                <form v-if="!done" @submit.prevent="handleSubmit" class="d-flex flex-column">
+                    <div  class="d-flex flex-column align-items-center flex-grow-1">
                         <img src="~/assets/images/logo.png" class="img-fluid mb-2" alt="" style="max-width: 150px">
                         <h3 class="mb-3">{{ $t('register.title') }}</h3>
                         <div class="feedback mb-2">
@@ -91,16 +91,21 @@
                         <button class="btn btn-primary mt-3" type="submit">{{ $t('general.register') }}</button>
                         <br>
                     </div>
-                    <div class="d-flex flex-column align-items-center flex-grow-1">
-                        <img src="~/assets/images/logo.png" class="img-fluid mb-2" alt="" style="max-width: 150px">
-                        <h3 class="mb-3">{{ $t('register.title') }}</h3>
-                        
-                    </div>
-                    <div class="d-flex align-items-center mt-4 justify-content-center">
-                        <span class="mr-2">{{ $t('register.have_account') }}</span>
+                    <div class="d-flex align-items-center mt-4">
+                        <span class="mr-2">{{ $t('login.have_account') }}</span>
                         <router-link to="/login" tag="button" class="btn btn-secondary">{{ $t('general.login') }}</router-link>
                     </div>
                 </form>
+                <div class="d-flex flex-column" v-else>
+                    <div class="d-flex flex-column align-items-center flex-grow-1">
+                        <img src="~/assets/images/logo.png" class="img-fluid mb-2" alt="" style="max-width: 150px">
+                        <h3 class="mb-3">{{ $t('register.done_title') }}</h3>
+                        <p>{{ $t('register.done_text') }}</p>
+                    </div>
+                    <div class="d-flex align-items-center mt-4 justify-content-center">
+                        <router-link to="/login" tag="button" class="btn btn-secondary">{{ $t('general.login') }}</router-link>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -116,7 +121,7 @@ export default {
             credentials: {
                 name: '',
                 enterprise: '',
-                travelAgency: '',
+                travelAgency: 'travel_agency',
                 web: '',
                 country: '',
                 email: '',
@@ -125,7 +130,8 @@ export default {
             },
             passwordRepeat: '',
             inProgress: false,
-            error: null
+            error: null,
+            done: false
         }
     },
     components: {
@@ -145,7 +151,7 @@ export default {
                 return;
             }
             this.registerUser(this.credentials).then(() => {
-                this.$router.push('/success');
+                this.done = true;
                 this.inProgress = false;
             }).catch(e => {
                 console.error(e);

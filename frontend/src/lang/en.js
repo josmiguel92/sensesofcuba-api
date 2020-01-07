@@ -42,11 +42,11 @@ export default {
             },
             address: "Address",
             phone: "Phone",
-            e_phone: "Emergency Phone",
-            g_contact: "General Contact",
+            emergency_phone: "Emergency Phone",
+            general_contact: "General Contact",
             sales: "Sales",
-            p_management: "Product Management",
-            o_times: "Opening Times"
+            product_management: "Product Management",
+            opening_times: "Opening Times"
         },
         footer: {
             links: {
@@ -66,7 +66,9 @@ export default {
     register: {
         title: 'Register a new account',
         no_confirm_email: "Don't receive the confirmation email?",
-        have_account: 'Have an account?'
+        have_account: 'Have an account?',
+        done_title: 'Registration Done',
+        done_text: 'Now wait until we approve your request, we will send you a confirmation email.'
     },
     password_reset: {
         title: 'Reset your password',
