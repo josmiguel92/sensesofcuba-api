@@ -110,17 +110,17 @@ class AdminController extends AbstractController
 
         return new JsonResponse($items);
     }
-
-    /**
-     * @Route("/api/reset-password", name="api_reset_password")
-     * @return JsonResponse
-     */
-    public function api_reset_password(Request $request, UserRepository $userRepository): JsonResponse
-    {
-        if ($request->isMethod(Request::METHOD_POST)) {
-            return new JsonResponse(null, 200);
-        }
-    }
+//
+//    /**
+//     * @Route("/api/reset-password", name="api_reset_password")
+//     * @return JsonResponse
+//     */
+//    public function api_reset_password(Request $request, UserRepository $userRepository): JsonResponse
+//    {
+//        if ($request->isMethod(Request::METHOD_POST)) {
+//            return new JsonResponse(null, 200);
+//        }
+//    }
 
 
 }

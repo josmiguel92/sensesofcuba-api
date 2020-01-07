@@ -18,9 +18,9 @@ use Symfony\Component\Routing\Annotation\Route;
 use Twig\Environment;
 
 /**
- * @Route("/api/reset-password", name="reset_password", methods={"POST"})
+ * @Route("/api/reset-password", name="api_reset_password", methods={"POST", "GET"})
  */
-final class ForgotPasswordController extends AbstractController
+class ForgotPasswordController extends AbstractController
 {
     public function __invoke(
         Request $request,
@@ -30,6 +30,14 @@ final class ForgotPasswordController extends AbstractController
         MessageBusInterface $bus
     ): Response {
         $form = $formFactory->createNamed('', ForgotPasswordType::class);
+
+          if($request->isMethod(Request::METHOD_GET))
+        {
+
+            $_token = $form->createView()->children['_token']->vars['data'];
+             return $this->json(['_token'=> $_token]);
+        }
+
 
         if ($request->isMethod(Request::METHOD_POST)) {
             $data = json_decode($request->getContent(), true);
@@ -48,6 +56,7 @@ final class ForgotPasswordController extends AbstractController
                 }
                 return $this->json(['message' => 'Succeed']);
             }
+            return  $this->json(['message' => 'Error'], Response::HTTP_BAD_REQUEST);
         }
 
         //$form->handleRequest($request);
