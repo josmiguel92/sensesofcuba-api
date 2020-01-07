@@ -66,7 +66,9 @@ export default {
     register: {
         title: 'Register a new account',
         no_confirm_email: "Don't receive the confirmation email?",
-        have_account: 'Have an account?'
+        have_account: 'Have an account?',
+        done_title: 'Registration Done',
+        done_text: 'Now wait until we approve your request, we will send you a confirmation email.'
     },
     password_reset: {
         title: 'Reset your password',
