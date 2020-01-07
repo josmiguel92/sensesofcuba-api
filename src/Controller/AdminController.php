@@ -21,7 +21,7 @@ class AdminController extends AbstractController
     public function homepage(): \Symfony\Component\HttpFoundation\Response
     {
      //   return new RedirectResponse('index.html');
-         $file = __DIR__."/../../public/index.html";
+         $file = __DIR__."/../../public/dist/index.html";
 
     if (file_exists($file)) {
         return new Response(file_get_contents($file));
