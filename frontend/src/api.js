@@ -1,6 +1,6 @@
 import Axios from "axios";
 
-const API_URL = 'https://habanatech.com/sensesofcuba/api';
+const API_URL = 'http://s498302874.online.de/api';
 
 class API {
     constructor() {
