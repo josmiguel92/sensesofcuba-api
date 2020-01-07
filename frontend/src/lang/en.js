@@ -42,11 +42,11 @@ export default {
             },
             address: "Address",
             phone: "Phone",
-            e_phone: "Emergency Phone",
-            g_contact: "General Contact",
+            emergency_phone: "Emergency Phone",
+            general_contact: "General Contact",
             sales: "Sales",
-            p_management: "Product Management",
-            o_times: "Opening Times"
+            product_management: "Product Management",
+            opening_times: "Opening Times"
         },
         footer: {
             links: {
