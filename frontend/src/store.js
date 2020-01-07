@@ -101,7 +101,7 @@ const store = new Vuex.Store({
                     return Promise.reject(e);
                 })
         },
-        getCSFRToken(route) {
+        getCSFRToken({commit}, route) {
             return API.getCsfrToken(route).then(res => {
                 return Promise.resolve(res.data._token);
             }).catch(e => {

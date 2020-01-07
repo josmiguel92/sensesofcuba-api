@@ -150,10 +150,12 @@ export default {
         }
     },
     mounted() {
-        this.getCSFRToken('register').then(token => {
-            this.credentials.csfrToken = token;
-        }).catch(e => {
-            console.error('Error getting the CSFR token for this form.')
+        this.$nextTick(() => {
+            this.getCSFRToken('register').then(token => {
+                this.credentials.csfrToken = token;
+            }).catch(e => {
+                console.error('Error getting the CSFR token for this form.')
+            });
         });
     }
 }

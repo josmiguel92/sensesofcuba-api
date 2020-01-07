@@ -70,10 +70,12 @@ export default {
         }
     },
     mounted() {
-        this.getCSFRToken('reset-password').then(token => {
-            this.csfrToken = token;
-        }).catch(e => {
-            console.error('Error getting the CSFR token for this form.')
+        this.$nextTick(() => {
+            this.getCSFRToken('reset-password').then(token => {
+                this.csfrToken = token;
+            }).catch(e => {
+                console.error('Error getting the CSFR token for this form.')
+            });
         });
     }
 }
