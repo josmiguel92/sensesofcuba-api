@@ -7,8 +7,8 @@
                 <small v-if="!isParent" class="d-none d-md-inline">{{ $t('general.updated') }}: {{ item.modified_on | date }}</small>
             </div>
             <div class="d-flex" v-if="item.file">
-                <button @click="openDocument(item.title, `../${item.file}`)" class="btn btn-secondary btn-sm btn-icon"><i class="fa fa-file-pdf mr-1"></i> <span class="d-none d-md-inline">Open</span></button>
-                <a role="button" :href="`../${item.file}`" class="btn btn-secondary btn-sm" download>
+                <button @click="openDocument(item.title, `${item.file}`)" class="btn btn-secondary btn-sm btn-icon"><i class="fa fa-file-pdf mr-1"></i> <span class="d-none d-md-inline">Open</span></button>
+                <a role="button" :href="`${item.file}`" class="btn btn-secondary btn-sm" download>
                     <i class="fa fa-download mr-1"></i> <span class="d-none d-md-inline">Download</span>
                 </a>
             </div>
