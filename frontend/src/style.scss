@@ -1,0 +1,20 @@
+$enable-gradients: true;
+$enable-responsive-font-sizes: true;
+$font-size-base: 0.875rem;
+$primary: #f9ce1c;
+$secondary: #eee;
+$dark: #212121;
+$font-family-sans-serif: "Montserrat", sans-serif;
+
+@import '../node_modules/@fortawesome/fontawesome-free/css/all.min.css';
+@import '../node_modules/bootstrap/scss/bootstrap.scss';
+
+
+.btn {
+    font-weight: 500 !important;
+}
+
+.input-group-text {
+    background-color: #eee !important;
+    min-width: 40px !important;
+}
