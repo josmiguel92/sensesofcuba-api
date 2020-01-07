@@ -70,8 +70,8 @@ const store = new Vuex.Store({
                 return Promise.reject(e);
             })
         },
-        resetUserPassword({email, token}) {
-            return API.resetPassword(email, token).then(() => {
+        resetUserPassword({commit}, data) {
+            return API.resetPassword(data.email, data.token).then(() => {
                 return Promise.resolve();
             }).catch(e => {
                 return Promise.reject(e);
