@@ -4,7 +4,7 @@
         <div class="container">
             <div class="navbar-left d-none d-lg-flex">
                 <Dropdown @select="onUserOptions" class="text-primary" icon="fa fa-user-circle" :title="currentUser.username" :options="userOptions"></Dropdown>
-                <a v-if="currentUser.role === 0" role="button" href="admin" class="btn btn-sm btn-primary d-flex align-items-center m-1">Admin Panel</a>
+                <a v-if="currentUser.role == 0" role="button" href="admin" class="btn btn-sm btn-primary d-flex align-items-center m-1">Admin Panel</a>
             </div>
             <a href="#" class="navbar-brand">
                 <img style="max-width: 200px" src="~/assets/images/logo2.png" class="">
