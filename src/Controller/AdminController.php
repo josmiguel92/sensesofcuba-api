@@ -66,7 +66,7 @@ class AdminController extends AbstractController
         {
             $file = null;
             if($product->getTranslatedDocument() && $product->getTranslatedDocument()->translate($lang)) {
-                $file = $product->getTranslatedDocument()->translate($lang)->getFileName();
+                $file = "uploads/files/" . $product->getTranslatedDocument()->translate($lang)->getFileName();
             }
             $items[] = [
                 'id' => $product->getId(),
@@ -104,7 +104,7 @@ class AdminController extends AbstractController
 
             $file = null;
             if($doc->getTranslatedDocument() && $doc->getTranslatedDocument()->translate($lang)) {
-                $file = $doc->getTranslatedDocument()->translate($lang)->getFileName();
+                $file = "uploads/files/" . $doc->getTranslatedDocument()->translate($lang)->getFileName();
             }
 
             $items[] = [
