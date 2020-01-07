@@ -222,15 +222,13 @@ class User extends BaseUser implements DomainEventHandler
 
     }
 //
-//    public function setUserRoles($role)
-//    {
-//        if($role === 'ADMIN'){
-//            if(!$this->isAdmin()){
-//                $this->getRoles()->
-//            }
-//
-//        }
-//
-//
-//    }
+    public function setUserRoles($role)
+    {
+        if($role instanceof Role){
+            $role = new UserRole($this, $role);
+        }
+                $this->roles = [$role];
+
+
+    }
 }

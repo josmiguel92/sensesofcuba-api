@@ -36,7 +36,8 @@
         "vich/uploader-bundle": "^1.12"
     },
     "require-dev": {
-        "symfony/maker-bundle": "^1.13"
+        "symfony/maker-bundle": "^1.13",
+        "doctrine/doctrine-migrations-bundle": "^2.1"
     },
     "config": {
         "preferred-install": {

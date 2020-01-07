@@ -48,6 +48,11 @@ class SocProduct
      */
     private $referenceName;
 
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\TranslatedDocument", cascade={"persist", "remove"})
+     */
+    private $translatedDocument;
+
     public function __construct()
     {
         $this->socProducts = new ArrayCollection();
@@ -145,6 +150,18 @@ class SocProduct
     public function setEnabled(bool $enabled)
     {
         $this->enabled = $enabled;
+    }
+
+    public function getTranslatedDocument(): ?TranslatedDocument
+    {
+        return $this->translatedDocument;
+    }
+
+    public function setTranslatedDocument(?TranslatedDocument $translatedDocument): self
+    {
+        $this->translatedDocument = $translatedDocument;
+
+        return $this;
     }
 
 }

@@ -8,6 +8,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Vich\UploaderBundle\Form\Type\VichFileType;
 use Vich\UploaderBundle\Form\Type\VichImageType;
+use A2lix\TranslationFormBundle\Form\Type\TranslationsType;
 
 class SocFileType extends AbstractType
 {
@@ -25,6 +26,7 @@ class SocFileType extends AbstractType
             ->add('file', VichFileType::class,  [
                 'required' => false
             ])
+
         ;
     }
 

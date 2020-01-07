@@ -4,31 +4,46 @@
 
 {% block card_document %}
     <div class="accordion" id="accordion-{{ document.id }}">
-        <div class="card">
+        <div class="card" data-id="{{ document.id }}">
         <div class="card-header" id="document-{{ document.id }}">
-            <h4>{{ document.referenceName }} <small class="badge badge-pill badge-secondary">     <a class="  action-edit" title="" href="{{ path('soc_document_edit', {'id': document.id}) }}" target="_self">Edit</a>
-        </small></h4>
+            <h4>
+                {% if document.image %}
+                 <img src="{{ asset('uploads/images/' ~ document.image.imageName)}}" class="img-thumbnail" style="max-width: 3em; max-height: 3em; border-radius: 50%">
+                {% endif %}
+
+                {{ document.referenceName }}
+
+                <small style="float: right;right: 4em;position: relative; font-size: .6em">
+                    <a class="  action-edit" title="" href="{{ path('soc_document_edit', {'id': document.id}) }}" target="_self">
+                    <i class="fa fa-edit"></i>    Edit
+                    </a>
+                </small>
+
+            </h4>
              <div class="checkbox-switch" data-propertyname="enabled" style="display: block;position: absolute;right: 1em;top: 1em;">
                     <label>
                         <input type="checkbox" {% if document.enabled %}checked=""{% endif %}>
                         <span></span>
                     </label>
             </div>
-            <div class="row">
+            {% if document.translatedDocument is not null %}
+                <div class="container">
 
-            </div>
-
-            <div class="col-md-6">
-                   {% if document.image is not null and document.image.imageName is not null %}
-                <img src="{{ asset('uploads/images/' ~ document.image.imageName)}}" style="max-height: 6em; max-width: 8em">
+                        {% for doc in document.translatedDocument.getDocuments %}
+                            {% if not loop.first %}
+                            |
+                            {% endif %}
+                        <small>
+                            <a href="{{ asset('uploads/files/' ~ doc.file.fileName)}}" download="download"><i class="fa fa-download"></i> Download {{ doc.lang }} file</a>
+                        </small>
+                        {% else %}
+                            <small>
+                                <span class="text-warning"><i class="fa fa-warning"></i>This document doesn't contain a downloadable file.</span>
+                            </small>
+                        {% endfor %}
+                </div>
             {% endif %}
 
-            </div>
-            <div class="col-md-6">
-                {% if document.file is not null and document.file.fileName is not null %}
-                <a href="{{ asset('uploads/files/' ~ document.file.fileName)}}">Download PDF file</a>
-            {% endif %}
-            </div>
 
         </div>
 
@@ -97,7 +112,7 @@
 
                 <div class="global-actions">
                     <div class="form-action form-action-search  action-search">
-                        <form method="get" action="/admin/">
+                        <form method="get" action="{{ path('easyadmin') }}">
                             <input type="hidden" name="action" value="search">
                             <input type="hidden" name="entity" value="Documents">
                             <input type="hidden" name="menuIndex" value="3">
@@ -189,7 +204,7 @@
 
 
 
-            <form name="delete_form" method="post" action="/admin/?action=delete&amp;entity=Documents&amp;id=__id__" id="delete-form" style="display: none"><input type="hidden" name="_method" value="DELETE"><div id="delete_form" style="display: none"><div><button type="submit" id="delete_form_submit" name="delete_form[submit]">Delete</button></div><input type="hidden" id="delete_form__easyadmin_delete_flag" name="delete_form[_easyadmin_delete_flag]" value="1"><input type="hidden" id="delete_form__token" name="delete_form[_token]" value="aaZg0Sl1Gq9j2FD4xDQRDRzl0Q1e1YNvNhq5V291MUQ"></div></form>
+            <form name="delete_form" method="post" action="{{ path('easyadmin') }}?action=delete&amp;entity=Documents&amp;id=__id__" id="delete-form" style="display: none"><input type="hidden" name="_method" value="DELETE"><div id="delete_form" style="display: none"><div><button type="submit" id="delete_form_submit" name="delete_form[submit]">Delete</button></div><input type="hidden" id="delete_form__easyadmin_delete_flag" name="delete_form[_easyadmin_delete_flag]" value="1"><input type="hidden" id="delete_form__token" name="delete_form[_token]" value="aaZg0Sl1Gq9j2FD4xDQRDRzl0Q1e1YNvNhq5V291MUQ"></div></form>
 
             <div id="modal-delete" class="modal fade">
                 <div class="modal-dialog">
@@ -252,8 +267,8 @@
                     const oldValue = !newValue;
                     const propertyName = this.closest('.checkbox-switch').dataset.propertyname;
 
-                    const toggleUrl = "/admin/?action=edit&entity=Document&view=list"
-                        + "&id=" + this.closest('tr').dataset.id
+                    const toggleUrl = "{{ path('easyadmin') }}?action=edit&entity=Documents&view=list"
+                        + "&id=" + this.closest('div.card').dataset.id
                         + "&property=" + propertyName
                         + "&newValue=" + newValue.toString();
 

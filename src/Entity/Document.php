@@ -29,11 +29,6 @@ class Document
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\SocFile", cascade={"persist","remove"})
-     */
-    private $file;
-
-    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\SocImage", cascade={"persist", "remove"})
      */
     private $image;
@@ -44,17 +39,10 @@ class Document
     private $referenceName;
 
 
-    public function getFile(): ?SocFile
-    {
-        return $this->file;
-    }
-
-    public function setFile(?SocFile $file): self
-    {
-        $this->file = $file;
-
-        return $this;
-    }
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\TranslatedDocument", cascade={"persist", "remove"})
+     */
+    private $translatedDocument;
 
     public function getImage(): ?SocImage
     {
@@ -68,9 +56,9 @@ class Document
         return $this;
     }
 
-    public function getReferenceName(): ?string
+    public function getReferenceName(): string
     {
-        return $this->referenceName;
+        return $this->referenceName ?: '';
     }
 
     public function setReferenceName(string $referenceName): self
@@ -80,9 +68,9 @@ class Document
         return $this;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
-        return $this->getReferenceName() ? $this->getReferenceName() : 'empty';
+        return $this->getReferenceName();
     }
 
     public function setEnabled(bool $enabled)
@@ -98,5 +86,15 @@ class Document
         return $this->id;
     }
 
+    public function getTranslatedDocument(): ?TranslatedDocument
+    {
+        return $this->translatedDocument;
+    }
 
+    public function setTranslatedDocument(?TranslatedDocument $translatedDocument): self
+    {
+        $this->translatedDocument = $translatedDocument;
+
+        return $this;
+    }
 }

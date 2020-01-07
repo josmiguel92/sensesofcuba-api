@@ -20,9 +20,9 @@ class DocumentType extends AbstractType
                 'label' => "Enabled",
                 'required' => false
             ])
-            ->add('file', SocFileType::class)
             ->add('image', SocImageType::class)
             ->add('translations',TranslationsType::class)
+            ->add('translatedDocument', TranslatedDocumentType::class)
         ;
     }
 

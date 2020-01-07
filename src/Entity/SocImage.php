@@ -21,15 +21,9 @@ class SocImage
      * @ORM\Column(type="integer")
      */
     private $id;
-//
-//    /**
-//     * @ORM\Column(type="string", length=180)
-//     */
-//    private $title;
-//
 
     /**
-    * @Vich\UploadableField(mapping="images", fileNameProperty="imageName", size="imageSize")
+    * @Vich\UploadableField(mapping="images", fileNameProperty="imageName")
     */
     private $imageFile;
 
@@ -38,28 +32,10 @@ class SocImage
      */
     private $imageName;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    private $imageSize;
-
     public function getId(): ?int
     {
         return $this->id;
     }
-//
-//    public function getTitle(): ?string
-//    {
-//        return $this->title;
-//    }
-//
-//    public function setTitle(string $title): self
-//    {
-//        $this->title = $title;
-//
-//        return $this;
-//    }
-
 
     public function getImageName(): ?string
     {
@@ -69,18 +45,6 @@ class SocImage
     public function setImageName(string $imageName = null): self
     {
         $this->imageName = $imageName;
-
-        return $this;
-    }
-
-    public function getImageSize(): ?int
-    {
-        return $this->imageSize;
-    }
-
-    public function setImageSize(int $imageSize = null): self
-    {
-        $this->imageSize = $imageSize;
 
         return $this;
     }
@@ -111,6 +75,5 @@ class SocImage
     {
         return $this->imageName;
     }
-
 
 }
