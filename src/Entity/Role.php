@@ -17,7 +17,7 @@ class Role extends BaseRole
     /** @ORM\Id() @ORM\Column(length=191) */
     private $name;
 
-    public function __construct(string $name)
+    public function __construct(string $name = 'ROLE_USER')
     {
         $this->name = $name;
     }
@@ -26,6 +26,17 @@ class Role extends BaseRole
     {
         return $this->name;
     }
+
+    /**
+     * @param string $name
+     * @return Role
+     */
+    public function setName(string $name): Role
+    {
+        $this->name = $name;
+        return $this;
+    }
+
 
     public function __toString()
     {

@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping as ORM;
 use MsgPhp\User\User as BaseUser;
 use MsgPhp\User\UserId;
@@ -61,10 +62,15 @@ class User extends BaseUser implements DomainEventHandler
      * @ORM\Column(type="string", length=180)
      */
     private $web;
+    /**
+     * @var EntityManager
+     */
+    private $em;
 
 
     public function __construct(UserId $id, string $email, string $password, string  $name,
-                                string  $enterprise, string $travelAgency, string $country, string $web)
+                                string  $enterprise, string $travelAgency, string $country, string $web,
+                                EntityManager $entityManager)
     {
         $this->id = $id;
         $this->credential = new EmailPassword($email, $password);
@@ -77,6 +83,7 @@ class User extends BaseUser implements DomainEventHandler
         $this->travelAgency = $travelAgency;
         $this->country = $country;
         $this->web = $web;
+        $this->em = $entityManager;
     }
 
     public function getId(): UserId
@@ -215,20 +222,24 @@ class User extends BaseUser implements DomainEventHandler
 
     public function getUserRoles()
     {
-        if($this->isAdmin()) {
-            return 'ADMIN';
-        }
-        return 'USER';
+//        if($this->isAdmin()) {
+//            return 'ADMIN';
+//        }
+        return $this->roles;
 
     }
 //
     public function setUserRoles($role)
     {
-        if($role instanceof Role){
-            $role = new UserRole($this, $role);
-        }
+              if($role instanceof Role){
+                $role = new UserRole($this, $role);
+//                $this->em->persist($role);
+            }
                 $this->roles = [$role];
 
 
+
+
     }
+
 }
