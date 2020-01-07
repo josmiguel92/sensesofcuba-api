@@ -4,11 +4,11 @@
             <div class="flex-grow-1 d-flex align-items-center">
                 <span class="label d-flex align-items-center ml-2 mr-2"><i class="mr-2" :class="iconClass"></i> {{ item.title }}</span>
                 <span v-if="!isParent" class="mr-2"> | </span>
-                <small v-if="!isParent" class="d-none d-md-inline">{{ $t('general.updated') }}: {{ item.modified_on | date }}</small>
+                <small v-if="!isParent && item.modified_on" class="d-none d-md-inline">{{ $t('general.updated') }}: {{ item.modified_on | date }}</small>
             </div>
             <div class="d-flex" v-if="item.file">
                 <button @click="openDocument(item.title, `${item.file}`)" class="btn btn-secondary btn-sm btn-icon"><i class="fa fa-file-pdf mr-1"></i> <span class="d-none d-md-inline">Open</span></button>
-                <a role="button" :href="`${item.file}`" class="btn btn-secondary btn-sm" download>
+                <a role="button" :href="`${item.file}`" class="btn btn-secondary btn-sm" :download="item.title">
                     <i class="fa fa-download mr-1"></i> <span class="d-none d-md-inline">Download</span>
                 </a>
             </div>
