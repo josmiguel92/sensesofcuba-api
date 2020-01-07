@@ -1,6 +1,6 @@
 <template>
     <div class="media p-2 bg-secondary">
-        <img :src="`../${item.image}`" class="img-fluid mr-3" alt="">
+        <img :src="`${item.image}`" class="img-fluid mr-3" alt="">
         <div class="media-body d-flex flex-column h-100 pt-2 pb-2">
             <h5 class="">{{ item.title }}</h5>
             <small class="flex-grow-1">{{ $t('general.updated') }}: {{ item.modified_on | date }}</small>
@@ -8,7 +8,7 @@
                 <button @click="openDocument" class="btn btn-secondary btn-sm"><i class="fa fa-file-pdf"></i>
                     <span class="d-none d-md-inline">{{ $t('general.open') }}</span>
                 </button>
-                <a role="button" :href="`../${item.file}`" class="btn btn-secondary btn-sm" download><i class="fa fa-download"></i>
+                <a role="button" :href="`${item.file}`" class="btn btn-secondary btn-sm" download><i class="fa fa-download"></i>
                     <span class="d-none d-md-inline">{{ $t('general.download') }}</span>
                 </a>
             </div>
