@@ -118,7 +118,7 @@ class TranslatedDocument
     /**
      * @return string
      */
-    public function translate($lang): SocFile
+    public function translate($lang): ?SocFile
     {
         if(in_array($lang, ['en', 'es', 'de']))
             $this->lang = $lang;
