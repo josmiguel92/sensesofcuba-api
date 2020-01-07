@@ -1,6 +1,6 @@
 import Axios from "axios";
 
-const API_URL = 'http://localhost:9000/api';
+const API_URL = 'https://habanatech.com/sensesofcuba/api';
 
 class API {
     constructor() {
@@ -14,8 +14,8 @@ class API {
         });
     }
 
-    getCsfrToken() {
-        return this.client.get('register');
+    getCsfrToken(route) {
+        return this.client.get(route);
     }
 
     getProducts() {
@@ -46,9 +46,10 @@ class API {
         });
     }
 
-    resetPassword(email) {
+    resetPassword(email, token) {
         return this.client.post('reset-password', {
-            email: email
+            email: email,
+            _token: token
         });
     }
 }

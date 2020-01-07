@@ -150,7 +150,7 @@ export default {
         }
     },
     mounted() {
-        this.getCSFRToken().then(token => {
+        this.getCSFRToken('register').then(token => {
             this.credentials.csfrToken = token;
         }).catch(e => {
             console.error('Error getting the CSFR token for this form.')
