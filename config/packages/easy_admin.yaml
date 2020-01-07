@@ -17,6 +17,7 @@ easy_admin:
           - { label: 'Your Products', icon: 'receipt',  route: 'soc_product_index' }
           - { label: 'Documents About Cuba',  icon: 'book',  route: 'soc_document_index'}
           - { entity: 'Users', icon: 'users', label: 'Users and clients' }
+          - { label: 'Public Homepage', route: 'homepage' }
 
       #form_theme: ['@FOSCKEditor/Form/ckeditor_widget.html.twig']
         form_theme:
@@ -73,6 +74,7 @@ easy_admin:
 
       Users:
         class: App\Entity\User
+        disabled_actions: ['new']
         show:
           fields:
             - { property: 'id' }
