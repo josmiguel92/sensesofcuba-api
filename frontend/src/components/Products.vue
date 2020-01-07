@@ -6,7 +6,7 @@
                 ref="items"
                 @click="toggle(i)"
                 :class="{selected: currentItem === i}"> 
-                <div class="content h-100 d-flex flex-column align-items-center justify-content-end" v-lazy:background-image="`${item.image}`">
+                <div class="content h-100 d-flex flex-column align-items-center justify-content-end" v-lazy:background-image="item.image">
                     <span class="title">{{ item.title }}</span>
                 </div>
                 <div class="panel p-4" v-active="currentItem === i">
