@@ -31,7 +31,7 @@ class MessageSubscriber implements EventSubscriberInterface
     {
         if($event->getMessage() instanceof Email)
         {
-            $event->getMessage()->from(new Address('web@sensesofcuba.com', 'SensesOfCuba')); //TODO: set the real email
+            $event->getMessage()->from(new Address('no-reply.infonet@sensesofcuba.com', 'SensesOfCuba')); //TODO: set the real email
         }
 
 
