@@ -1,11 +1,12 @@
 import Axios from "axios";
 
-const API_URL = 'http://s498302874.online.de/api';
+//const API_URL = 'http://s498302874.online.de/api';
+const API_URL = `${process.env.VUE_API}`;
 
 class API {
     constructor() {
         this.client = Axios.create({
-            baseURL: API_URL,
+            baseURL: API_URL.trim('%20'),
         });
         this.client.interceptors.request.use(config => {
             const locale = localStorage.getItem('locale');
