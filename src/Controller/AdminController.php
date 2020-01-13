@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Form\User\RegisterType;
 use App\Repository\DocumentRepository;
 use App\Repository\ProductCategoryRepository;
 use App\Repository\SocProductRepository;
@@ -12,6 +13,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Csrf\CsrfToken;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 class AdminController extends AbstractController
 {
@@ -120,17 +123,4 @@ class AdminController extends AbstractController
 
         return new JsonResponse($items);
     }
-//
-//    /**
-//     * @Route("/api/reset-password", name="api_reset_password")
-//     * @return JsonResponse
-//     */
-//    public function api_reset_password(Request $request, UserRepository $userRepository): JsonResponse
-//    {
-//        if ($request->isMethod(Request::METHOD_POST)) {
-//            return new JsonResponse(null, 200);
-//        }
-//    }
-
-
 }

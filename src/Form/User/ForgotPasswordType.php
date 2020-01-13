@@ -16,11 +16,14 @@ final class ForgotPasswordType extends AbstractType
     {
         $builder->add('email', EmailType::class, [
             'constraints' => [new NotBlank()],
-        ]);
+        ])
+        ->add('_token', null, ['required' => true]);
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefault('user_mapping', ['email' => 'user']);
+        $resolver->setDefaults(['user_mapping', ['email' => 'user'],
+            'csrf_protection' => false]);
     }
+
 }

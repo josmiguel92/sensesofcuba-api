@@ -37,14 +37,14 @@ class EasyAdminSubscriber implements EventSubscriberInterface
         return array(
 //                'easy_admin.pre_new' => array('setUploadedImagesAsGallery'),
 //                'easy_admin.post_new' => array('setUploadedImagesAsGallery'),
-                'easy_admin.pre_persist' => [
-                    'setUpRoles',
-//                    'setUploadedImagesInDestinationsAndActivities'
-                    ],
-                'easy_admin.pre_update' => [
-                    'setUpRoles',
-//                    'setUploadedImagesInDestinationsAndActivities'
-                    ],
+//                'easy_admin.pre_persist' => [
+//                    'setUpRoles',
+////                    'setUploadedImagesInDestinationsAndActivities'
+//                    ],
+//                'easy_admin.pre_update' => [
+//                    'setUpRoles',
+////                    'setUploadedImagesInDestinationsAndActivities'
+//                    ],
 //
 //                'easy_admin.post_initialize' => [
 //                    'setUploadedImagesInDestinationsAndActivities'
@@ -91,26 +91,5 @@ class EasyAdminSubscriber implements EventSubscriberInterface
 //        $request->request->set($entityName, $sentData);
 //        $event['request'] = $request;
 //    }
-    public function setUpRoles(GenericEvent $event): void
-    {
-            $entity = $event->getSubject();
 
-            //Add entities contains gallery
-            if (!($entity instanceof User))
-            {
-                return;
-            }
-
-
-
-            foreach ($entity->getRoles() as $userRole )
-            {
-                if($userRole instanceof UserRole){
-                      $this->entityManager->persist($userRole);
-                }
-            }
-
-            $event['entity'] = $entity;
-
-        }
 }

@@ -17,61 +17,13 @@ easy_admin:
           - { label: 'Your Products', icon: 'receipt',  route: 'soc_product_index' }
           - { label: 'Documents About Cuba',  icon: 'book',  route: 'soc_document_index'}
           - { entity: 'Users', icon: 'users', label: 'Users and clients' }
-          - { entity: 'Role', icon: 'users', label: 'Roles' }
-          - { label: 'Public Homepage', route: 'homepage' }
+          - { label: 'Back to Homepage', route: 'homepage', icon: 'home' }
 
       #form_theme: ['@FOSCKEditor/Form/ckeditor_widget.html.twig']
         form_theme:
           - '@EasyAdmin/form/bootstrap_4.html.twig'
           - '@FOSCKEditor/Form/ckeditor_widget.html.twig'
     entities:
-#
-#      Categories:
-#        class: App\Entity\ProductCategory
-#        form:
-#          fields:
-#            - { property: 'title' }
-#            #            - { property: 'ChildNodeOf', type: 'entity', type_options: { class:  'App\Entity\ProductCategory' } }
-#            - { property: 'image', type: 'file' }
-#            - { property: 'parent' }
-#        show:
-#          fields:
-#            - { property: 'title' }
-#            - { property: 'getImageWebPath', type: 'file', template: 'admin/partial/image.html.twig', label: 'Image' }
-#            - { property: 'parent' }
-#        list:
-#          fields:
-#            - { property: 'title' }
-#            - { property: 'getImageWebPath', type: 'file', template: 'admin/partial/image.html.twig',label: 'Image' }
-#            - { property: 'parent' }
-#
-#      Products:
-#        class: App\Entity\Product
-#        list:
-#          fields:
-#            - { property: 'id' }
-#            - { property: 'title' }
-#            - { property: 'getImageWebPath', type: 'file', template: 'admin/partial/image.html.twig',label: 'Image' }
-#            - { property: 'getFileWebPath',  type: 'file', template: 'admin/partial/file.html.twig' , label: 'PDF'}
-#            - { property: 'category' }
-#        # ...
-#        show:
-#          fields:
-#            - { property: 'title' }
-#            - { property: 'getImageWebPath', type: 'file', template: 'admin/partial/image.html.twig', label: 'Image' }
-#            - { property: 'getFileWebPath',  type: 'file', template: 'admin/partial/file.html.twig' , label: 'PDF'}
-#            - { property: 'category' }
-#        form:
-#          fields:
-#            - { property: 'title' }
-#            - { property: 'file', type: 'file' }
-#            - { property: 'image', type: 'file' }
-#            - { property: 'category' }
-#
-#      Documents:
-#        class: App\Entity\Document
-#
-
 
       Users:
         class: App\Entity\User
@@ -80,6 +32,7 @@ easy_admin:
           fields:
             - { property: 'id' }
             - { property: 'enabled' }
+            - { property: 'confirmedAt' }
             - { property: 'email' }
             - { property: 'name' }
 #            - { property: 'lastName' }
@@ -87,7 +40,7 @@ easy_admin:
             - { property: 'travelAgency' }
             - { property: 'country' }
             - { property: 'web' }
-            - { property: 'getAllRolesAsString', type: 'array' }
+            - { property: 'role' }
         form:
           fields:
             - { property: 'enabled' }
@@ -97,11 +50,12 @@ easy_admin:
             - { property: 'travelAgency' }
             - { property: 'country' }
             - { property: 'web' }
-            - { property: 'userRoles', type: 'entity', type_options:{ class: 'App\Entity\Role'}}
-#            - { property: 'userRolesCollection', label: 'Add roles to user',  help: 'Select one or more roles', type: 'entity',  type_options: { class: 'App\Entity\Role', multiple: true, attr: {'data-widget': 'select2'} } }
+#            - { property: 'userRoles', type: 'entity', type_options:{ class: 'App\Entity\Role'}}
+            - { property: 'role', label: 'User Role',  help: 'Select one role', type: 'choice',  type_options: { choices: { Administrator: 'ROLE_ADMIN',  Editor: 'ROLE_EDITOR', 'Premium Client': 'ROLE_PREMIUM_CLIENT', Client: 'ROLE_CLIENT' } } }
         list:
           fields:
             - { property: 'enabled' }
+            - { property: 'confirmedAt' }
             - { property: 'name' }
 #            - { property: 'lastName' }
             - { property: 'enterprise' }
@@ -114,13 +68,6 @@ easy_admin:
         class: App\Entity\SocProduct
         form:
           - { property: product, type: 'App\Form\SocProductType'}
-#      UserRoles:
-#        class: App\Entity\UserRole
-      Role:
-        class: App\Entity\Role
-        form:
-          fields:
-            - { property: 'name' }
 
 #        # List the entity class name you want to manage
 #        - App\Entity\Product

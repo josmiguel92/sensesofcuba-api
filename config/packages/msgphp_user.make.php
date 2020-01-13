@@ -11,8 +11,8 @@ return function (ContainerConfigurator $container) {
   'class_mapping' => 
   array (
     'MsgPhp\\User\\Credential\\Credential' => 'MsgPhp\\User\\Credential\\EmailPassword',
-    'MsgPhp\\User\\Role' => 'App\\Entity\\Role',
-    'MsgPhp\\User\\UserRole' => 'App\\Entity\\UserRole',
+//    'MsgPhp\\User\\Role' => 'App\\Entity\\Role',
+//    'MsgPhp\\User\\UserRole' => 'App\\Entity\\UserRole',
   ),
   'role_providers' => 
   array (
@@ -20,7 +20,7 @@ return function (ContainerConfigurator $container) {
     array (
       0 => 'ROLE_USER',
     ),
-    0 => 'MsgPhp\\User\\Role\\UserRoleProvider',
+//    0 => 'MsgPhp\\User\\Role\\UserRoleProvider',
   ),
 ));
 

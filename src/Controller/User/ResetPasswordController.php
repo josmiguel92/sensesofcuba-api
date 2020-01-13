@@ -6,8 +6,10 @@ namespace App\Controller\User;
 
 use App\Entity\User;
 use App\Form\User\ResetPasswordType;
+use App\Message\PasswordReseted;
 use MsgPhp\User\Command\ResetUserPassword;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -20,7 +22,7 @@ use Twig\Environment;
 /**
  * @Route("/reset-password/{token}", name="reset_password")
  */
-final class ResetPasswordController
+final class ResetPasswordController extends AbstractController
 {
     /**
      * @ParamConverter("user", converter="doctrine.orm", options={"mapping": {"token": "passwordResetToken"}})
@@ -38,9 +40,10 @@ final class ResetPasswordController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $bus->dispatch(new ResetUserPassword($user->getId(), $form->getData()['password']));
+            $bus->dispatch(new PasswordReseted($user->getEmail()));
             $flashBag->add('success', 'You\'re password is changed.');
 
-            return new RedirectResponse('/login');
+            return $this->redirectToRoute('homepage');
         }
 
         return new Response($twig->render('user/reset_password.html.twig', [

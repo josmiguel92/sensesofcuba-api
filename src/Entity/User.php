@@ -24,7 +24,6 @@ class User extends BaseUser implements DomainEventHandler
     use DomainEventHandlerTrait;
     use EmailPasswordCredential;
     use ResettablePassword;
-    use RolesField;
     use CreatedAtField;
     use CanBeEnabled;
     use CanBeConfirmed;
@@ -61,6 +60,16 @@ class User extends BaseUser implements DomainEventHandler
      * @ORM\Column(type="string", length=180)
      */
     private $web;
+
+    /**
+     * @ORM\Column(type="string", length=180)
+     */
+    private $email;
+
+    /**
+     * @ORM\Column(type="string", length=180)
+     */
+    private $role;
     
 
 
@@ -69,6 +78,7 @@ class User extends BaseUser implements DomainEventHandler
     {
         $this->id = $id;
         $this->credential = new EmailPassword($email, $password);
+        $this->email = $email;
         $this->createdAt = new \DateTimeImmutable();
         $this->confirmationToken = bin2hex(random_bytes(32));
 
@@ -78,6 +88,7 @@ class User extends BaseUser implements DomainEventHandler
         $this->travelAgency = $travelAgency;
         $this->country = $country;
         $this->web = $web;
+        $this->role = "ROLE_CLIENT";
     }
 
     public function getId(): UserId
@@ -193,14 +204,6 @@ class User extends BaseUser implements DomainEventHandler
         return $this;
     }
 
-    public function getAllRolesAsString(){
-        $roles = [];
-        foreach ($this->getRoles() as $role)
-            $roles[] = $role->getRoleName();
-
-        return $roles;
-    }
-
     public function setEnabled(bool $enabled)
     {
         if($enabled)
@@ -208,32 +211,24 @@ class User extends BaseUser implements DomainEventHandler
         else
             $this->disable();
     }
-    
-    public function isAdmin():bool
+
+    public function getRole(): ?string
     {
-        return in_array('ROLE_ADMIN', array_values($this->getAllRolesAsString()), true);
+        if($this->enabled && $this->confirmedAt)
+            return $this->role;
+        return null;
     }
 
-    public function getUserRoles()
+    public function setRole($role): self
     {
-//        if($this->isAdmin()) {
-//            return 'ADMIN';
-//        }
-        return $this->roles;
+        $this->role = $role;
 
+        return $this;
     }
 //
-    public function setUserRoles($role)
+    public function isAdmin():bool
     {
-              if($role instanceof Role){
-                $role = new UserRole($this, $role);
-//                $this->em->persist($role);
-            }
-                $this->roles = [$role];
-
-
-
-
+        return 'ROLE_ADMIN' === $this->getRole();
     }
 
 }

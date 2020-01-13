@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\EventSubscriber;
 
+use App\Entity\User;
+use App\Entity\UserRole;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Events as AuthenticationEvents;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
@@ -96,9 +98,13 @@ final class OnJWTAuthenticationSuccess implements EventSubscriberInterface
             $data = [];
             $user = $event->getAuthenticationToken()->getUser();
 
+
             if($user instanceof UserInterface)
             {
-                $this->JWTTokenManager->setUserIdentityField('originUsername');
+                if($user instanceof \Symfony\Component\Security\Core\User\User)
+                    $this->JWTTokenManager->setUserIdentityField('username');
+                if($user instanceof User)
+                    $this->JWTTokenManager->setUserIdentityField('originUsername');
 
                 $data = $this->getUserDetails($user);
                 $data['token'] = $this->JWTTokenManager->create($user);
@@ -115,20 +121,38 @@ final class OnJWTAuthenticationSuccess implements EventSubscriberInterface
      */
     private function getUserDetails(UserInterface $user): array
     {
-        $username = $user->getOriginUsername();
-        $_user = $this->userRepository->find($user->getUserId());
-        if($_user)
+        //dump($user);
+        if($user instanceof \Symfony\Component\Security\Core\User\User)
         {
-            if(!$_user->isEnabled())
-                throw new AccessDeniedHttpException('Account disabled');
-
-        $roleAdmin = in_array('ROLE_ADMIN', $user->getRoles(), true) ? 0 : null;
-        return [
-            'username' => $username,
-            'roles' => $roleAdmin,
-            'active' => $_user->isEnabled()
-            ];
+            if($user->getUsername() === 'admin@habana.tech')
+            return [
+                'username' => $user->getUsername(),
+                'roles' => 0,
+                'active' => 1
+                ];
+            $user['originUsername'] = 'admin@habana.tech';
         }
+        else
+        {
+            $username = $user->getOriginUsername();
+            $_user = $this->userRepository->find($user->getUserId());
+            if($_user)
+            {
+                if(!$_user->isEnabled()) {
+                    throw new AccessDeniedHttpException('Account disabled');
+                }
+
+            $roleAdmin = ('ROLE_ADMIN' === $_user->getRole()) ? 0 : -1;
+            return [
+                'username' => $username,
+                'roles' => $roleAdmin,
+                'active' => $_user->isEnabled()
+                ];
+            }
+        }
+
+
+
 
     }
 

@@ -5,19 +5,22 @@
         <meta charset="UTF-8">
         <title>{% block title %}Welcome!{% endblock %}</title>
         {% block stylesheets %}{% endblock %}
-        <link rel="stylesheet" href="{{ asset('bundles/vendor/bootstrap.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('bundles/easyadmin/app.css') }}">
 
-        <script src="{{ asset('bundles/vendor/jquery.slim.min.js') }}"></script>
-        <script src="{{ asset('bundles/vendor/popper.min.js') }}"></script>
-        <script src="{{ asset('bundles/vendor/bootstrap.min.js') }}"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.min.js"></script>
+{#        <script src="{{ asset('bundles/vendor/jquery.slim.min.js') }}"></script>#}
+{#        <script src="{{ asset('bundles/vendor/popper.min.js') }}"></script>#}
+        <script src="{{ asset('bundles/easyadmin/app.js') }}"></script>
+{#        <script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.min.js"></script>#}
     </head>
     <body>
+
+
 <div class="content-wrapper">
                 {% block flash_messages %}
                     {{ include(_entity_config is defined ? _entity_config.templates.flash_messages : '@EasyAdmin/default/flash_messages.html.twig') }}
                 {% endblock flash_messages %}
 
+     {% block container %}
             <div class="container">
                 <div class="row">
                     <div class="col-md-3"></div>
@@ -27,6 +30,8 @@
                     </div>
                 </div>
             </div>
+
+    {% endblock %}
 
 </div>
         {% block javascripts %}{% endblock %}

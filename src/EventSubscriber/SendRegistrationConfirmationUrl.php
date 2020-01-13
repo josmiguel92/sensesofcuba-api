@@ -6,8 +6,10 @@ namespace App\EventSubscriber;
 
 use App\Entity\User;
 use MsgPhp\User\Event\UserCreated;
+use Symfony\Bridge\Twig\Mime\NotificationEmail;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\Routing\RouterInterface;
 use Twig\Environment;
 use Symfony\Component\Mailer\MailerInterface;
 
@@ -15,11 +17,13 @@ final class SendRegistrationConfirmationUrl implements MessageHandlerInterface
 {
     private $mailer;
     private $twig;
+    private $router;
 
-    public function __construct(MailerInterface $mailer, Environment $twig)
+    public function __construct(MailerInterface $mailer, Environment $twig, RouterInterface $router)
     {
         $this->mailer = $mailer;
         $this->twig = $twig;
+        $this->router = $router;
     }
 
     public function __invoke(UserCreated $event): void
@@ -33,15 +37,23 @@ final class SendRegistrationConfirmationUrl implements MessageHandlerInterface
             return;
         }
 
-        $params = ['user' => $user];
-        $message = (new TemplatedEmail())
-//        $message = (new \Swift_Message('Confirm your account at The App'))
-            ->addTo($user->getEmail())
-            ->htmlTemplate('@email/user/confirm_registration.html.twig')
-            ->textTemplate('@email/user/confirm_registration.txt.twig')
-            ->context($params)
-        ;
+        $userName = $user->getName();
 
-        $this->mailer->send($message);
+         $email = (new NotificationEmail())
+            ->to($user->getEmail())
+            ->subject('You have created an account at Senses of Cuba')
+            ->markdown(<<<EOF
+Hello $userName, Recently you have created an account at our website **Senses of Cuba**.
+You can access all our products from here.
+
+An administrator should approve your request soon, now, you should confirm your account by click in this button.
+
+EOF
+        )
+          ->action('Confirm account', $this->router->generate('confirm_registration', ['token'=> $user->getConfirmationToken()], 0) )
+         ->importance(NotificationEmail::IMPORTANCE_MEDIUM)
+         ;
+
+        $this->mailer->send($email);
     }
 }

@@ -6,7 +6,10 @@ namespace App\Controller\User;
 
 use App\Entity\User;
 use App\Form\User\ForgotPasswordType;
+use App\Message\PasswordRequest;
+use App\Repository\UserRepository;
 use MsgPhp\User\Command\RequestUserPassword;
+use MsgPhp\User\Event\UserPasswordRequested;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,56 +30,47 @@ class ForgotPasswordController extends AbstractController
         FormFactoryInterface $formFactory,
         FlashBagInterface $flashBag,
         Environment $twig,
-        MessageBusInterface $bus
+        MessageBusInterface $bus,
+        UserRepository $userRepository
     ): Response {
-        $form = $formFactory->createNamed('', ForgotPasswordType::class);
 
-          if($request->isMethod(Request::METHOD_GET))
+        if($request->isMethod(Request::METHOD_GET))
         {
-
-            $_token = $form->createView()->children['_token']->vars['data'];
-             return $this->json(['_token'=> $_token]);
+            return $this->json(['_token'=>RegisterController::getToken()]);
         }
 
+        $data = json_decode($request->getContent(), true);
 
-        if ($request->isMethod(Request::METHOD_POST)) {
-            $data = json_decode($request->getContent(), true);
-            if ($data) {
-                foreach($data as $key => $value) {
-                    $request->request->add([$key => $value]);
-                }
+        $form = $formFactory->create(ForgotPasswordType::class);
+
+        $dataNormalized = [];
+        if ($data) {
+            foreach($data as $key => $value) {
+                $dataNormalized[$key] = $value;
             }
-            $form->handleRequest($request);
-            if ($form->isSubmitted() && $form->isValid()) {
-                $data = $form->getData();
-                if (isset($data['user'])) {
-                    /** @var User $user */
-                    $user = $data['user'];
+        }
+
+        if(!RegisterController::isValidToken($data['_token'])){
+            return $this->json(['_error' => "Invalid CSRF Token"], 400);
+        }
+
+        $form->submit($dataNormalized);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            if (isset($data['email'])) {
+                /** @var User $user */
+
+                $user = $userRepository->findOneBy(['email'=>$data['email']]);
+                if($user)
+                {
+                    $bus->dispatch(new PasswordRequest($user->getId()));
                     $bus->dispatch(new RequestUserPassword($user->getId()));
+                    return $this->json(['message' => 'Succeed']);
                 }
-                return $this->json(['message' => 'Succeed']);
             }
-            return  $this->json(['message' => 'Error'], Response::HTTP_BAD_REQUEST);
+
         }
-
-        //$form->handleRequest($request);
-
-        //if ($form->isSubmitted() && $form->isValid()) {
-        //    $data = $form->getData();
-
-        //    if (isset($data['user'])) {
-        //        /** @var User $user */
-        //        $user = $data['user'];
-        //        $bus->dispatch(new RequestUserPassword($user->getId()));
-        //    }
-
-        //    $flashBag->add('success', 'You\'re password is requested.');
-
-        //    return new RedirectResponse('/login');
-        //}
-
-        //return new Response($twig->render('user/forgot_password.html.twig', [
-        //    'form' => $form->createView(),
-        //]));
+        return  $this->json(['message' => 'Error'], Response::HTTP_BAD_REQUEST);
     }
 }

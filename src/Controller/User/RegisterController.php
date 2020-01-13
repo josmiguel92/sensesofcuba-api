@@ -6,6 +6,7 @@ namespace App\Controller\User;
 
 use App\Form\User\RegisterType;
 use MsgPhp\User\Command\CreateUser;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,45 +32,30 @@ final class RegisterController extends AbstractController
         FormFactoryInterface $formFactory,
         FlashBagInterface $flashBag,
         Environment $twig,
-        MessageBusInterface $bus,
-        CsrfTokenManagerInterface $csrfTokenManager
+        MessageBusInterface $bus
     ): Response {
-
-
-        $form = $formFactory->createNamed('', RegisterType::class);
 
         if($request->isMethod(Request::METHOD_GET))
         {
-//            return new Response($twig->render('user/register.html.twig', [
-//                'form' => $form->createView(),
-//            ]));
-
-            $_token = $form->createView()->children['_token']->vars['data'];
-             return $this->json(['_token'=> $_token]);
+            return $this->json(['_token'=>self::getToken()]);
         }
 
         $data = json_decode($request->getContent(), true);
+
+        $form = $formFactory->create(RegisterType::class);
+        $dataNormalized = [];
         if($data)
             foreach ($data as $key => $value) {
                 if($key === 'password')
                     $value = ['plain' => $value];
-
-                $request->request->add([$key => $value]);
+                $dataNormalized[$key] = $value;
             }
-
-        $form->handleRequest($request);
-
-        //$form->submit($data);
-//        $_token = null;
-
-        if(isset($data['_token']))
-        {
-            $_token = new CsrfToken('App\Form\User\RegisterType', $data['_token']);
+        
+        if(!self::isValidToken($data['_token'])){
+            return $this->json(['_error' => "Invalid CSRF Token"], 400);
         }
 
-//        if(!$csrfTokenManager->isTokenValid($_token)){
-//            return $this->json(['_error' => "Invalid CSRF Token"], 403);
-//        }
+        $form->submit($dataNormalized);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $bus->dispatch(new CreateUser($form->getData()));
@@ -77,19 +63,32 @@ final class RegisterController extends AbstractController
 
             return $this->json(['message'=> 'You\'re successfully registered. We\'ve send you an email about it']);
         }
-        else
-        {
-            $errors = [];
-            foreach ($form->getErrors(true) as $error) {
-                if(is_array($error->getMessageParameters()) && count($error->getMessageParameters()) > 0)
-                {
-//                    dump($error->getMessageParameters());
-                    $value = array_values($error->getMessageParameters())[0];
-                    $errors[] = $error->getMessageTemplate().': '.$value;
-                }
 
+        $errors = [];
+        foreach ($form->getErrors(true) as $error) {
+            if(is_array($error->getMessageParameters()) && count($error->getMessageParameters()) > 0)
+            {
+//                    dump($error->getMessageParameters());
+                $value = array_values($error->getMessageParameters())[0];
+                $errors[] = $error->getMessageTemplate().': '.$value;
             }
-            return $this->json(['message' => 'The form contains errors', 'errors' => $errors]);
+
         }
+        return $this->json(['message' => 'The form contains errors', 'errors' => $errors], Response::HTTP_BAD_REQUEST);
+    }
+
+    public static function getToken(): string
+    {
+        return substr(uniqid("t", true), 0, 10).'-'.self::getTokenKeepStr();
+    }
+
+    private static function getTokenKeepStr()
+    {
+        return substr(date('thLzmhyytLzm'), 0, 10);
+    }
+
+    public static function isValidToken($token):bool
+    {
+        return substr($token, 11, 10) === self::getTokenKeepStr();
     }
 }
