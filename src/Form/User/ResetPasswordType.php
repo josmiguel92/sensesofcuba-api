@@ -16,7 +16,9 @@ final class ResetPasswordType extends AbstractType
         $builder
             ->add('password', HashedPasswordType::class, [
                 'password_confirm' => true,
-                'password_options' => ['constraints' => new NotBlank()],
+                'password_options' => ['constraints' => new NotBlank(),
+                'label'=>'New Password']
+                ,
             ])
         ;
     }

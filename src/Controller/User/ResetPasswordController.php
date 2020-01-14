@@ -41,7 +41,7 @@ final class ResetPasswordController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $bus->dispatch(new ResetUserPassword($user->getId(), $form->getData()['password']));
             $bus->dispatch(new PasswordReseted($user->getEmail()));
-            $flashBag->add('success', 'You\'re password is changed.');
+            $flashBag->add('success', 'You\'re password was changed on '.date("F j, Y, g:i a"));
 
             return $this->redirectToRoute('homepage');
         }

@@ -43,15 +43,18 @@ easy_admin:
             - { property: 'role' }
         form:
           fields:
-            - { property: 'enabled' }
+            - { property: 'enabled', help: 'Select if this user can log in and see products'}
             - { property: 'name' }
 #            - { property: 'lastName' }
             - { property: 'enterprise' }
             - { property: 'travelAgency' }
             - { property: 'country' }
             - { property: 'web' }
+            - { property: 'receiveEmails' , help: 'Select if this user will receive the new users subscriptions notifications'}
 #            - { property: 'userRoles', type: 'entity', type_options:{ class: 'App\Entity\Role'}}
-            - { property: 'role', label: 'User Role',  help: 'Select one role', type: 'choice',  type_options: { choices: { Administrator: 'ROLE_ADMIN',  Editor: 'ROLE_EDITOR', 'Premium Client': 'ROLE_PREMIUM_CLIENT', Client: 'ROLE_CLIENT' } } }
+            - { property: 'role', label: 'User Role',  help: 'Select one role', type: 'choice',  type_options: { choices: { Administrator: 'ROLE_ADMIN',  Editor: 'ROLE_EDITOR', '____________': 'ROLE_CLIENT', 'Premium Client': 'ROLE_PREMIUM_CLIENT', Client: 'ROLE_CLIENT' } } }
+            - { property: 'subscribedProducts', help: 'Products about the user will receive notifications' }
+            - { property: 'hiddenProducts', help: 'Select the products hidden for this user' }
         list:
           fields:
             - { property: 'enabled' }

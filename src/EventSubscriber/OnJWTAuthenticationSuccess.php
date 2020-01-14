@@ -23,7 +23,7 @@ use MsgPhp\User\Infrastructure\Security\UserIdentity;
 final class OnJWTAuthenticationSuccess implements EventSubscriberInterface
 {
     private $JWTTokenManager;
-    private $cookieName = '_socAuth';
+    public static $cookieName = '_socAuth';
     private $userRepository;
 
     /**
@@ -54,13 +54,11 @@ final class OnJWTAuthenticationSuccess implements EventSubscriberInterface
 
     public function addRequestAuthorizationIfCookieExist(RequestEvent $event): void
     {
-        if(strpos('admin', $event->getRequest()->getPathInfo()))
-            dump($event);
 
         $token = null;
-        if(isset($_COOKIE[$this->cookieName]))
+        if(isset($_COOKIE[self::$cookieName]))
         {
-            $cookie = json_decode($_COOKIE[$this->cookieName], true);
+            $cookie = json_decode($_COOKIE[self::$cookieName], true);
             $token = $cookie['token'];
         }
 
@@ -83,7 +81,7 @@ final class OnJWTAuthenticationSuccess implements EventSubscriberInterface
             $data[$key] = $value;
         }
 
-        setcookie($this->cookieName, json_encode($data), 0 , '/');
+        setcookie(self::$cookieName, json_encode($data), 0 , '/');
         $event->setData($data);
 
     }
@@ -98,19 +96,20 @@ final class OnJWTAuthenticationSuccess implements EventSubscriberInterface
             $data = [];
             $user = $event->getAuthenticationToken()->getUser();
 
-
             if($user instanceof UserInterface)
             {
-                if($user instanceof \Symfony\Component\Security\Core\User\User)
-                    $this->JWTTokenManager->setUserIdentityField('username');
-                if($user instanceof User)
+                if ($user instanceof UserIdentity) {
                     $this->JWTTokenManager->setUserIdentityField('originUsername');
+                }
+                else {
+                    $this->JWTTokenManager->setUserIdentityField('username');
+                }
 
                 $data = $this->getUserDetails($user);
                 $data['token'] = $this->JWTTokenManager->create($user);
             }
 
-            setcookie($this->cookieName, json_encode($data), 0 , '/');
+            setcookie(self::$cookieName, json_encode($data), 0 , '/');
         }
 
     }

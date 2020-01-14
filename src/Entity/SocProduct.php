@@ -53,9 +53,15 @@ class SocProduct
      */
     private $translatedDocument;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\User", mappedBy="subscribedProducts")
+     */
+    private $subscribedUsers;
+
     public function __construct()
     {
         $this->socProducts = new ArrayCollection();
+        $this->subscribedUsers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -160,6 +166,34 @@ class SocProduct
     public function setTranslatedDocument(?TranslatedDocument $translatedDocument): self
     {
         $this->translatedDocument = $translatedDocument;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|User[]
+     */
+    public function getSubscribedUsers(): Collection
+    {
+        return $this->subscribedUsers;
+    }
+
+    public function addSubscribedUser(User $subscribedUser): self
+    {
+        if (!$this->subscribedUsers->contains($subscribedUser)) {
+            $this->subscribedUsers[] = $subscribedUser;
+            $subscribedUser->addSubscribedProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSubscribedUser(User $subscribedUser): self
+    {
+        if ($this->subscribedUsers->contains($subscribedUser)) {
+            $this->subscribedUsers->removeElement($subscribedUser);
+            $subscribedUser->removeSubscribedProduct($this);
+        }
 
         return $this;
     }

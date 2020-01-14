@@ -2,16 +2,20 @@
 
 namespace App\Controller;
 
+use App\Entity\SocProduct;
+use App\EventSubscriber\OnJWTAuthenticationSuccess;
 use App\Form\User\RegisterType;
 use App\Repository\DocumentRepository;
 use App\Repository\ProductCategoryRepository;
 use App\Repository\SocProductRepository;
 use App\Repository\UserRepository;
+use http\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
@@ -24,13 +28,12 @@ class AdminController extends AbstractController
     public function homepage(): \Symfony\Component\HttpFoundation\Response
     {
      //   return new RedirectResponse('index.html');
-         $file = __DIR__."/../../public/index.html";
+         $file = __DIR__. '/../../public/index.html';
 
     if (file_exists($file)) {
         return new Response(file_get_contents($file));
-    } else {
-        throw new NotFoundHttpException("file index.html Not Found.");
     }
+        throw new NotFoundHttpException('file index.html Not Found.');
     }
 
 
@@ -39,6 +42,7 @@ class AdminController extends AbstractController
      */
     public function logout(): RedirectResponse
     {
+        setcookie(OnJWTAuthenticationSuccess::$cookieName, '', time() - 3600);
         return new RedirectResponse('index.html');
     }
     /**
@@ -69,7 +73,7 @@ class AdminController extends AbstractController
         {
             $file = null;
             if($product->getTranslatedDocument() && $product->getTranslatedDocument()->translate($lang)) {
-                $file = "uploads/files/" . $product->getTranslatedDocument()->translate($lang)->getFileName();
+                $file = 'uploads/files/' . $product->getTranslatedDocument()->translate($lang)->getFileName();
             }
             $items[] = [
                 'id' => $product->getId(),
