@@ -3,7 +3,7 @@
 
 namespace App\MessageHandler;
 
-use App\Message\PasswordReseted;
+use App\Message\Events\PasswordReseted;
 use Symfony\Bridge\Twig\Mime\NotificationEmail;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;

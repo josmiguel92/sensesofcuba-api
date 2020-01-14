@@ -2,9 +2,12 @@
 
 namespace App\Entity;
 
+use App\Message\Events\UserAccountConfirmed;
+use App\Message\Events\UserAccountEnabled;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use MsgPhp\Domain\DomainMessageBus;
 use MsgPhp\User\User as BaseUser;
 use MsgPhp\User\UserId;
 use MsgPhp\Domain\Event\DomainEventHandler;
@@ -17,6 +20,8 @@ use MsgPhp\User\Model\EmailPasswordCredential;
 use MsgPhp\User\Model\ResettablePassword;
 use MsgPhp\User\Model\RolesField;
 use phpDocumentor\Reflection\Types\Boolean;
+use Symfony\Component\Messenger\MessageBus;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 /**
  * @ORM\Entity()
@@ -59,7 +64,7 @@ class User extends BaseUser implements DomainEventHandler
     private $country;
 
     /**
-     * @ORM\Column(type="string", length=180)
+     * @ORM\Column(type="string", length=180, nullable=true)
      */
     private $web;
 
@@ -88,11 +93,15 @@ class User extends BaseUser implements DomainEventHandler
      * @ORM\JoinTable(name="user_hidden_products")
      */
     private $hiddenProducts;
-    
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $wasEnabled;
 
 
     public function __construct(UserId $id, string $email, string $password, string  $name,
-                                string  $enterprise, string $travelAgency, string $country, string $web)
+                                string  $enterprise, string $travelAgency, string $country, ?string $web)
     {
         $this->id = $id;
         $this->credential = new EmailPassword($email, $password);
@@ -244,6 +253,7 @@ class User extends BaseUser implements DomainEventHandler
     {
         $this->receiveEmails = ($role === 'ROLE_ADMIN' OR $role === 'ROLE_EDITOR');
 
+        $role = in_array($role, ['ROLE_ADMIN', 'ROLE_EDITOR', 'ROLE_PREMIUM_CLIENT', 'ROLE_CLIENT'])? $role : 'ROLE_CLIENT';
         $this->role = $role;
 
         return $this;
@@ -309,13 +319,33 @@ public function addHiddenProduct(SocProduct $hiddenProduct): self
     return $this;
 }
 
-public function removeHiddenProduct(SocProduct $hiddenProduct): self
-{
-    if ($this->hiddenProducts->contains($hiddenProduct)) {
-        $this->hiddenProducts->removeElement($hiddenProduct);
+    public function removeHiddenProduct(SocProduct $hiddenProduct): self
+    {
+        if ($this->hiddenProducts->contains($hiddenProduct)) {
+            $this->hiddenProducts->removeElement($hiddenProduct);
+        }
+
+        return $this;
     }
 
-    return $this;
-}
+    /**
+     * @return mixed
+     */
+    public function getWasEnabled()
+    {
+        return $this->wasEnabled;
+    }
+
+    /**
+     * @param mixed $wasEnabled
+     * @return User
+     */
+    public function setWasEnabled($wasEnabled)
+    {
+        $this->wasEnabled = $wasEnabled;
+        return $this;
+    }
+
+
 
 }

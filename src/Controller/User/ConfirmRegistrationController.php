@@ -7,6 +7,7 @@ namespace App\Controller\User;
 use App\Entity\User;
 use App\Http\Responder;
 use App\Http\RespondRouteRedirect;
+use App\Message\ConfirmUserAccount;
 use MsgPhp\User\Command\ConfirmUser;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,7 +27,7 @@ final class ConfirmRegistrationController
         Responder $responder,
         MessageBusInterface $bus
     ): Response {
-        $bus->dispatch(new ConfirmUser($user->getId()));
+        $bus->dispatch(new ConfirmUserAccount($user->getId()));
 
         return $responder->respond((new RespondRouteRedirect('homepage')));
     }

@@ -52,11 +52,12 @@ easy_admin:
             - { property: 'web' }
             - { property: 'receiveEmails' , help: 'Select if this user will receive the new users subscriptions notifications'}
 #            - { property: 'userRoles', type: 'entity', type_options:{ class: 'App\Entity\Role'}}
-            - { property: 'role', label: 'User Role',  help: 'Select one role', type: 'choice',  type_options: { choices: { Administrator: 'ROLE_ADMIN',  Editor: 'ROLE_EDITOR', '____________': 'ROLE_CLIENT', 'Premium Client': 'ROLE_PREMIUM_CLIENT', Client: 'ROLE_CLIENT' } } }
+            - { property: 'role', label: 'User Role',  help: 'Select one role', type: 'choice',  type_options: { choices: { Client: 'ROLE_CLIENT' , 'Premium Client': 'ROLE_PREMIUM_CLIENT', '____________': '____________', Editor: 'ROLE_EDITOR', Administrator: 'ROLE_ADMIN'} } }
             - { property: 'subscribedProducts', help: 'Products about the user will receive notifications' }
             - { property: 'hiddenProducts', help: 'Select the products hidden for this user' }
         list:
           fields:
+            - { property: id}
             - { property: 'enabled' }
             - { property: 'confirmedAt' }
             - { property: 'name' }

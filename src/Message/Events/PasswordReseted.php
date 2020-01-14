@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Message;
+namespace App\Message\Events;
 
 
 class PasswordReseted

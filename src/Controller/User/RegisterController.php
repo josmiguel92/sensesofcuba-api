@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller\User;
 
 use App\Form\User\RegisterType;
+use App\Message\Events\UserRegistered;
 use MsgPhp\User\Command\CreateUser;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
