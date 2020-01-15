@@ -16,7 +16,8 @@
     "build:dev": "set NODE_ENV=development && set VUE_API='https://habanatech.com/sensesofcuba/api' && parcel build ./src/index.html --public-url . --detailed-report --no-source-maps --out-dir ./dist/dev",
     "build:local": "set VUE_API=https://localhost:8000/api && parcel build ./src/index.html --public-url . --detailed-report --no-source-maps --no-cache --out-dir ./dist/local",
     "build:habanatech": "set VUE_API=https://habanatech.com/sensesofcuba/api && parcel build ./src/index.html --public-url . --detailed-report --no-source-maps --no-cache --out-dir ./dist/habanatech",
-    "build:online": "set VUE_API=http://s498302874.online.de/api && parcel build ./src/index.html --public-url . --detailed-report --no-source-maps --no-cache --out-dir ./dist/online"
+    "build:online": "set VUE_API=http://s498302874.online.de/api && parcel build ./src/index.html --public-url . --detailed-report --no-source-maps --no-cache --out-dir ./dist/online",
+    "build:tourcomcuba": "set VUE_API=http://infonet.tourcomcuba.com/api && parcel build ./src/index.html --public-url . --detailed-report --no-source-maps --no-cache --out-dir ./dist/tourcom"
   },
   "devDependencies": {
     "@vue/component-compiler-utils": "^3.0.2",
