@@ -10,6 +10,10 @@ class API {
         });
         this.client.interceptors.request.use(config => {
             const locale = localStorage.getItem('locale');
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (user.token) {
+                config.headers['Authorization'] = `Bearer ${user.token}`;
+            }
             config.headers['Accept-Language'] = locale;
             return config;
         });
