@@ -136,7 +136,7 @@ class SocProduct
         return $this;
     }
 
-    public function getReferenceName(): ?string
+    public function getReferenceName(): string
     {
         return $this->referenceName;
     }
@@ -150,10 +150,10 @@ class SocProduct
 
     public function __toString()
     {
-        return $this->getReferenceName() ? $this->getReferenceName() : 'empty';
+        return $this->getReferenceName() ?: 'empty';
     }
 
-    public function setEnabled(bool $enabled)
+    public function setEnabled(bool $enabled):void
     {
         $this->enabled = $enabled;
     }

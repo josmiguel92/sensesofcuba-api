@@ -60,8 +60,15 @@ class AdminController extends AbstractController
      * @param Request $request
      * @return JsonResponse
      */
-    public function api_products(SocProductRepository $productRepository, Request $request): JsonResponse
+    public function api_products(SocProductRepository $productRepository, Request $request, UserRepository $userRepository): JsonResponse
     {
+        $user = null;
+        $hiddenProducts = null;
+        if($username = $this->getUserNameFromCookie($request))
+            $user = $userRepository->findOneBy(['email'=>$username]);
+        if($user)
+            $hiddenProducts = $user->getHiddenProducts();
+
         $products = $productRepository->findBy(['enabled'=>true]);
         //dump($categories);
         $lang = substr($request->headers->get('Accept-Language'), 0, 2);
@@ -71,13 +78,17 @@ class AdminController extends AbstractController
 
         foreach ($products as $product)
         {
+            if($hiddenProducts->contains($product)) {
+                continue;
+            }
+
             $file = null;
             if($product->getTranslatedDocument() && $product->getTranslatedDocument()->translate($lang)) {
                 $file = 'uploads/files/' . $product->getTranslatedDocument()->translate($lang)->getFileName();
             }
             $items[] = [
                 'id' => $product->getId(),
-                'title' => $product->translate($lang)->getName(),
+                'title' => $product->translate($lang)->getName() ?: $product->getReferenceName(),
                 'description' => $product->translate($lang)->getDescription(),
                 'file' => $file,
                 'modified_on' =>  $product->getUpdatedAt(),
@@ -116,7 +127,7 @@ class AdminController extends AbstractController
 
             $items[] = [
                 'id' => $doc->getId(),
-                'title' => $doc->translate($lang)->getName(),
+                'title' => $doc->translate($lang)->getName() ?: $doc->getReferenceName(),
                 'description' => $doc->translate($lang)->getDescription(),
                 'file' => $file,
                 'created_on' =>  $doc->getCreatedAt(),
@@ -126,5 +137,13 @@ class AdminController extends AbstractController
         }
 
         return new JsonResponse($items);
+    }
+
+    public function getUserNameFromCookie($request)
+    {
+        $cookieStr = $request->cookies->get(OnJWTAuthenticationSuccess::$cookieName);
+        if($cookie = json_decode($cookieStr, true))
+            return $cookie['username'];
+        return false;
     }
 }

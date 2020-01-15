@@ -119,6 +119,7 @@ class User extends BaseUser implements DomainEventHandler
         $this->subscribedProducts = new ArrayCollection();
         $this->hiddenProducts = new ArrayCollection();
         $this->receiveEmails = false;
+        $this->wasEnabled = false;
     }
 
     public function getId(): UserId
