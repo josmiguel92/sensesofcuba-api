@@ -3,7 +3,8 @@ security:
     encoders:
         MsgPhp\User\Infrastructure\Security\UserIdentity: auto
         Symfony\Component\Security\Core\User\User:
-            algorithm: auto
+            algorithm: bcrypt
+
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
         chain_provider:
@@ -13,7 +14,7 @@ security:
             memory:
                 users:
                     admin@habana.tech:
-                        password: $argon2i$v=19$m=65536,t=4,p=1$V0RNc3pnNnllS3FHNGlLeQ$wrH+JIZ8aLwTnGgtxz/2h+XUY1987Ck2L8JA4oU1ENA
+                        password: $2y$13$u8oayTragV6c8Pu5l3pOx.iAJ8slNdWeWbI25fFMs3ELvqRR3rhLq
                         roles: ['ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN']
 
         msgphp_user: { id: MsgPhp\User\Infrastructure\Security\UserIdentityProvider }

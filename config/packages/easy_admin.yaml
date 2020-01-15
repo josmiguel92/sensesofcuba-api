@@ -41,6 +41,8 @@ easy_admin:
             - { property: 'country' }
             - { property: 'web' }
             - { property: 'role' }
+            - { property: 'subscribedProducts', help: 'Products about the user will receive notifications' }
+            - { property: 'hiddenProducts', help: 'Select the products hidden for this user' }
         form:
           fields:
             - { property: 'enabled', help: 'Select if this user can log in and see products'}

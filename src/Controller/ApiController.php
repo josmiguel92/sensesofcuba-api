@@ -6,10 +6,9 @@ use App\Entity\SocProduct;
 use App\EventSubscriber\OnJWTAuthenticationSuccess;
 use App\Form\User\RegisterType;
 use App\Repository\DocumentRepository;
-use App\Repository\ProductCategoryRepository;
 use App\Repository\SocProductRepository;
 use App\Repository\UserRepository;
-use http\Cookie;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -20,7 +19,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
-class AdminController extends AbstractController
+class ApiController extends AbstractController
 {
     /**
      * @Route("/", name="homepage")
@@ -137,6 +136,34 @@ class AdminController extends AbstractController
         }
 
         return new JsonResponse($items);
+    }
+
+    /**
+     * @Route("/api/product_subscribe/{id}/{action}", name="api_product_subscribe")
+     * @param SocProduct $product
+     * @param $action
+     * @param UserRepository $userRepository
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function subscribe_to_product(SocProduct $product, $action, UserRepository $userRepository, Request $request, ManagerRegistry $managerRegistry): JsonResponse
+    {
+        $user = null;
+        if($username = $this->getUserNameFromCookie($request))
+            $user = $userRepository->findOneBy(['email'=>$username]);
+
+        if(!$user || !$product)
+            throw new NotFoundHttpException();
+
+        if($action === 'subscribe')
+        $product->addSubscribedUser($user);
+        else $product->removeSubscribedUser($user);
+
+        $em = $managerRegistry->getManager();
+        $em->persist($product);
+        $em->flush();
+
+        return $this->json(['status'=>'product updated']);
     }
 
     public function getUserNameFromCookie($request)

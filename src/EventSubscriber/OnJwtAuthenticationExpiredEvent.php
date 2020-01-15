@@ -31,11 +31,13 @@ class OnJwtAuthenticationExpiredEvent extends AbstractController implements Even
 
     public function redirectToHomeResponseFromAdmin(ResponseEvent $event)
     {
+//        header($event->getRequest()->get('_route'));
         $response = $event->getResponse();
-        if($response->getStatusCode() === 401 && $event->getRequest()->get('_route') == 'easyadmin')
+        if($response->getStatusCode() === 401 && substr_count($event->getRequest()->getPathInfo(), 'admin/'))
         {
             $event->setResponse($this->redirectToRoute('homepage'));
         }
     }
+
 
 }

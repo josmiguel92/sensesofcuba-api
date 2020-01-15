@@ -136,7 +136,7 @@ class SocProduct
         return $this;
     }
 
-    public function getReferenceName(): string
+    public function getReferenceName(): ?string
     {
         return $this->referenceName;
     }

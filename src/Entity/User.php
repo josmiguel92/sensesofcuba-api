@@ -347,6 +347,10 @@ public function addHiddenProduct(SocProduct $hiddenProduct): self
         return $this;
     }
 
+    public function __toString()
+    {
+        return $this->email;
+    }
 
 
 }
