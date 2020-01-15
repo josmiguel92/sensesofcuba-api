@@ -1,6 +1,8 @@
 {% trans_default_domain easyadmin_config('translation_domain') %}
 {% extends easyadmin_config('design.templates.layout') %}
 
+{% block title %}Products{% endblock %}
+
 
 {% block card_product %}
     <div class="accordion" id="accordion-{{ product.id }}">
