@@ -13,12 +13,12 @@
                         <div class="nav-item">
                             <strong>{{ $t('home.contact.phone') }}</strong>
                             <br>
-                            <span>+53 7XXX XXXX</span>
+                            <span>+53 7866 4734</span>
                         </div>
                         <div class="nav-item">
                             <strong>{{ $t('home.contact.emergency_phone') }}</strong>
                             <br>
-                            <span>+53 7XXX XXXX</span>
+                            <span>+53 5813 8572</span>
                         </div>
                     </div>
                 </div>
