@@ -61,6 +61,11 @@ security:
             guard:
                 authenticators:
                     - lexik_jwt_authentication.jwt_token_authenticator
+        migrations:
+            pattern: ^/admin/migration
+            provider: in_memory
+            http_basic: true
+
 
         main_admin:
             pattern: ^/admin
