@@ -1,5 +1,12 @@
 <?php
 
+if($_SERVER['HTTPS']== 'off')
+{
+	header("Location: https://infonet.sensesofcuba.com/");
+	exit();
+}
+
+
 use App\Kernel;
 use Symfony\Component\Debug\Debug;
 use Symfony\Component\HttpFoundation\Request;
