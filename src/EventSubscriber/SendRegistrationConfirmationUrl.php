@@ -8,9 +8,11 @@ use App\Entity\User;
 use App\Message\Events\UserRegistered;
 use MsgPhp\User\Event\UserCreated;
 use Symfony\Bridge\Twig\Mime\NotificationEmail;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\RouterInterface;
 use Twig\Environment;
 use Symfony\Component\Mailer\MailerInterface;
@@ -44,23 +46,22 @@ final class SendRegistrationConfirmationUrl implements MessageHandlerInterface
             return;
         }
 
-        $userName = $user->getName();
+        $email = (new TemplatedEmail())
 
-         $email = (new NotificationEmail())
             ->to($user->getEmail())
             ->subject('You have created an account at Senses of Cuba')
-            ->markdown(<<<EOF
-Hello $userName, Recently you have created an account at our website **Senses of Cuba**.
-You can access all our products from here.
+            ->htmlTemplate('email/foundation/cases/welcome.html.twig')
+            ->context([
+                'subject' => 'New account on Senses of Cuba',
+                'username' =>  $user->getName(),
+                'action_url' => $this->router->generate('confirm_registration', ['token'=> $user->getConfirmationToken()], 0) ,
+            ])
+          ->priority(Email::PRIORITY_HIGH);
 
-An administrator should approve your request soon, now, you should confirm your account by click in this button.
-
-EOF
-        )
-          ->action('Confirm account', $this->router->generate('confirm_registration', ['token'=> $user->getConfirmationToken()], 0) )
-         ->importance(NotificationEmail::IMPORTANCE_MEDIUM)
-         ;
-
-        $this->mailer->send($email);
+        try {
+            $this->mailer->send($email);
+        } catch (TransportExceptionInterface $e) {
+            dump($e);
+        }
     }
 }
