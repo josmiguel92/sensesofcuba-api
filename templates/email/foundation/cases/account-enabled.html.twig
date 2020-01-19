@@ -1,12 +1,6 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+{% extends 'email/foundation/base.html.twig' %}
 
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta name="viewport" content="width=device-width">
-    <title>Title</title>
-    <style>{{ source('../foundation-emails.css') }}</style> </head>
-
+    {% block body %}
   <body>
     <!-- <style> -->
     <table class="body" data-made-with-foundation="">
@@ -20,29 +14,43 @@
                 background: #f3f3f3 !important;
               }
               
-              .header {
+              .container.header {
                 background: #f3f3f3;
               }
+              
+              .body-border {
+                border-top: 8px solid #fdc416;
+              }
             </style>
-            <table align="center" class="container float-center">
+            <table align="center" class="container header float-center">
               <tbody>
                 <tr>
                   <td>
-                    <table class="row header">
+                    <table class="row">
                       <tbody>
                         <tr>
                           <th class="small-12 large-12 columns first last">
                             <table>
                               <tr>
                                 <th>
-                                  <table class="spacer">
-                                    <tbody>
+                                  <h1 class="text-center">Your account at Senses of Cuba was enabled</h1>
+                                  <center data-parsed="">
+                                    <table align="center" class="menu text-center float-center">
                                       <tr>
-                                        <td height="16px" style="font-size:16px;line-height:16px;">&#xA0;</td>
+                                        <td>
+                                          <table>
+                                            <tr>
+                                              <th class="menu-item float-center"><a href="https://sensesofcuba.com/#Profile">About Us</a></th>
+                                              <th class="menu-item float-center"><a href="https://sensesofcuba.com/#ourTeam">Our Team</a></th>
+                                              <th class="menu-item float-center"><a href="https://sensesofcuba.com/#ProductSection">Products</a></th>
+                                              <th class="menu-item float-center"><a href="https://sensesofcuba.com/#ContactUs">Contact Us</a></th>
+                                            </tr>
+                                          </table>
+                                        </td>
                                       </tr>
-                                    </tbody>
-                                  </table>
-                                  <h4 class="text-center">Pirate Retirement Services</h4> </th>
+                                    </table>
+                                  </center>
+                                </th>
                                 <th class="expander"></th>
                               </tr>
                             </table>
@@ -50,6 +58,14 @@
                         </tr>
                       </tbody>
                     </table>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <table align="center" class="container body-border float-center">
+              <tbody>
+                <tr>
+                  <td>
                     <table class="row">
                       <tbody>
                         <tr>
@@ -64,7 +80,7 @@
                                       </tr>
                                     </tbody>
                                   </table>
-                                  <center data-parsed=""> <img src="http://placehold.it/250x250" align="center" class="float-center"> </center>
+                                  <center data-parsed=""> <img src="{{ email.image('email/foundation/logo.png') }}" align="center" class="float-center"> </center>
                                   <table class="spacer">
                                     <tbody>
                                       <tr>
@@ -72,22 +88,28 @@
                                       </tr>
                                     </tbody>
                                   </table>
-                                  <h1 class="text-center">Forgot Your Password?</h1>
-                                  <table class="spacer">
+                                  <h4>Hello {{ username }}, thanks for join us at Senses of Cuba website and product repository</h4>
+                                  <p>Your recently created account at Senses of Cuba was approved and now you can start to explore ours products.</p>
+                                  <center data-parsed="">
+
+
+                                    <table class="spacer">
                                     <tbody>
                                       <tr>
+                                        <td height="16px" style="font-size:16px;line-height:16px;">&#xA0;</td>
+                                      </tr><tr>
                                         <td height="16px" style="font-size:16px;line-height:16px;">&#xA0;</td>
                                       </tr>
                                     </tbody>
                                   </table>
-                                  <p class="text-center">It happens. Click the link below to reset your password.</p>
+
                                   <table class="button large expand">
                                     <tr>
                                       <td>
                                         <table>
                                           <tr>
                                             <td>
-                                              <center data-parsed=""><a href="#" align="center" class="float-center">Reset Password</a></center>
+                                              <center data-parsed=""><a href="{{ action_url }}" align="center" class="float-center">Long in</a></center>
                                             </td>
                                           </tr>
                                         </table>
@@ -95,8 +117,21 @@
                                       <td class="expander"></td>
                                     </tr>
                                   </table>
-                                  <hr>
-                                  <p><small>You're getting this email because you've signed up for email updates. If you want to opt-out of future emails, <a href="#">unsubscribe here</a>.</small></p>
+
+                                    <table align="center" class="menu float-center">
+                                      <tr>
+                                        <td>
+                                          <table>
+                                            <tr>
+                                              <th class="menu-item float-center"><a href="https://sensesofcuba.com/">sensesofcuba.com</a></th>
+                                              <th class="menu-item float-center"><a href="mailto:info@sensesofcuba.com#">info@sensesofcuba.com</a></th>
+                                              <th class="menu-item float-center"><a href="tel://+5378664734">+53 7866 4734</a></th>
+                                            </tr>
+                                          </table>
+                                        </td>
+                                      </tr>
+                                    </table>
+                                  </center>
                                 </th>
                                 <th class="expander"></th>
                               </tr>
@@ -121,5 +156,4 @@
       </tr>
     </table>
   </body>
-
-</html>
+{% endblock body %}

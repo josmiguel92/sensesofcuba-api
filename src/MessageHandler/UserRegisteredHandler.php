@@ -4,7 +4,7 @@
 namespace App\MessageHandler;
 
 
-use App\Message\Events\PasswordReseted;
+use App\Message\Events\PasswordReset;
 use App\Message\Events\UserRegistered;
 use App\Repository\UserRepository;
 use Symfony\Bridge\Twig\Mime\NotificationEmail;

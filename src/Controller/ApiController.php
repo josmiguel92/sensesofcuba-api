@@ -77,7 +77,7 @@ class ApiController extends AbstractController
 
         foreach ($products as $product)
         {
-            if($hiddenProducts->contains($product)) {
+            if($hiddenProducts && $hiddenProducts->contains($product)) {
                 continue;
             }
 
