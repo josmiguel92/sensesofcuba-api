@@ -6,7 +6,7 @@ namespace App\Controller\User;
 
 use App\Entity\User;
 use App\Form\User\ResetPasswordType;
-use App\Message\PasswordReseted;
+use App\Message\Events\PasswordReset;
 use MsgPhp\User\Command\ResetUserPassword;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -40,7 +40,7 @@ final class ResetPasswordController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $bus->dispatch(new ResetUserPassword($user->getId(), $form->getData()['password']));
-            $bus->dispatch(new PasswordReseted($user->getEmail()));
+            $bus->dispatch(new PasswordReset($user->getEmail()));
             $flashBag->add('success', 'You\'re password was changed on '.date("F j, Y, g:i a"));
 
             return $this->redirectToRoute('homepage');

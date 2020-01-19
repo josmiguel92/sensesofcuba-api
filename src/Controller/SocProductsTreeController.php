@@ -5,12 +5,18 @@ namespace App\Controller;
 use App\Entity\SocProduct;
 use App\Form\SocProductType;
 use App\Repository\SocProductRepository;
+use App\SocMimeTypeGuesser;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser;
+use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mime\MimeTypeGuesserInterface;
+use Symfony\Component\Mime\MimeTypes;
+use Symfony\Component\Mime\MimeTypesInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -33,6 +39,7 @@ class SocProductsTreeController extends AbstractController
     /**
      * @Route("/new", name="new", methods="GET|POST")
      * @param Request $request
+     * @param MimeTypeGuesserInterface $guesser
      * @return RedirectResponse|Response
      */
     public function new(Request $request)

@@ -4,7 +4,7 @@
 namespace App\Message\Events;
 
 
-class PasswordReseted
+class PasswordReset
 {
     private $email;
 

@@ -4,13 +4,16 @@
 namespace App\MessageHandler;
 
 
-use App\Message\Events\PasswordReseted;
+use App\Message\Events\PasswordReset;
 use App\Message\Events\UserRegistered;
 use App\Repository\UserRepository;
 use Symfony\Bridge\Twig\Mime\NotificationEmail;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Router;
 use Symfony\Component\Routing\RouterInterface;
 
@@ -57,34 +60,36 @@ class UserRegisteredHandler implements MessageHandlerInterface
             }
         }
 
-        if(!$receiversList)
-            return;
+        $newUser = $this->userRepository->find($message->getUserId());
 
-        $email = (new NotificationEmail());
+        //if no Admin is subscribed to emails or isnt any admin or there in no newUser on DB
+        if(!$receiversList || !$newUser) {
+            return;
+        }
+
+        $email = new TemplatedEmail();
 
         foreach ($receiversList as $address)
         {
             $email->addBcc((new Address($address)));
         }
 
-        $newUser = $this->userRepository->find($message->getUserId());
-        $newUserName = $newUser->getName();
-        $email->subject('A new user created an account at Senses of Cuba and await for approbation.')
-            ->markdown(<<<EOF
-Hi!
-There is a new user ($newUserName) at Senses of Cuba intranet... 
 
-**The new account is not enabled until you (or another Admin) approve it.**
+         $email
+            ->subject('There is a new user registered at Senses of Cuba')
+            ->htmlTemplate('email/foundation/cases/new-user.html.twig')
+            ->context([
+                'subject' => 'New account on Senses of Cuba',
+                'username' =>  $newUser->getName(),
+                'action_url' => $this->router->generate('easyadmin', [], 0 ) ,
+            ])
+          ->priority(Email::PRIORITY_HIGH);
 
-You can go to Administration page and review the new accounts profile. 
+        try {
+            $this->mailer->send($email);
+        } catch (TransportExceptionInterface $e) {
+            dump($e);
+        }
 
-Have a nice day!
-EOF
-        )
-         ->action('Go to Admin', $this->router->generate('easyadmin', [], 0 ))
-         ->importance(NotificationEmail::IMPORTANCE_HIGH)
-         ;
-
-        $this->mailer->send($email);
     }
 }

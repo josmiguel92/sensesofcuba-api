@@ -6,7 +6,10 @@ namespace App\EventSubscriber;
 
 use App\Entity\User;
 use MsgPhp\User\Event\UserPasswordRequested;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
+use Symfony\Component\Mime\Email;
 use Twig\Environment;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Bridge\Twig\Mime\NotificationEmail;
@@ -36,19 +39,21 @@ final class SendPasswordResetUrl implements MessageHandlerInterface
             return;
         }
 
-        $email = (new NotificationEmail())
+        $email = (new TemplatedEmail())
             ->to($user->getEmail())
             ->subject('PasswordRequested via SensesOfCuba')
-            ->markdown(<<<EOF
-Recently you have requested a **new password**.
-To create a new one, just click the btn.
+            ->htmlTemplate('email/foundation/cases/password.html.twig')
+            ->context([
+                'subject' => 'PasswordRequested via SensesOfCuba',
+                'action_url' => $this->router->generate('reset_password', ['token'=> $user->getPasswordResetToken()], 0) ,
+            ])
+          ->priority(Email::PRIORITY_HIGH);
 
-EOF
-    )
-    ->action('Set a new Password', $this->router->generate('reset_password', ['token'=> $user->getPasswordResetToken()], 0) )
-    ->importance(NotificationEmail::IMPORTANCE_MEDIUM)
-;
+        try {
+            $this->mailer->send($email);
+        } catch (TransportExceptionInterface $e) {
+            return;
+        }
 
-        $this->mailer->send($email);
     }
 }

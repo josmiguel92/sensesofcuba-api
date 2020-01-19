@@ -3,63 +3,53 @@
 
 namespace App\MessageHandler;
 
-
-use App\Message\Events\UserAccountEnabled;
+use App\Message\Events\PasswordReset;
 use App\Repository\UserRepository;
 use Symfony\Bridge\Twig\Mime\NotificationEmail;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
-use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\RouterInterface;
+use Twig\Environment;
 
-class UserAccountEnabledHandler implements MessageHandlerInterface
+class PasswordResetHandler implements MessageHandlerInterface
 {
     /**
      * @var MailerInterface
      */
     private $mailer;
     /**
-     * @var RouterInterface
-     */
-    private $router;
-    /**
      * @var UserRepository
      */
     private $userRepository;
 
-
     /**
-     * UserAccountEnabledHandler constructor.
+     * PasswordRequestHandler constructor.
      * @param MailerInterface $mailer
-     * @param RouterInterface $router
      * @param UserRepository $userRepository
      */
-    public function __construct(MailerInterface $mailer, RouterInterface $router, UserRepository $userRepository)
+       public function __construct(MailerInterface $mailer, UserRepository $userRepository)
     {
         $this->mailer = $mailer;
-        $this->router = $router;
         $this->userRepository = $userRepository;
     }
 
-    public function __invoke(UserAccountEnabled $message)
-    {
 
+    public function __invoke(PasswordReset $message)
+    {
         $user = $this->userRepository->findOneBy(['email' => $message->getEmail()]);
-        if (!$user) {
+        if (!$user)
             return;
-        }
 
         $email = (new TemplatedEmail())
             ->to($user->getEmail())
-            ->subject('Your account at Senses of Cuba was enabled')
-            ->htmlTemplate('email/foundation/cases/account-enabled.html.twig')
+            ->subject('Your password at Senses of Cuba was reset')
+            ->htmlTemplate('email/foundation/cases/password-reset.html.twig')
             ->context([
-                'subject' => 'Your account at Senses of Cuba was enabled',
+                'subject' => 'Your password at Senses of Cuba was reset',
                 'username' => $user->getName(),
-                'action_url' => $this->router->generate('homepage', [], 0)
             ])
             ->priority(Email::PRIORITY_HIGH);
 
@@ -68,8 +58,5 @@ class UserAccountEnabledHandler implements MessageHandlerInterface
         } catch (TransportExceptionInterface $e) {
             return;
         }
-
     }
-
-
 }
