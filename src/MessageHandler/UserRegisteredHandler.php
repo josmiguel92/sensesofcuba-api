@@ -88,7 +88,7 @@ class UserRegisteredHandler implements MessageHandlerInterface
         try {
             $this->mailer->send($email);
         } catch (TransportExceptionInterface $e) {
-            dump($e);
+            return;
         }
 
     }

@@ -1,9 +1,25 @@
 <?php
-
-if($_SERVER['HTTPS']== 'off')
+if($_SERVER['SERVER_NAME'] === 'infonet.sensesofcuba.com')
 {
-	header("Location: https://infonet.sensesofcuba.com/");
-	exit();
+    if($_SERVER['HTTPS'] === 'off')
+    {
+        header("HTTP/1.1 301 Moved Permanently");
+        header("Location: https://infonet.sensesofcuba.com/index.php");
+        exit();
+    }
+
+    if($_SERVER['REQUEST_URI'] !== '/index.php/' && strpos($_SERVER['REQUEST_URI'], '/index.php/') === 0)
+    {
+        $request_uri = substr($_SERVER['REQUEST_URI'], 10);
+
+        if(file_exists('./'.$request_uri) && !is_dir('./'.$request_uri))
+        {
+            header("HTTP/1.1 301 Moved Permanently");
+            header("Location: https://infonet.sensesofcuba.com/".$request_uri);
+            exit();
+        }
+
+    }
 }
 
 
