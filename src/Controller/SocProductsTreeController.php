@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\SocProduct;
 use App\Form\SocProductType;
+use App\Message\Events\ProductUpdated;
 use App\Repository\SocProductRepository;
 use App\SocMimeTypeGuesser;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,6 +15,7 @@ use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBus;
 use Symfony\Component\Mime\MimeTypeGuesserInterface;
 use Symfony\Component\Mime\MimeTypes;
 use Symfony\Component\Mime\MimeTypesInterface;
@@ -77,7 +79,7 @@ class SocProductsTreeController extends AbstractController
      * @param Request $request
      * @return RedirectResponse|Response
      */
-    public function edit(SocProduct $product, Request $request)
+    public function edit(SocProduct $product, Request $request, MessageBus $bus)
     {
         $deleteForm = $this->createDeleteForm($product);
         $form = $this->createForm(SocProductType::class, $product);
@@ -88,6 +90,8 @@ class SocProductsTreeController extends AbstractController
             $this->getDoctrine()->getManager()->flush();
 
             $this->addFlash('success', 'Product updated!');
+            $bus->dispatch(new ProductUpdated($product->getId()));
+
 
             return $this->redirectToRoute('soc_product_index');
         }
