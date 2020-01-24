@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBus;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Mime\MimeTypeGuesserInterface;
 use Symfony\Component\Mime\MimeTypes;
 use Symfony\Component\Mime\MimeTypesInterface;
@@ -79,7 +80,7 @@ class SocProductsTreeController extends AbstractController
      * @param Request $request
      * @return RedirectResponse|Response
      */
-    public function edit(SocProduct $product, Request $request, MessageBus $bus)
+    public function edit(SocProduct $product, Request $request, MessageBusInterface $bus)
     {
         $deleteForm = $this->createDeleteForm($product);
         $form = $this->createForm(SocProductType::class, $product);

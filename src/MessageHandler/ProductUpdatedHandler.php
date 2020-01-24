@@ -51,7 +51,7 @@ class ProductUpdatedHandler implements MessageHandlerInterface
 
         foreach ($subscribedUsers as $user)
         {
-            $this->bus->dispatch(new NotifyUserAboutProductUpdate($user->getId()));
+            $this->bus->dispatch(new NotifyUserAboutProductUpdate($user->getId(), $product->getId()));
         }
     }
 
