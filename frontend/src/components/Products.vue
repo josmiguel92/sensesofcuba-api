@@ -13,7 +13,7 @@
                     <div class="d-flex align-items-center mb-4">
                         <h3 class="panel-title text-dark mr-2">{{ item.title }}</h3>
                         <button v-if="item.file" @click="openDocument(item.title, `${item.file}`)" class="btn btn-secondary btn-sm btn-icon"><i class="fa fa-file-pdf mr-1"></i> <span class="d-none d-md-inline">Open</span></button>
-                        <a v-if="item.file" role="button" v-if="item.file" :href="`${item.file}`" class="btn btn-primary" :download="item.title"><i class="fa fa-download mr-1"></i>
+                        <a v-if="item.file" role="button" :href="`${item.file}`" class="btn btn-primary btn-sm btn-icon" :download="item.title"><i class="fa fa-download mr-1"></i>
                             <span class="d-none d-md-inline">Download</span>
                         </a>
                     </div>

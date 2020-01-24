@@ -8,6 +8,16 @@
             </div>
             <div class="d-flex" v-if="item.file">
                 <button @click="openDocument(item.title, `${item.file}`)" class="btn btn-secondary btn-sm btn-icon"><i class="fa fa-file-pdf mr-1"></i> <span class="d-none d-md-inline">Open</span></button>
+                <button @click="toggleSubscribe(item.id)" class="btn btn-secondary btn-sm btn-icon">
+                    <template v-if="subscribed">
+                        <i class="fa fa-bell text-primary"></i> 
+                        <span class="d-none d-md-inline">Unsubscribe</span>
+                    </template>
+                    <template v-else>
+                        <i class="fa fa-bell"></i> 
+                        <span class="d-none d-md-inline">Subscribe</span>
+                    </template>
+                </button>
                 <a role="button" :href="`${item.file}`" class="btn btn-secondary btn-sm" :download="item.title">
                     <i class="fa fa-download mr-1"></i> <span class="d-none d-md-inline">Download</span>
                 </a>
@@ -20,12 +30,15 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+
 export default {
     name: 'TreeItem',
     props: ['item'],
     data() {
         return {
-            isOpen: false
+            isOpen: false,
+            subscribed: this.item.subscribed
         }
     },
     computed: {
@@ -45,6 +58,7 @@ export default {
         }
     },
     methods: {
+        ...mapActions(['subscribeToProduct', 'unsubscribeFromProduct']),
         toggle() {
             if (this.isParent) {
                 this.isOpen = !this.isOpen;
@@ -52,6 +66,15 @@ export default {
         },
         openDocument(title, file) {
             this.$pdfModal.show(title, file, this.$t('general.close'));
+        },
+        toggleSubscribe(productId) {
+            if (this.subscribed) {
+                this.unsubscribeFromProduct(productId);
+                this.subscribed = false;
+            } else {
+                this.subscribeToProduct(productId);
+                this.subscribed = true;
+            }
         }
     },
     updated() {

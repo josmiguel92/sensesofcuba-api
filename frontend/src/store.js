@@ -107,6 +107,20 @@ const store = new Vuex.Store({
             }).catch(e => {
                 return Promise.reject(e);
             });
+        },
+        subscribeToProduct({commit}, productId) {
+            return API.subscribeToProduct(productId).then(res => {
+                return Promise.resolve();
+            }).catch(e => {
+                return Promise.reject(e);
+            });
+        },
+        unSubscribeFromProduct({commit}, productId) {
+            return API.unsubscribeToProduct(productId).then(res => {
+                return Promise.resolve();
+            }).catch(e => {
+                return Promise.reject(e);
+            });
         }
     }
 });
