@@ -57,6 +57,14 @@ class API {
             _token: token
         });
     }
+
+    subscribeToProduct(productId) {
+        return this.client.get(`product_subscribe/${productId}/subscribe`);
+    }
+
+    unsubscribeToProduct(productId) {
+        return this.client.get(`product_subscribe/${productId}/unsubscribe`);
+    }
 }
 
 export default new API();
