@@ -17,7 +17,11 @@
     "build:local": "set VUE_API=http://localhost:8000/api && parcel build ./src/index.html --public-url . --detailed-report --no-source-maps --no-cache --out-dir ./dist/local",
     "build:habanatech": "set VUE_API=https://habanatech.com/sensesofcuba/api && parcel build ./src/index.html --public-url . --detailed-report --no-source-maps --no-cache --out-dir ./dist/habanatech",
     "build:online": "set VUE_API=http://s498302874.online.de/api && parcel build ./src/index.html --public-url . --detailed-report --no-source-maps --no-cache --out-dir ./dist/online",
+<<<<<<< HEAD
     "build:infonet": "set VUE_API=https://infonet.sensesofcuba.com/api && parcel build ./src/index.html --public-url . --detailed-report --no-source-maps --no-cache --out-dir ./dist/infonet"
+=======
+    "build:sensesofcuba": "set VUE_API=https://infonet.sensesofcuba.com/index.php/api && parcel build ./src/index.html --public-url . --detailed-report --no-source-maps --no-cache --out-dir ./dist/sensesofcuba"
+>>>>>>> 02dac49b0a779640ef6069882f1c1e1bd28480c2
   },
   "devDependencies": {
     "@vue/component-compiler-utils": "^3.0.2",

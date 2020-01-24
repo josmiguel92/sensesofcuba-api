@@ -34,7 +34,7 @@ class MigrationController extends AbstractController
      */
     public function dbAplyMigrations(KernelInterface $kernel)
     {
-        echo "hola";
+//        echo "hola";
         if(!$this->isGranted('ROLE_SUPER_ADMIN'))
             throw new AccessDeniedHttpException();
 
