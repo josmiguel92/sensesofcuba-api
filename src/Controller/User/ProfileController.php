@@ -19,7 +19,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Twig\Environment;
 
 /**
- * @Route("/profile", name="profile")
+ * @Route("/profile", name="profile", host="%app.main_domain%")
  */
 final class ProfileController
 {

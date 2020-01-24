@@ -20,7 +20,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Twig\Environment;
 
 /**
- * @Route("/reset-password/{token}", name="reset_password")
+ * @Route("/reset-password/{token}", name="reset_password", host="%app.main_domain%")
  */
 final class ResetPasswordController extends AbstractController
 {

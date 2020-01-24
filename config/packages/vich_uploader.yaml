@@ -1,7 +1,7 @@
 vich_uploader:
     db_driver: orm
 
-    storage: '@App\CustomStorage'
+    #storage: '@App\CustomStorage'
     #mappings:
     #    products:
     #        uri_prefix: /images/products

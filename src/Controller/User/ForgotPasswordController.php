@@ -21,7 +21,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Twig\Environment;
 
 /**
- * @Route("/api/reset-password", name="api_reset_password", methods={"POST", "GET"})
+ * @Route("/api/reset-password", name="api_reset_password", methods={"POST", "GET"}, host="%app.main_domain%")
  */
 class ForgotPasswordController extends AbstractController
 {

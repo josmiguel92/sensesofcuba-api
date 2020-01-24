@@ -15,7 +15,7 @@ use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/register/confirm/{token}", name="confirm_registration")
+ * @Route("/register/confirm/{token}", name="confirm_registration", host="%app.main_domain%")
  */
 final class ConfirmRegistrationController
 {

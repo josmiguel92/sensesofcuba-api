@@ -19,6 +19,9 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
+/**
+ * @Route(host="%app.main_domain%")
+ */
 class ApiController extends AbstractController
 {
     /**
@@ -93,6 +96,7 @@ class ApiController extends AbstractController
                 'modified_on' =>  $product->getUpdatedAt(),
                 'image' => $product->getImage() ? 'uploads/images/'.$product->getImage()->getImageName() : null,
                 'child_of' => $product->getParent() ? $product->getParent()->getId() : null,
+                'subscribed' => $product->getSubscribedUsers()->contains($user),
             ];
         }
 

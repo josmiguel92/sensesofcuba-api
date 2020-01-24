@@ -13,7 +13,7 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Twig\Environment;
 
 /**
- * @Route("/login", name="login")
+ * @Route("/login", name="login", host="%app.main_domain%")
  */
 final class LoginController
 {

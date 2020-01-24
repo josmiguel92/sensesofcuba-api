@@ -20,7 +20,7 @@ use Symfony\Component\Mime\MimeTypesInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
-* @Route("/admin/product", name="soc_product_")
+* @Route("/admin/product", name="soc_product_", host="%app.main_domain%")
 */
 class SocProductsTreeController extends AbstractController
 {

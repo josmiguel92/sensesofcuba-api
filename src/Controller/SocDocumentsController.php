@@ -20,7 +20,7 @@ use Symfony\Component\Mime\MimeTypes;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
-* @Route("/admin/document", name="soc_document_")
+* @Route("/admin/document", name="soc_document_", host="%app.main_domain%")
 */
 class SocDocumentsController extends AbstractController
 {

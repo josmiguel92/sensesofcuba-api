@@ -24,7 +24,7 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Twig\Environment;
 
 /**
- * @Route("/api/register", name="register", methods={"POST", "GET"})
+ * @Route("/api/register", name="register", methods={"POST", "GET"}, host="%app.main_domain%")
  */
 final class RegisterController extends AbstractController
 {
