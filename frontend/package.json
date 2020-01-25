@@ -14,11 +14,13 @@
     "build:prod": "parcel build ./src/index.html --public-url . --detailed-report --no-source-maps --no-cache --out-dir ./dist/prod",
     "copy": "cp -r ./dist/local/* ../public/",
     "build:dev": "set NODE_ENV=development && set VUE_API='https://habanatech.com/sensesofcuba/api' && parcel build ./src/index.html --public-url . --detailed-report --no-source-maps --out-dir ./dist/dev",
-    "build:local": "set VUE_API=http://localhost:8000/api && parcel build ./src/index.html --public-url . --detailed-report --no-source-maps --no-cache --out-dir ./dist/local",
+    "build:local": "set VUE_API=https://localhost:8000/api && parcel build ./src/index.html --public-url . --detailed-report --no-source-maps --no-cache --out-dir ./dist/local",
     "build:habanatech": "set VUE_API=https://habanatech.com/sensesofcuba/api && parcel build ./src/index.html --public-url . --detailed-report --no-source-maps --no-cache --out-dir ./dist/habanatech",
     "build:online": "set VUE_API=http://s498302874.online.de/api && parcel build ./src/index.html --public-url . --detailed-report --no-source-maps --no-cache --out-dir ./dist/online",
-    "build:sensesofcuba": "set VUE_API=https://infonet.sensesofcuba.com/index.php/api && parcel build ./src/index.html --public-url . --detailed-report --no-source-maps --no-cache --out-dir ./dist/sensesofcuba",
-    "build:tourcom": "set VUE_API=https://infonet.tourcomcuba.com/api && parcel build ./src/index.html --public-url . --detailed-report --no-source-maps --no-cache --out-dir ./dist/tourcom"
+    "build:sensesofcuba": "set VUE_API=http://infonet.sensesofcuba.com/index.php/api && parcel build ./src/index.html --public-url . --detailed-report --no-source-maps --no-cache --out-dir ./dist/sensesofcuba",
+    "build:sensesofcubasecure": "set VUE_API=https://infonet.sensesofcuba.com/index.php/api && parcel build ./src/index.html --public-url . --detailed-report --no-source-maps --no-cache --out-dir ./dist/sensesofcubasecure",
+    "build:tourcom": "set VUE_API=https://infonet.tourcomcuba.com/api && parcel build ./src/index.html --public-url . --detailed-report --no-source-maps --no-cache --out-dir ./dist/tourcom",
+    "build:tourcomsecure": "set VUE_API=http://infonet.tourcomcuba.com/api && parcel build ./src/index.html --public-url . --detailed-report --no-source-maps --no-cache --out-dir ./dist/tourcomsecure"
   },
   "devDependencies": {
     "@vue/component-compiler-utils": "^3.0.2",

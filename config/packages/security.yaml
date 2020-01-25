@@ -15,7 +15,7 @@ security:
                 users:
                     admin@habana.tech:
                         password: $2y$13$u8oayTragV6c8Pu5l3pOx.iAJ8slNdWeWbI25fFMs3ELvqRR3rhLq
-                        roles: ['ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN']
+                        roles: ['ROLE_USER', 'ROLE_EDITOR', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN']
 
         msgphp_user: { id: MsgPhp\User\Infrastructure\Security\UserIdentityProvider }
         msgphp_user_jwt: { id: MsgPhp\User\Infrastructure\Security\Jwt\UserIdentityProvider }
@@ -86,10 +86,11 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
-        - { path: ^/api/register, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
-        - { path: ^/api/reset-password, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
-        - { path: ^/api, roles: ROLE_USER, requires_channel: https }
-        - { path: ^/admin, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
-        - { path: ^/profile, roles: ROLE_USER, requires_channel: https }
-        - { path: ^/, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+        - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/reset-password, roles: IS_AUTHENTICATED_ANONYMOUSLYs }
+        - { path: ^/api, roles: ROLE_USER }
+        - { path: ^/admin, roles: ROLE_EDITOR }
+        - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        #- { path: ^/, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }

@@ -1,4 +1,5 @@
 <?php
+/*
 if($_SERVER['SERVER_NAME'] === 'infonet.sensesofcuba.com')
 {
     if($_SERVER['HTTPS'] === 'off')
@@ -21,7 +22,7 @@ if($_SERVER['SERVER_NAME'] === 'infonet.sensesofcuba.com')
 
     }
 }
-
+*/
 
 use App\Kernel;
 use Symfony\Component\Debug\Debug;
