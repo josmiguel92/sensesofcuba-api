@@ -40,7 +40,7 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
     const pageTitle = to.meta.title;
-    document.title = `${pageTitle} | Client Intranet`;
+    document.title = `${pageTitle} | Client Infonet`;
     next();
 });
 

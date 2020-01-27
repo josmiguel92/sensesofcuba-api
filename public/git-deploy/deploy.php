@@ -13,12 +13,12 @@
 	$commands = array(
 		'echo $PWD',
 		'whoami',
-		'git reset --hard HEAD',
+		/*'git reset --hard HEAD',
 		'git pull',
 		'git status',
 		'git submodule sync',
 		'git submodule update',
-		'git submodule status',
+		'git submodule status',*/
 		'rm -r $PWD/../../var/cache/prod/',
 	);
 	// Run the commands for output

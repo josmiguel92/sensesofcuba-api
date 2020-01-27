@@ -1,7 +1,7 @@
 {
   "name": "client-intranet",
   "version": "1.0.0",
-  "description": "Client Intranet for sensesofcuba.com",
+  "description": "Client Infonet for sensesofcuba.com",
   "author": "lexz <lexz.zaldivar@gmail.com>",
   "license": "ISC",
   "private": true,
@@ -19,8 +19,8 @@
     "build:online": "set VUE_API=http://s498302874.online.de/api && parcel build ./src/index.html --public-url . --detailed-report --no-source-maps --no-cache --out-dir ./dist/online",
     "build:sensesofcuba": "set VUE_API=http://infonet.sensesofcuba.com/index.php/api && parcel build ./src/index.html --public-url . --detailed-report --no-source-maps --no-cache --out-dir ./dist/sensesofcuba",
     "build:sensesofcubasecure": "set VUE_API=https://infonet.sensesofcuba.com/index.php/api && parcel build ./src/index.html --public-url . --detailed-report --no-source-maps --no-cache --out-dir ./dist/sensesofcubasecure",
-    "build:tourcom": "set VUE_API=https://infonet.tourcomcuba.com/api && parcel build ./src/index.html --public-url . --detailed-report --no-source-maps --no-cache --out-dir ./dist/tourcom",
-    "build:tourcomsecure": "set VUE_API=http://infonet.tourcomcuba.com/api && parcel build ./src/index.html --public-url . --detailed-report --no-source-maps --no-cache --out-dir ./dist/tourcomsecure"
+    "build:tourcomsecure": "set VUE_API=https://infonet.tourcomcuba.com/api && parcel build ./src/index.html --public-url . --detailed-report --no-source-maps --no-cache --out-dir ./dist/tourcomsecure",
+    "build:tourcom": "set VUE_API=http://infonet.tourcomcuba.com/api && parcel build ./src/index.html --public-url . --detailed-report --no-source-maps --no-cache --out-dir ./dist/tourcom"
   },
   "devDependencies": {
     "@vue/component-compiler-utils": "^3.0.2",

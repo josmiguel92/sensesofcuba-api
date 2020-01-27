@@ -21,7 +21,7 @@ export default {
                 text2: 'unsere',
                 text3: 'Leidenschaft'
             },
-            lead: 'Willkommen in unserem Kunden-Intranet'
+            lead: 'Willkommen in unserem Kunden-Infonet'
         },
         products: {
             title: {
