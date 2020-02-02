@@ -1,26 +1,26 @@
 <template>
     <div @click.stop="toggle" class="tree-item">
-        <div class="content d-flex align-items-center">
-            <div class="flex-grow-1 d-flex align-items-center">
-                <span class="label d-flex align-items-center ml-2 mr-2"><i class="mr-2" :class="iconClass"></i> {{ item.title }}</span>
-                <span v-if="!isParent" class="mr-2"> | </span>
-                <small v-if="!isParent && item.modified_on" class="d-none d-md-inline">{{ $t('general.updated') }}: {{ item.modified_on | date }}</small>
+        <div class="content d-flex flex-column p-2 justify-content-center">
+            <div class="d-flex align-items-center">
+                <div class="d-flex flex-grow-1 align-items-center">
+                    <span class="label d-flex align-items-center ml-2 mr-2">
+                        <i class="mr-2" :class="iconClass"></i> {{ item.title }}
+                    </span>
+                    <span v-if="!isParent" class="mr-2"> | </span>
+                    <small v-if="!isParent && item.modified_on" class="d-none d-md-inline">{{ $t('general.updated') }}: {{ item.modified_on | date }}</small>
+                </div>
+                <div class="d-flex" v-if="item.file">
+                    <SubscribeButton :item="item"></SubscribeButton>
+                    <OpenDocumentButton :item="item"></OpenDocumentButton>
+                    <a role="button" :href="`${item.file}`" class="btn btn-secondary btn-sm" :download="item.title">
+                        <i class="fa fa-download"></i> <span class="d-none d-md-inline">Download</span>
+                    </a>
+                </div>
             </div>
-            <div class="d-flex" v-if="item.file">
-                <button @click="openDocument(item.title, `${item.file}`)" class="btn btn-secondary btn-sm btn-icon"><i class="fa fa-file-pdf mr-1"></i> <span class="d-none d-md-inline">Open</span></button>
-                <button @click="toggleSubscribe(item.id)" class="btn btn-secondary btn-sm btn-icon">
-                    <template v-if="subscribed">
-                        <i class="fa fa-bell text-primary"></i> 
-                        <span class="d-none d-md-inline">Unsubscribe</span>
-                    </template>
-                    <template v-else>
-                        <i class="fa fa-bell"></i> 
-                        <span class="d-none d-md-inline">Subscribe</span>
-                    </template>
-                </button>
-                <a role="button" :href="`${item.file}`" class="btn btn-secondary btn-sm" :download="item.title">
-                    <i class="fa fa-download mr-1"></i> <span class="d-none d-md-inline">Download</span>
-                </a>
+            <div class="d-flex" v-if="item.description">
+                <small class="ml-2 mt-2">
+                    <i class="mr-2 fa fa-info-circle"></i> {{ item.description }}
+                </small>
             </div>
         </div>
         <div class="tree" v-if="isParent" v-show="isOpen">
@@ -30,11 +30,17 @@
 </template>
 
 <script>
+import SubscribeButton from '~/components/SubscribeButton.vue';
+import OpenDocumentButton from '~/components/OpenDocumentButton.vue';
 import { mapActions } from 'vuex';
 
 export default {
     name: 'TreeItem',
     props: ['item'],
+    components: {
+        SubscribeButton,
+        OpenDocumentButton
+    },
     data() {
         return {
             isOpen: false,
@@ -90,7 +96,7 @@ export default {
         background-color: #eee;
         border-radius: 3px;
         padding: 4px 8px;
-        height: 46px;
+        min-height: 46px;
         .label {
             font-weight: 500;
         }
