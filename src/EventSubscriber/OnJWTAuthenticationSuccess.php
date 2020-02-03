@@ -141,7 +141,7 @@ final class OnJWTAuthenticationSuccess implements EventSubscriberInterface
                     throw new AccessDeniedHttpException('Account disabled');
                 }
 
-            $roleAdmin = ('ROLE_ADMIN' === $_user->getRole()) ? 0 : -1;
+            $roleAdmin = ('ROLE_ADMIN' === $_user->getRole() OR 'ROLE_EDITOR' === $_user->getRole()) ? 0 : -1;
             return [
                 'username' => $username,
                 'roles' => $roleAdmin,
@@ -149,9 +149,6 @@ final class OnJWTAuthenticationSuccess implements EventSubscriberInterface
                 ];
             }
         }
-
-
-
 
     }
 

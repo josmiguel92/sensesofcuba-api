@@ -250,6 +250,11 @@ class User extends BaseUser implements DomainEventHandler
         return null;
     }
 
+    public function getRoles(): array
+    {
+        return ['ROLE_ADMIN', $this->getRole()];
+    }
+
     public function setRole($role): self
     {
         $this->receiveEmails = ($role === 'ROLE_ADMIN' OR $role === 'ROLE_EDITOR');
@@ -262,7 +267,7 @@ class User extends BaseUser implements DomainEventHandler
 //
     public function isAdmin():bool
     {
-        return 'ROLE_ADMIN' === $this->getRole();
+        return ('ROLE_ADMIN' === $this->getRole() OR 'ROLE_EDITOR' === $this->getRole()) ;
     }
 
 public function getReceiveEmails(): ?bool
