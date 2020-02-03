@@ -13,7 +13,7 @@
         <section id="products" class="d-flex flex-column align-items-center w-100 bg-primary p-2">
             <h3 class="title p-4 text-light">{{ $t('home.products.title.text1') }} <br> <em class="text-dark">{{ $t('home.products.title.text2') }}</em></h3>
             <PulseLoader :loading="inProgress" color="#212121"></PulseLoader>
-            <Products :items="products" v-show="!inProgress"></Products>
+            <ProductGrid :items="products" v-show="!inProgress"></ProductGrid>
         </section>
         <svg class="section-divider" viewBox="0 0 100 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
             <path fill="#f9ce1c" class="divider-bg" d="M 0 0 L 0 100 L 100 100 L 100 0 Z"></path>
@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import Products from '~/components/Products.vue';
+import ProductGrid from '~/components/ProductGrid.vue';
 import Documents from '~/components/Documents.vue';
 import PulseLoader from 'vue-spinner/src/PulseLoader.vue';
 import { mapActions, mapGetters } from 'vuex';
@@ -50,7 +50,7 @@ export default {
         }
     },
     components: {
-        Products,
+        ProductGrid,
         Documents,
         PulseLoader
     },

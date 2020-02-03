@@ -17,11 +17,11 @@ export default {
         },
         hero: {
             welcome: {
-                text1: 'Cuba is...',
-                text2: 'Our',
+                text1: 'Cuba',
+                text2: 'is Our',
                 text3: 'Passion'
             },
-            lead: 'Welcome to our Client Infonet'
+            lead: 'Welcome to our Infonet'
         },
         products: {
             title: {
@@ -84,6 +84,8 @@ export default {
         register: 'Register',
         download_all: 'Download All',
         download: 'Download',
-        updated: 'Updated'
+        updated: 'Updated',
+        subscribe: 'Subscribe',
+        subscribed: 'Subscribed'
     }
 }

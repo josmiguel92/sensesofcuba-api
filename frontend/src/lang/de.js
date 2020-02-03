@@ -84,6 +84,8 @@ export default {
         register: 'Registrieren',
         download_all: ' Alles herunterladen',
         download: 'Herunterladen',
-        updated: 'Aktualisiert'
+        updated: 'Aktualisiert',
+        subscribe: 'Abonnieren',
+        subscribed: 'Gezeichnet'
     }
 }

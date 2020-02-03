@@ -115,7 +115,7 @@ const store = new Vuex.Store({
                 return Promise.reject(e);
             });
         },
-        unSubscribeFromProduct({commit}, productId) {
+        unsubscribeFromProduct({commit}, productId) {
             return API.unsubscribeToProduct(productId).then(res => {
                 return Promise.resolve();
             }).catch(e => {
