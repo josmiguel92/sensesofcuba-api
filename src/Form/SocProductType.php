@@ -28,6 +28,7 @@ class SocProductType extends EasyAdminFormType
                 'required' => false
             ])
             ->add('parent')
+            ->add('importance')
 //            ->add('file', SocFileType::class)
             ->add('image', SocImageType::class)
             ->add('translations', TranslationsType::class, [

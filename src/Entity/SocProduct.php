@@ -58,6 +58,11 @@ class SocProduct
      */
     private $subscribedUsers;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $importance;
+
     public function __construct()
     {
         $this->socProducts = new ArrayCollection();
@@ -194,6 +199,18 @@ class SocProduct
             $this->subscribedUsers->removeElement($subscribedUser);
             $subscribedUser->removeSubscribedProduct($this);
         }
+
+        return $this;
+    }
+
+    public function getImportance(): ?int
+    {
+        return $this->importance;
+    }
+
+    public function setImportance(?int $importance): self
+    {
+        $this->importance = $importance;
 
         return $this;
     }

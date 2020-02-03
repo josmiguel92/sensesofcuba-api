@@ -44,6 +44,11 @@ class Document
      */
     private $translatedDocument;
 
+       /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $importance;
+
     public function getImage(): ?SocImage
     {
         return $this->image;
@@ -97,4 +102,24 @@ class Document
 
         return $this;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getImportance()
+    {
+        return $this->importance;
+    }
+
+    /**
+     * @param mixed $importance
+     * @return Document
+     */
+    public function setImportance($importance)
+    {
+        $this->importance = $importance;
+        return $this;
+    }
+
+
 }

@@ -20,6 +20,7 @@ class DocumentType extends AbstractType
                 'label' => "Enabled",
                 'required' => false
             ])
+            ->add('importance')
             ->add('image', SocImageType::class)
             ->add('translations',TranslationsType::class)
             ->add('translatedDocument', TranslatedDocumentType::class)

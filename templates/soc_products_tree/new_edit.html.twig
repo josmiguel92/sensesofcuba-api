@@ -6,7 +6,10 @@
 
 
 {% block content %}
+<link rel="stylesheet" href="{{ asset('assets/bootstrap-select.min.css') }}">
 <script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.min.js"></script>
+<script src="{{ asset('assets/bootstrap-select.min.js') }}"></script>
+
 {#{% form_theme form '@EasyAdminBundle:form:bootstrap_4.html.twig' %}#}
 
     <style>
@@ -56,6 +59,16 @@
         </div>
     </div>
 
+    <div class="row top-padding">
+            <div class="col-md-4">
+                Product importance, any valor. <br>
+                <small>The bigger ones are show first.</small>
+            </div>
+            <div class="col-md-6">
+                {{ form_row(form.importance) }}
+            </div>
+    </div>
+
 
 
     <div class="row top-padding">
@@ -65,7 +78,7 @@
             <small>Empty for show it at home as category</small>
         </div>
         <div class="col-md-6">
-            {{ form_widget(form.parent) }}
+            {{ form_widget(form.parent, {'attr':{ 'data-widget': 'select2', 'class': 'products_parent_select' } }) }}
         </div>
     </div>
 
@@ -177,9 +190,13 @@
             max-width: 100%;
         }
     </style>
+
     <script>
         $(document).ready(function () {
-          bsCustomFileInput.init()
+            $('.products_parent_select').select2();
+            if(typeof bsCustomFileInput != 'undefined')
+                bsCustomFileInput.init();
+
         })
     </script>
     <h2></h2>

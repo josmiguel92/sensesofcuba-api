@@ -71,7 +71,7 @@ class ApiController extends AbstractController
         if($user)
             $hiddenProducts = $user->getHiddenProducts();
 
-        $products = $productRepository->findBy(['enabled'=>true]);
+        $products = $productRepository->findBy(['enabled'=>true], ['importance'=>'DESC']);
         //dump($categories);
         $lang = substr($request->headers->get('Accept-Language'), 0, 2);
         $lang = in_array($lang, ['en', 'es', 'de', 'fr']) ? $lang : 'en';
@@ -115,7 +115,7 @@ class ApiController extends AbstractController
         $lang = substr($request->headers->get('Accept-Language'), 0, 2);
         $lang = in_array($lang, ['en', 'es', 'de', 'fr']) ? $lang : 'en';
 
-        $docs = $documentRepository->findBy(['enabled'=>true]);
+        $docs = $documentRepository->findBy(['enabled'=>true], ['importance'=>'DESC']);
 
 
         $items = [];
