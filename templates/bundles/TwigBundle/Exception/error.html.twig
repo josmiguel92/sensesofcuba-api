@@ -1,11 +1,39 @@
 {# templates/bundles/TwigBundle/Exception/error404.html.twig #}
-{% extends 'base.html.twig' %}
+<!DOCTYPE html>
+<html lang="en">
 
-{% block body %}
-    <h1>Page not found</h1>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <p>
-        The requested page couldn't be located. Checkout for any URL
-        misspelling or <a href="{{ path('homepage') }}">return to the homepage</a>.
-    </p>
-{% endblock %}
+    <title>404 HTML Template by Colorlib</title>
+
+	<!-- Google font -->
+	<link href="https://fonts.googleapis.com/css?family=Cabin:400,700" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Montserrat:900" rel="stylesheet">
+
+	<!-- Custom stlylesheet -->
+	<link type="text/css" rel="stylesheet" href="{{ asset('assets/error-style.css') }}" />
+
+</head>
+
+<body>
+
+	<div id="notfound">
+		<div class="notfound">
+			{% block body %}
+			<div class="notfound-404">
+
+				<h3>Oops! {{ status_text  }}</h3>
+				<h1><span>{{status_code | slice(0,1)}}</span><span>{{status_code | slice(1,1)}}</span><span>{{status_code | slice(2,1)}}</span></h1>
+			</div>
+			<h2>we are sorry, but the page you requested was {{ status_text  }}</h2>
+				<a href="{{ path('homepage') }}" style="text-transform: none;">Click here to return to the homepage</a>
+			{% endblock %}
+		</div>
+	</div>
+
+</body>
+
+</html>
