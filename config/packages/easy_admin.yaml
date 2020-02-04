@@ -9,7 +9,7 @@ easy_admin:
     design:
         assets:
           css:
-            - '/admin/css/rewrite.css'
+            - '/assets/admin-rewrite.css'
         brand_color: '#fdc416'
         menu:
 #          - { entity: 'Categories', label: 'Kind of products' }

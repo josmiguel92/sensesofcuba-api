@@ -87,7 +87,7 @@ class SocProductsTreeController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            if($product->getId() === $product->getParent()->getId()){
+            if($product && $product->getParent() && $product->getId() === $product->getParent()->getId()){
                 $this->addFlash('warning', 'The product parent is not valid. It must be different than himself');
             }
             else{

@@ -1,0 +1,12 @@
+html,
+body{
+    font-family: 'Montserrat', Arial, Helvetica, sans-serif;
+}
+
+.btn {
+    height: 34px !important;
+}
+
+.form-actions {
+    align-items: center !important;
+}
