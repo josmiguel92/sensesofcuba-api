@@ -156,7 +156,11 @@ class SocProduct
 
     public function __toString()
     {
-        return $this->getReferenceName() ?: 'empty';
+        if($this->parent && $this->getReferenceName() )
+
+            return  $this->parent->getReferenceName(). ' / ' . $this->getReferenceName();
+
+        return $this->getReferenceName() ?? 'empty';
     }
 
     public function setEnabled(bool $enabled):void

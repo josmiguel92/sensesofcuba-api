@@ -87,14 +87,20 @@ class SocProductsTreeController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            if($product->getId() === $product->getParent()->getId()){
+                $this->addFlash('warning', 'The product parent is not valid. It must be different than himself');
+            }
+            else{
 
-            $this->getDoctrine()->getManager()->flush();
+                $this->getDoctrine()->getManager()->flush();
 
-            $this->addFlash('success', 'Product updated!');
-            $bus->dispatch(new ProductUpdated($product->getId()));
+                $this->addFlash('success', 'Product updated!');
+                $bus->dispatch(new ProductUpdated($product->getId()));
 
 
-            return $this->redirectToRoute('soc_product_index');
+                return $this->redirectToRoute('soc_product_index');
+            }
+
         }
 
           return $this->render('soc_products_tree/new_edit.html.twig', [
