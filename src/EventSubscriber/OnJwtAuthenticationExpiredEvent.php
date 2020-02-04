@@ -31,10 +31,11 @@ class OnJwtAuthenticationExpiredEvent extends AbstractController implements Even
 
     public function redirectToHomeResponseFromAdmin(ResponseEvent $event)
     {
-//        header($event->getRequest()->get('_route'));
         $response = $event->getResponse();
         if($response->getStatusCode() === 401 && self::isAdminRoute($event->getRequest()->getPathInfo()))
         {
+            //clear cookie
+            setcookie(OnJWTAuthenticationSuccess::$cookieName, '', 0 , '/');
             $event->setResponse($this->redirectToRoute('homepage'));
         }
     }
@@ -42,10 +43,9 @@ class OnJwtAuthenticationExpiredEvent extends AbstractController implements Even
 
     private static function isAdminRoute($route)
     {
-        if(substr_count($route, 'migration/db/'))
-            return false;
-        if(substr_count($route, 'admin/'))
+        if(substr_count($route, 'admin'))
             return true;
+        return false;
     }
 
 
