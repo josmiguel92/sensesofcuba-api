@@ -120,7 +120,6 @@ final class OnJWTAuthenticationSuccess implements EventSubscriberInterface
      */
     private function getUserDetails(UserInterface $user): array
     {
-        //dump($user);
         if($user instanceof \Symfony\Component\Security\Core\User\User)
         {
             if($user->getUsername() === 'admin@habana.tech')

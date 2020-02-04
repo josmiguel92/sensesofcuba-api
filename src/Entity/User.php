@@ -252,7 +252,7 @@ class User extends BaseUser implements DomainEventHandler
 
     public function getRoles(): array
     {
-        return ['ROLE_ADMIN', $this->getRole()];
+        return [$this->getRole()];
     }
 
     public function setRole($role): self

@@ -16,11 +16,11 @@ return function (ContainerConfigurator $container) {
   ),
   'role_providers' => 
   array (
-    'default' => 
+    'default' =>
     array (
       0 => 'ROLE_USER',
     ),
-//    0 => 'MsgPhp\\User\\Role\\UserRoleProvider',
+    0 => 'App\\RoleProvider\\RoleProvider',
   ),
 ));
 

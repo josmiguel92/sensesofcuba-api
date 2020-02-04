@@ -9,7 +9,7 @@ security:
     providers:
         chain_provider:
             chain:
-                providers: [msgphp_user, msgphp_user_jwt,in_memory]
+                providers: [msgphp_user, msgphp_user_jwt, in_memory]
         in_memory:
             memory:
                 users:
