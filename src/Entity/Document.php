@@ -21,6 +21,8 @@ class Document
        ORMBehaviors\Timestampable\Timestampable,
         CanBeEnabled;
 
+    use HasImageTrait;
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()

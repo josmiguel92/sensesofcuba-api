@@ -16,6 +16,7 @@ class SocProduct
     use ORMBehaviors\Translatable\Translatable,
        ORMBehaviors\Timestampable\Timestampable,
         CanBeEnabled;
+    use HasImageTrait;
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()

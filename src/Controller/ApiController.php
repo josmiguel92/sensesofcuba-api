@@ -94,7 +94,7 @@ class ApiController extends AbstractController
                 'description' => $product->translate($lang)->getDescription(),
                 'file' => $file,
                 'modified_on' =>  $product->getUpdatedAt(),
-                'image' => $product->getImage() ? 'uploads/images/'.$product->getImage()->getImageName() : null,
+                'image' => $product->hasImage() ? 'uploads/images/'.$product->getImage()->getImageName() : null,
                 'child_of' => $product->getParent() ? $product->getParent()->getId() : null,
                 'subscribed' => $product->getSubscribedUsers()->contains($user),
             ];
@@ -135,7 +135,7 @@ class ApiController extends AbstractController
                 'file' => $file,
                 'created_on' =>  $doc->getCreatedAt(),
                 'modified_on' =>  $doc->getUpdatedAt(),
-                'image' => $doc->getImage() ? 'uploads/images/'.$doc->getImage()->getImageName() : null
+                'image' => $doc->hasImage() ? 'uploads/images/'.$doc->getImage()->getImageName() : null
             ];
         }
 
