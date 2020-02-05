@@ -4,7 +4,7 @@ node_modules
 # Bundler
 .cache
 /build
-#/dist
+/dist
 /public
 
 
