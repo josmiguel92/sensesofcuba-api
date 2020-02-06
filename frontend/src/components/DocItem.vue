@@ -1,13 +1,15 @@
 <template>
-    <div class="media p-2 bg-secondary">
-        <img :src="`${item.image}`" class="img-fluid mr-3" alt="">
-        <div class="media-body d-flex flex-column h-100 pt-2 pb-2">
-            <h5 class="">{{ item.title }}</h5>
+    <div class="doc-item p-2 bg-secondary d-flex flex-column">
+        <div class="d-flex ml-2 mr-2 flex-column flex-grow-1">
+            <h3 class="mt-2">{{ item.title }}</h3>
+            <span v-if="item.description">
+                <i class="ml-2 fa fa-info-circle"></i> {{ item.description }}
+            </span>
+        </div>
+        <div class="d-flex ml-2 mr-2 align-items-center">
             <small v-if="item.modified_on" class="flex-grow-1">{{ $t('general.updated') }}: {{ item.modified_on | date }}</small>
-            <div class="media-actions d-flex" v-if="item.file">
-                <button @click="openDocument" class="btn btn-secondary btn-sm"><i class="fa fa-file-pdf"></i>
-                    <span class="d-none d-md-inline">{{ $t('general.open') }}</span>
-                </button>
+            <div class="d-flex" v-if="item.file">
+                <OpenDocumentButton :item="item"></OpenDocumentButton>
                 <a role="button" :href="`${item.file}`" class="btn btn-secondary btn-sm" :download="item.title"><i class="fa fa-download"></i>
                     <span class="d-none d-md-inline">{{ $t('general.download') }}</span>
                 </a>
@@ -17,25 +19,19 @@
 </template>
 
 <script>
+import OpenDocumentButton from './OpenDocumentButton.vue';
+
 export default {
     props: ['item'],
-    methods: {
-        openDocument() {
-            this.$pdfModal.show(this.item.title, `../${this.item.file}`);
-        }
+    components: {
+        OpenDocumentButton
     }
 }
 </script>
 
-<style lang="scss" scoped>
-.media {
-    height: 150px;
+<style scoped>
+.doc-item {
     min-width: 300px;
-    border-radius: 3px;
-    img {
-        height: 100%;
-        object-fit: cover;
-        object-position: center;
-    }
+    min-height: 150px;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="container-fluid">
         <div id="grid" class="d-flex align-items-start justify-content-center flex-wrap">
             <ProductItem 
                 v-for="(item, i) in items"

@@ -59,8 +59,8 @@ export default {
 <style lang="scss" scoped>
 .item {
     cursor: pointer;
-    min-width: 200px; 
-    height: 150px;
+    min-width: 400px; 
+    height: 200px;
     opacity: 0.95;
     transition: opacity 0.35s;
     .content {

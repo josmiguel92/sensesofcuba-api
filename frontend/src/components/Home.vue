@@ -2,7 +2,7 @@
     <div class="home-page">
         <section id="hero" class="jumbotron jumbotron-fluid" v-lazy:background-image="heroImg">
             <div class="container">
-                <h1 class="display-3">{{ $t('home.hero.welcome.text1') }} <br>{{ $t('home.hero.welcome.text2') }} <strong class="text-primary text-bold">{{ $t('home.hero.welcome.text3') }}</strong> </h1>
+                <h1 class="display-3">{{ $t('home.hero.welcome.text1') }} <br>{{ $t('home.hero.welcome.text2') }} <br> <strong class="text-primary text-bold">{{ $t('home.hero.welcome.text3') }}</strong> </h1>
                 <p class="lead">{{ $t('home.hero.lead') }}</p>
   		    </div>
             <svg class="section-divider" viewBox="0 0 100 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
@@ -90,7 +90,7 @@ export default {
 
 <style scoped>
 #hero {
-	background-position: left;
+	background-position: center;
 	background-size: cover;
 	background-repeat: no-repeat;
 	color: #fafafa;

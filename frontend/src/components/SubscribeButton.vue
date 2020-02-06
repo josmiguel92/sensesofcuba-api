@@ -2,7 +2,7 @@
     <button class="btn btn-secondary btn-sm btn-icon"
         @click.stop="toggleSubscribe">
         <i class="fa fa-bell" :class="{'text-primary': subscribed}"></i>
-        <span>{{ buttonText }}</span>
+        <span class="d-none d-md-inline">{{ buttonText }}</span>
     </button>
 </template>
 
