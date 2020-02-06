@@ -8,9 +8,6 @@
         <div class="card" data-id="{{ document.id }}">
         <div class="card-header" id="document-{{ document.id }}">
             <h4>
-                {% if document.image %}
-                 <img src="{{ asset('uploads/images/' ~ document.image.imageName)}}" class="img-thumbnail" style="max-width: 3em; max-height: 3em; border-radius: 50%">
-                {% endif %}
 
                 {{ document.referenceName }}
 
@@ -53,54 +50,6 @@
     </div>
 {% endblock %}
 
-{#{% block row_product %}#}
-{#     <div class="row {% if product.parent %}nested{% endif %}  {% if product.socProducts | length > 0 %}caret{% endif %}" data-id="{{product.id}}">#}
-
-{#        <div class="col-md-12 row">#}
-
-{#         <div class="col-md-1">#}
-{#                <div class="checkbox-switch" data-propertyname="enabled">#}
-{#                    <label>#}
-{#                        <input type="checkbox" {% if product.enabled %}checked=""{% endif %}>#}
-{#                        <span></span>#}
-{#                    </label>#}
-{#                </div>#}
-{#        </div>#}
-
-{#         <div class="col-md-2">#}
-{#            <span title="{{ product.referenceName}}">{{ product.referenceName}}</span>#}
-{#         </div>#}
-
-
-{#        <div class="col-md-2">#}
-{#            <span title="{{ product.parent}}">{{ product.parent}}</span>#}
-
-{#        </div>#}
-
-{#        <div class="col-md-3">#}
-
-{#            {% if product.image is not null and product.image.imageName is not null %}#}
-{#                <img src="{{ asset('uploads/images/' ~ product.image.imageName)}}" style="max-height: 6em; max-width: 8em">#}
-{#            {% endif %}#}
-{#            {% if product.file is not null and product.file.fileName is not null %}#}
-{#                <a href="{{ asset('uploads/files/' ~ product.file.fileName)}}">Download PDF file</a>#}
-{#            {% endif %}#}
-{#        </div>#}
-
-{#        <div class="col-md-3">#}
-{#            <a class="  action-edit" title="" href="{{ path('soc_product_edit', {'id': product.id}) }}" target="_self">Edit</a>#}
-{#            <a class=" text-danger action-delete" title="" href="/admin/?entity=SocProduct&amp;action=delete&amp;menuIndex=3&amp;submenuIndex=-1&amp;sortField=id&amp;sortDirection=DESC&amp;page=1&amp;referer=%252Fadmin%252F%253Fentity%253DUsers%2526action%253Dlist%2526menuIndex%253D3%2526submenuIndex%253D-1%2526sortField%253Did%2526sortDirection%253DDESC%2526page%253D1&amp;id=10" target="_self">Delete</a>#}
-
-{#        </div>#}
-{#        </div>#}
-{#        <div class="col-md-12 row">#}
-{#            {% for product in product.SocProducts %}#}
-{#                {{ block('row_product') }}#}
-{#            {% endfor %}#}
-{#        </div>#}
-{#     </div>#}
-{#{% endblock %}#}
-
 {% block body_class 'page-blank' %}
 
 {% block content %}
@@ -140,59 +89,6 @@
         </section>
 
         <section id="main" class="content-body">
-
-{#            <table class="table datagrid">#}
-{#                <thead>#}
-{#                <tr>#}
-{#                    <th class="   ">#}
-{#                        <a href="#">#}
-
-{#                        </a>#}
-{#                    </th>#}
-
-{#                    <th class="  toggle ">#}
-{#                        <a href="#">#}
-{#                            Enabled#}
-{#                        </a>#}
-{#                    </th>#}
-
-{#                    <th class="  string ">#}
-{#                        <a href="#">#}
-{#                            Reference </i>#}
-{#                        </a>#}
-{#                    </th>#}
-
-{#                    <th class="  string ">#}
-{#                        <a href="#">#}
-{#                            Parent <i class="fa fa-fw fa-sort"></i>#}
-{#                        </a>#}
-{#                    </th>#}
-
-{#                    <th class="  string ">#}
-{#                        <a href="#">#}
-{#                            Image <i class="fa fa-fw fa-sort"></i>#}
-{#                        </a>#}
-{#                    </th>#}
-
-
-{#                    <th class="  string ">#}
-{#                        <a href="#">#}
-{#                            PDF File <i class="fa fa-fw fa-sort"></i>#}
-{#                        </a>#}
-{#                    </th>#}
-
-
-
-{#                    <th>#}
-{#                        <span class="sr-only">Actions</span>#}
-{#                    </th>#}
-{#                </tr>#}
-{#                </thead>#}
-
-{#                <tbody>#}
-
-{#                </tbody>#}
-{#            </table>#}
 
             <div class="container">
                  {% for document in documents %}

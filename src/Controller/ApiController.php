@@ -135,7 +135,6 @@ class ApiController extends AbstractController
                 'file' => $file,
                 'created_on' =>  $doc->getCreatedAt(),
                 'modified_on' =>  $doc->getUpdatedAt(),
-                'image' => $doc->hasImage() ? 'uploads/images/'.$doc->getImage()->getImageName() : null
             ];
         }
 

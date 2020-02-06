@@ -32,9 +32,6 @@
         <section id="main" class="content-body">
              {{ form_start(form) }}
     <div class="row">
-        {% if document.image %}
-            <img src="{{ asset('uploads/images/' ~ document.image.imageName)}}" class="img-thumbnail" style="max-width: 7em; max-height: 7em; border-radius: 50%; transform: translate(-20%,-30%)">
-        {% endif %}
         <h2 style="text-transform: uppercase">{{ document.referenceName }}</h2>
     </div>
 
@@ -86,20 +83,6 @@
         </div>
     </div>
 
-
-    <hr>
-
-    <div class="row top-padding">
-        <div class="col-md-4">
-            Document image
-            <br>
-            <small>Add an image for this document. It will be used to show the document at list.</small>
-
-        </div>
-        <div class="col-md-6">
-            {{ form_row(form.image.imageFile) }}
-        </div>
-    </div>
 
 
 <hr>
@@ -153,8 +136,6 @@
 
                     {% if document.id %}{{ form(deleteForm) }}{% endif %}
 
-
-
                     <a class=" btn btn-link pr-0 action-list" title="" href="{{ path('soc_document_index') }}" target="_self">Back to listing</a>
 
 
@@ -163,17 +144,7 @@
 
             </section>
                     </div>
-    <style>
-        .card .vich-image img{
-            display: none;
-        }
-        .top-padding{
-            padding-top: 2em;
-        }
-        .vich-image, .vich-image img{
-            max-width: 100%;
-        }
-    </style>
+
     <script>
         $(document).ready(function () {
           bsCustomFileInput.init()

@@ -21,19 +21,12 @@ class Document
        ORMBehaviors\Timestampable\Timestampable,
         CanBeEnabled;
 
-    use HasImageTrait;
-
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
     private $id;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\SocImage", cascade={"persist", "remove"})
-     */
-    private $image;
 
      /**
      * @ORM\Column(type="string", length=180)
@@ -50,18 +43,6 @@ class Document
      * @ORM\Column(type="integer", nullable=true)
      */
     private $importance;
-
-    public function getImage(): ?SocImage
-    {
-        return $this->image;
-    }
-
-    public function setImage(?SocImage $image): self
-    {
-        $this->image = $image;
-
-        return $this;
-    }
 
     public function getReferenceName(): string
     {

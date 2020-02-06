@@ -21,7 +21,6 @@ class DocumentType extends AbstractType
                 'required' => false
             ])
             ->add('importance')
-            ->add('image', SocImageType::class)
             ->add('translations',TranslationsType::class)
             ->add('translatedDocument', TranslatedDocumentType::class)
         ;
