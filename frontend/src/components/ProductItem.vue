@@ -59,10 +59,19 @@ export default {
 <style lang="scss" scoped>
 .item {
     cursor: pointer;
-    min-width: 400px; 
+    min-width: 90vw; 
     height: 200px;
     opacity: 0.95;
     transition: opacity 0.35s;
+    @media (min-width: 768px) {
+        min-width: 30vw;
+    }
+    @media (min-width: 992px) {
+        min-width: 300px;
+    }
+    @media (min-width: 1200px) {
+        min-width: 400px;
+    }
     .content {
         position: relative;
         background-size: cover;
