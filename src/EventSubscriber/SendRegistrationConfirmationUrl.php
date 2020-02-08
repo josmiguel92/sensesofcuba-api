@@ -49,7 +49,7 @@ final class SendRegistrationConfirmationUrl implements MessageHandlerInterface
         $email = (new TemplatedEmail())
 
             ->to($user->getEmail())
-            ->subject('You have created an account at Senses of Cuba')
+            ->subject('You have created a Senses of Cuba Infonet account')
             ->htmlTemplate('email/foundation/cases/welcome.html.twig')
             ->context([
                 'subject' => 'New account on Senses of Cuba',
