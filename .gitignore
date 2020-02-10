@@ -23,7 +23,4 @@
 ###< lexik/jwt-authentication-bundle ###
 
 .idea
-public/uploads
-public/git-deploy
-public/test.php
-public/info.php
+public/
