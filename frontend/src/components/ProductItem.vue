@@ -87,6 +87,7 @@ export default {
             text-transform: none;
             z-index: 99;
             transition: all .2s ease;
+            text-decoration: none;
         }
         &:hover {
             &::before {
@@ -126,5 +127,6 @@ export default {
         color: #f9ce1c;
         padding: 3%;
         background-color: rgba(0,0,0,0.6);
+        text-decoration: underline;
 }
 </style>
