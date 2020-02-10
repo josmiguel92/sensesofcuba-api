@@ -86,7 +86,7 @@
 </template>
 
 <script>
-import imgSrc from '~/assets/images/soc_team.jpg';
+import imgSrc from '~/assets/images/havana.jpg';
 import imgLoading from '~/assets/images/soc_team-loading.jpg';
 
 export default {
