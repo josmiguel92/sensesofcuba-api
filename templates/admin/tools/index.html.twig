@@ -1,0 +1,52 @@
+{% trans_default_domain easyadmin_config('translation_domain') %}
+{% extends easyadmin_config('design.templates.layout') %}
+
+{% block title %}Tools{% endblock %}
+
+{% block body_class 'page-blank' %}
+
+{% block content %}
+    <div class="content">
+        <section class="content-header ">
+            <div class="d-flex flex-row justify-content-between align-content-center w-100">
+                <div class="content-header-title">
+                    <h1 class="title">   Email Tools</h1>
+                </div>
+
+
+
+            </div>
+
+
+
+        </section>
+
+        <section id="main" class="content-body">
+
+            <div class="container">
+                <ul class="list-unstyled list-inline flex-column" style="display: flex">
+                    {% for tool in tools %}
+                        <li class="list-group-horizontal">
+                            <a class="btn" role="button" href="{{ tool.link }}">{{ tool.name }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+
+            </div>
+
+
+
+
+
+        </section>
+
+        <section class="content-footer">
+
+
+
+        </section>
+
+    </div>
+
+
+{% endblock %}
