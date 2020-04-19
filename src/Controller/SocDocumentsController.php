@@ -7,7 +7,6 @@ use App\Entity\SocProduct;
 use App\Form\DocumentType;
 use App\Form\SocProductType;
 use App\Repository\DocumentRepository;
-use App\SocMimeTypeGuesser;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormInterface;

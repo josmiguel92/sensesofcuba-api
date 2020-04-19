@@ -12,7 +12,6 @@ use App\Message\Events\NotifyUserAboutProductUpdate;
 use App\Message\Events\ProductUpdated;
 use App\Repository\DocumentRepository;
 use App\Repository\SocProductRepository;
-use App\SocMimeTypeGuesser;
 use MsgPhp\User\Command\CreateUser;
 use MsgPhp\User\Repository\UserRepository;
 use MsgPhp\UserBundle\MsgPhpUserBundle;

@@ -6,7 +6,6 @@ use App\Entity\SocProduct;
 use App\Form\SocProductType;
 use App\Message\Events\ProductUpdated;
 use App\Repository\SocProductRepository;
-use App\SocMimeTypeGuesser;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormInterface;
