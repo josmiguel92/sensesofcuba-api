@@ -3,31 +3,27 @@
 {% block title %}Welcome to our Senses of Cuba Infonet{% endblock title %}
 
 {% block message %}
-<h4>
-                                    <center>
-                                       Hello {{ username }},
-                                    </center>
-                                  </h4>
-                                   <h4><center> thanks for joining our Senses of Cuba Infonet.</center></h4>
-                                  <center data-parsed="">
+    <h4>
+        <center>
+           Hello {{ username }},
+        </center>
+    </h4>
+       <h4><center> thanks for joining our Senses of Cuba Infonet.</center></h4>
 
+        <table class="spacer">
+        <tbody>
+          <tr>
+            <td height="10px" style="font-size:16px;line-height:16px;">&#xA0;</td>
+          </tr>
+        </tbody>
+      </table>
 
-                                    <table class="spacer">
-                                    <tbody>
-                                      <tr>
-                                        <td height="16px" style="font-size:16px;line-height:16px;">&#xA0;</td>
-                                      </tr><tr>
-                                        <td height="16px" style="font-size:16px;line-height:16px;">&#xA0;</td>
-                                      </tr>
-                                    </tbody>
-                                  </table>
-
-                                    <center>
-                                     <p class="text-center">An administrator has to approve your account before you will gain full access to our product.</p>
-                                    </center>
+        <center>
+         <p class="text-center">An administrator has to approve your account before you will gain full access to our product.</p>
+        </center>
 
 {% endblock message %}
 
 {% block action %}
-   <center data-parsed=""><p class="text-center">Please confirm your account by clicking <a href="{{ action_url }}">here</a>.</p></center>
+   <center data-parsed=""><p class="text-center">Please confirm your account by clicking <strong><a href="{{ action_url }}" title="Activate account">here</a></strong>.</p></center>
 {% endblock action %}

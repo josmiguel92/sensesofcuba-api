@@ -33,7 +33,7 @@
                         <button class="btn btn-primary mt-3" type="submit">{{ $t('general.login') }}</button>
                         <br>
                     </div>
-                    <div class="d-flex align-items-center mt-4">
+                    <div class="d-flex align-items-center mt-4 flex-md-column">
                         <span class="mr-2">{{ $t('login.no_account') }}</span>
                         <router-link to="/register" tag="button" class="btn btn-secondary">{{ $t('general.register') }}</router-link>
                     </div>
