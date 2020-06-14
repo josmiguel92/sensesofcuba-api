@@ -68,7 +68,7 @@ export default {
         no_confirm_email: "Don't receive the confirmation email?",
         have_account: 'Have an account?',
         done_title: 'Registration Done',
-        done_text: 'Now wait until we approve your request, we will send you a confirmation email.'
+        done_text: 'Please wait until we have approved your request. We will send you a confirmation E-Mail'
     },
     password_reset: {
         title: 'Reset your password',

@@ -4,15 +4,15 @@ export default {
             links: {
                 products: 'Unsere Produkte',
                 documents: 'Über Kuba',
-                contact: 'Kontaktiere uns'
+                contact: 'Kontaktiere Sie uns'
             },
             user: {
-                options: 'Options',
+                options: 'Optionen',
                 logout: 'Ausloggen'
             },
             lang: {
                 en: 'Englisch',
-                de: 'Deutsche'
+                de: 'Deutsch'
             }
         },
         hero: {
@@ -37,55 +37,55 @@ export default {
         },
         contact: {
             title: {
-                text1: 'Kontaktiere',
+                text1: 'Kontaktieren Sie',
                 text2: 'uns'
             },
             address: "Adresse",
             phone: "Telefon",
             emergency_phone: "Notfalltelefon",
             general_contact: "Allgemeiner Kontakt",
-            sales: "Der Umsatz",
+            sales: "Sales",
             product_management: "Produkt Management",
             opening_times: "Öffnungszeiten"
         },
         footer: {
             links: {
                 imprint: 'Impressum',
-                privacy_policy: 'Datenschutz-Bestimmungen',
+                privacy_policy: 'Datenschutzbestimmungen',
                 cooperations: 'Kooperationen',
                 general_and_conditions: 'Allgemeine Geschäftsbedingungen'
             },
-            copyright: 'Urheberrechte'
+            copyright: 'Copyright'
         }
     },
     login: {
-        title: 'Melde dich in deinem Konto an',
+        title: 'Login in Ihrem Account',
         forgot_password: 'Passwort vergessen?',
         no_account: "Sie haben noch keinen Account?"
     },
     register: {
         title: 'Ein neues Konto eröffnen',
-        no_confirm_email: "Sie erhalten keine Bestätigungsmail?",
-        have_account: 'Ein Konto haben?',
-        done_title: 'Registration Done',
-        done_text: 'Now wait until we approve your request, we will send you a confirmation email.'
+        no_confirm_email: "Sie haben keine Bestätigungmail erhalten?",
+        have_account: 'Sie haben bereits einen Account?',
+        done_title: 'Registrierung erfolgreich',
+        done_text: 'Bitte warten Sie, bis wir Ihren Account bestätigt haben. Sie erhalten eine Bestätigunsmail.'
     },
     password_reset: {
-        title: 'Setze dein Passwort zurück',
+        title: 'Setzen Sie Ihr Passwort zurück',
         subtitle: 'Wenn Sie einer unserer registrierten Kunden sind, senden wir Ihnen ein neues Passwort an Ihre E-Mail-Adresse',
         reset: 'Zurücksetzen',
         reset_completed: 'Passwort zurückgesetzt',
-        login_with_credentials: ' Loggen Sie sich mit Ihren neuen Zugangsdaten ein'
+        login_with_credentials: 'Loggen Sie sich mit Ihren neuen Zugangsdaten ein'
     },
     general: {
         open: 'Öffnen',
         close: 'Schließen',
         login: 'Einloggen',
         register: 'Registrieren',
-        download_all: ' Alles herunterladen',
+        download_all: 'Alles herunterladen',
         download: 'Herunterladen',
         updated: 'Aktualisiert',
         subscribe: 'Abonnieren',
-        subscribed: 'Gezeichnet'
+        subscribed: 'Abonniert'
     }
 }
