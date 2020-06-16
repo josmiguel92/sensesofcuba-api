@@ -11,7 +11,7 @@
 
             <h4>
                 {% if product.image and product.image.imageName %}
-                 <img src="{{ asset('uploads/images/' ~ product.image.imageName)}}" class="img-thumbnail" style="max-width: 3em; border-radius: 50%">
+                 <img src="{{ asset('uploads/images/thumbs/' ~ product.image.imageName)}}" class="img-thumbnail" style="max-width: 3em; border-radius: 50%">
                 {% else %}
                     <i class="fa fa-image"></i>
                 {% endif %}

@@ -24,6 +24,7 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
  */
 class ApiController extends AbstractController
 {
+    const DATE_FORMAT = 'Y/m/d H:i:s';
     /**
      * @Route("/", name="homepage")
      */
@@ -98,7 +99,7 @@ class ApiController extends AbstractController
                 'title' => $product->translate($lang)->getName() ?: $product->getReferenceName(),
                 'description' => $product->translate($lang)->getDescription(),
                 'file' => $file,
-                'modified_on' =>  $product->getUpdatedAt(),
+                'modified_on' =>  $product->getUpdatedAt()->format(self::DATE_FORMAT),
                 'image' => $product->hasImage() ? 'uploads/images/'.$product->getImage()->getThumbnailPath() : null,
                 'child_of' => $product->getParent() ? $product->getParent()->getId() : null,
                 'subscribed' => $product->getSubscribedUsers()->contains($user),
@@ -141,8 +142,8 @@ class ApiController extends AbstractController
                 'title' => $doc->translate($lang)->getName() ?: $doc->getReferenceName(),
                 'description' => $doc->translate($lang)->getDescription(),
                 'file' => $file,
-                'created_on' =>  $doc->getCreatedAt(),
-                'modified_on' =>  $doc->getUpdatedAt(),
+                'created_on' =>  $doc->getCreatedAt()->format(self::DATE_FORMAT),
+                'modified_on' =>  $doc->getUpdatedAt()->format(self::DATE_FORMAT),
             ];
         }
 
