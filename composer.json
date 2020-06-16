@@ -6,6 +6,7 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "ext-json": "*",
+        "ext-gd": "*",
         "a2lix/translation-form-bundle": "^3.0",
         "easycorp/easyadmin-bundle": "^2.3",
         "erusev/parsedown": "^1.7",
@@ -32,7 +33,7 @@
         "twig/cssinliner-extra": "^3.0",
         "twig/inky-extra": "^3.0",
         "twig/markdown-extra": "^3.0",
-        "vich/uploader-bundle": "^1.12"
+        "vich/uploader-bundle": "^1.12",
     },
     "require-dev": {
         "symfony/maker-bundle": "^1.13",

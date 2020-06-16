@@ -11,6 +11,7 @@ use App\Form\User\RegisterType;
 use App\Message\Events\NotifyUserAboutProductUpdate;
 use App\Message\Events\ProductUpdated;
 use App\Repository\DocumentRepository;
+use App\Repository\SocImageRepository;
 use App\Repository\SocProductRepository;
 use MsgPhp\User\Command\CreateUser;
 use MsgPhp\User\Repository\UserRepository;
@@ -112,6 +113,25 @@ class AdminToolsController extends AbstractController
 
         return $this->redirectToRoute('admin_tools_index');
     }
+
+
+    /**
+     * @Route("/thumbs", name="remake_thumbs")
+     */
+    public function remake_thumbs(SocImageRepository $repository)
+    {
+        $images = $repository->findAll();
+
+        foreach ($images as $image)
+        {
+            $image->createCustomThumbnail();
+        }
+
+        $this->addFlash('notice', "The thumbs was generated");
+
+        return $this->redirectToRoute('admin_tools_index');
+    }
+
 
 
 

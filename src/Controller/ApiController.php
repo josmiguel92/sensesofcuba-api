@@ -99,7 +99,7 @@ class ApiController extends AbstractController
                 'description' => $product->translate($lang)->getDescription(),
                 'file' => $file,
                 'modified_on' =>  $product->getUpdatedAt(),
-                'image' => $product->hasImage() ? 'uploads/images/'.$product->getImage()->getImageName() : null,
+                'image' => $product->hasImage() ? 'uploads/images/'.$product->getImage()->getThumbnailPath() : null,
                 'child_of' => $product->getParent() ? $product->getParent()->getId() : null,
                 'subscribed' => $product->getSubscribedUsers()->contains($user),
             ];
