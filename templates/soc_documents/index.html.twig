@@ -101,7 +101,7 @@
 
 
 
-            <form name="delete_form" method="post" action="{{ path('easyadmin') }}?action=delete&amp;entity=Documents&amp;id=__id__" id="delete-form" style="display: none"><input type="hidden" name="_method" value="DELETE"><div id="delete_form" style="display: none"><div><button type="submit" id="delete_form_submit" name="delete_form[submit]">Delete</button></div><input type="hidden" id="delete_form__easyadmin_delete_flag" name="delete_form[_easyadmin_delete_flag]" value="1"><input type="hidden" id="delete_form__token" name="delete_form[_token]" value="aaZg0Sl1Gq9j2FD4xDQRDRzl0Q1e1YNvNhq5V291MUQ"></div></form>
+            <form name="delete_form" method="post" action="{{ path('easyadmin') }}?action=delete&amp;entity=Document&amp;id=__id__" id="delete-form" style="display: none"><input type="hidden" name="_method" value="DELETE"><div id="delete_form" style="display: none"><div><button type="submit" id="delete_form_submit" name="delete_form[submit]">Delete</button></div><input type="hidden" id="delete_form__easyadmin_delete_flag" name="delete_form[_easyadmin_delete_flag]" value="1"><input type="hidden" id="delete_form__token" name="delete_form[_token]" value="aaZg0Sl1Gq9j2FD4xDQRDRzl0Q1e1YNvNhq5V291MUQ"></div></form>
 
             <div id="modal-delete" class="modal fade">
                 <div class="modal-dialog">
@@ -164,7 +164,7 @@
                     const oldValue = !newValue;
                     const propertyName = this.closest('.checkbox-switch').dataset.propertyname;
 
-                    const toggleUrl = "{{ path('easyadmin') }}?action=edit&entity=Documents&view=list"
+                    const toggleUrl = "{{ path('easyadmin') }}?action=edit&entity=Document&view=list"
                         + "&id=" + this.closest('div.card').dataset.id
                         + "&property=" + propertyName
                         + "&newValue=" + newValue.toString();

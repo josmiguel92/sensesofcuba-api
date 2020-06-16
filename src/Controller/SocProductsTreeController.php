@@ -66,6 +66,16 @@ class SocProductsTreeController extends AbstractController
             return $this->redirectToRoute('soc_product_index');
         }
 
+        if($form->isSubmitted() && $form->isValid() === false) {
+            $this->addFlash('danger', 'Error saving changes');
+            $errors = $form->getErrors(true, true);
+            foreach ($errors as $error)
+            {
+                $this->addFlash('danger', $error->getMessage());
+            }
+
+        }
+
         return $this->render('soc_products_tree/new_edit.html.twig', [
            'product' => $product,
            'form' => $form->createView()
@@ -101,6 +111,17 @@ class SocProductsTreeController extends AbstractController
             }
 
         }
+
+        if($form->isSubmitted() && $form->isValid() === false) {
+            $this->addFlash('danger', 'Error saving changes');
+            $errors = $form->getErrors(true, true);
+            foreach ($errors as $error)
+            {
+                $this->addFlash('danger', $error->getMessage());
+            }
+
+        }
+
 
           return $this->render('soc_products_tree/new_edit.html.twig', [
            'product' => $product,

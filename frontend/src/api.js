@@ -1,7 +1,8 @@
 import Axios from "axios";
 
 //const API_URL = 'http://s498302874.online.de/api';
-const API_URL = `${process.env.VUE_API}`;
+//const API_URL = `${process.env.VUE_API}`;
+const API_URL = window.location.origin + '/api'
 
 class API {
     constructor() {

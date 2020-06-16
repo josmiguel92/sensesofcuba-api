@@ -60,9 +60,12 @@ class ApiController extends AbstractController
      * @Route("/api/products", name="api_products")
      * @param SocProductRepository $productRepository
      * @param Request $request
+     * @param UserRepository $userRepository
      * @return JsonResponse
      */
-    public function api_products(SocProductRepository $productRepository, Request $request, UserRepository $userRepository): JsonResponse
+    public function api_products(Request $request,
+                                 SocProductRepository $productRepository,
+                                 UserRepository $userRepository): JsonResponse
     {
         $user = null;
         $hiddenProducts = null;
@@ -85,8 +88,10 @@ class ApiController extends AbstractController
             }
 
             $file = null;
-            if($product->getTranslatedDocument() && $product->getTranslatedDocument()->translate($lang)) {
-                $file = 'uploads/files/' . $product->getTranslatedDocument()->translate($lang)->getFileName();
+            if($product->getTranslatedDocument()
+                && $product->getTranslatedDocument()->translate($lang)
+                && $filename = $product->getTranslatedDocument()->translate($lang)->getFileName()) {
+                $file = 'uploads/files/' . $filename;
             }
             $items[] = [
                 'id' => $product->getId(),
@@ -124,8 +129,11 @@ class ApiController extends AbstractController
         {
 
             $file = null;
-            if($doc->getTranslatedDocument() && $doc->getTranslatedDocument()->translate($lang)) {
-                $file = "uploads/files/" . $doc->getTranslatedDocument()->translate($lang)->getFileName();
+            if($doc->getTranslatedDocument() &&
+                $doc->getTranslatedDocument()->translate($lang) &&
+                $filename = $doc->getTranslatedDocument()->translate($lang)->getFileName()
+            ) {
+                $file = "uploads/files/" . $filename;
             }
 
             $items[] = [
@@ -142,25 +150,38 @@ class ApiController extends AbstractController
     }
 
     /**
-     * @Route("/api/product_subscribe/{id}/{action}", name="api_product_subscribe")
+     * @Route("/api/product_subscribe/{id}/{action}",
+     *     name="api_product_subscribe",
+     *     requirements={"action"="subscribe|unsubscribe"}
+     *     )
      * @param SocProduct $product
      * @param $action
-     * @param UserRepository $userRepository
      * @param Request $request
+     * @param UserRepository $userRepository
+     * @param ManagerRegistry $managerRegistry
      * @return JsonResponse
      */
-    public function subscribe_to_product(SocProduct $product, $action, UserRepository $userRepository, Request $request, ManagerRegistry $managerRegistry): JsonResponse
+    public function subscribe_to_product(SocProduct $product,
+                                         $action,
+                                         Request $request,
+                                         UserRepository $userRepository,
+                                         ManagerRegistry $managerRegistry): JsonResponse
     {
         $user = null;
         if($username = $this->getUserNameFromCookie($request))
             $user = $userRepository->findOneBy(['email'=>$username]);
 
-        if(!$user || !$product)
+        if(!$user || !$product) {
             throw new NotFoundHttpException();
+        }
 
-        if($action === 'subscribe')
-        $product->addSubscribedUser($user);
-        else $product->removeSubscribedUser($user);
+        if($action === 'subscribe') {
+            $product->addSubscribedUser($user);
+        }
+        if($action === 'unsubscribe')
+        {
+            $product->removeSubscribedUser($user);
+        }
 
         $em = $managerRegistry->getManager();
         $em->persist($product);

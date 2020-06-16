@@ -18,7 +18,7 @@
                         <div class="nav-item">
                             <strong>{{ $t('home.contact.emergency_phone') }}</strong>
                             <br>
-                            <span>+53 5813 8572</span>
+                            <span>+53 5339 3060</span>
                         </div>
                     </div>
                 </div>

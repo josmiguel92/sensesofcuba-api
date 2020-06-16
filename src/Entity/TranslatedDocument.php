@@ -109,7 +109,7 @@ class TranslatedDocument
 
         switch ($lang)
         {
-            case 'es' : return $this->getEsFile() ?: $this->getEnFile() ;
+            case 'es' : return $this->getEsFile() ?: $this->getEnFile();
             case 'de' : return $this->getDeFile()?: $this->getEnFile();
             default : return $this->getEnFile();
         }
