@@ -45,7 +45,8 @@ class ApiController extends AbstractController
      */
     public function logout(): RedirectResponse
     {
-        setcookie(OnJWTAuthenticationSuccess::$cookieName, '', time() - 3600);
+        OnJWTAuthenticationSuccess::unsetCookie();
+
         return new RedirectResponse('index.html');
     }
     /**

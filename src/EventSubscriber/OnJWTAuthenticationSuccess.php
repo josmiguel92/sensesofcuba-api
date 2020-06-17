@@ -29,6 +29,7 @@ final class OnJWTAuthenticationSuccess implements EventSubscriberInterface
     /**
      * OnJWTAuthenticationSuccess constructor.
      * @param JWTTokenManagerInterface $JWTTokenManager
+     * @param UserRepository $userRepository
      */
     public function __construct(JWTTokenManagerInterface $JWTTokenManager, UserRepository $userRepository)
     {
@@ -81,7 +82,16 @@ final class OnJWTAuthenticationSuccess implements EventSubscriberInterface
             $data[$key] = $value;
         }
 
-        setcookie(self::$cookieName, json_encode($data), 0 , '/');
+        setcookie(
+            self::$cookieName,
+            json_encode($data),
+            [
+                'expires'  => time() + (int)(60 * 60 * 1.5),
+                'path'     => '/',
+                'domain'   => $_SERVER['HTTP_HOST'],
+                'samesite' => 'Strict'
+            ]
+        );
         $event->setData($data);
 
     }
@@ -109,7 +119,7 @@ final class OnJWTAuthenticationSuccess implements EventSubscriberInterface
                 $data['token'] = $this->JWTTokenManager->create($user);
             }
 
-            setcookie(self::$cookieName, json_encode($data), 0 , '/');
+            $this->setCookie($data);
         }
 
     }
@@ -150,5 +160,35 @@ final class OnJWTAuthenticationSuccess implements EventSubscriberInterface
         }
 
     }
+
+    private function setCookie($data)
+    {
+
+        setcookie(
+            self::$cookieName,
+            json_encode($data),
+            [
+                'expires'  => time() + (int)(60 * 60 * 2),
+                'path'     => '/',
+                'samesite' => 'Strict'
+            ]
+        );
+    }
+
+    public static function unsetCookie()
+    {
+        setcookie(
+            self::$cookieName,
+            "",
+            [
+                'expires'  => time() - (int)(3600),
+                'path'     => '/',
+                'samesite' => 'Strict'
+            ]
+        );
+    }
+
+
+
 
 }

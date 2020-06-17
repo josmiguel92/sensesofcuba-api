@@ -1,3 +1,3 @@
 export const date = (date) => {
-    return new Date(date.date).toLocaleDateString();
+    return new Date(date).toLocaleDateString();
 }
