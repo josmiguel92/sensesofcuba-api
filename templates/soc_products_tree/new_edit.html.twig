@@ -35,7 +35,7 @@
         <section id="main" class="content-body">
              {{ form_start(form) }}
     <div class="row">
-        {% if product.image %}
+        {% if product.hasImage() %}
             <img src="{{ asset('uploads/images/' ~ product.image.imageName)}}" class="img-thumbnail" style="max-width: 7em; border-radius: 50%; transform: translate(-20%,-30%)">
         {% endif %}
         <h2 style="text-transform: uppercase">{{ product.referenceName }}</h2>

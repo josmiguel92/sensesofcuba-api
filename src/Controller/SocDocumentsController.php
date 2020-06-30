@@ -50,7 +50,7 @@ class SocDocumentsController extends AbstractController
             $em->persist($document);
             $em->flush();
 
-            $this->addFlash('success', 'Document created!');
+            $this->addFlash('success', 'Document "'. $document->getReferenceName().'" created!');
 
             return $this->redirectToRoute('soc_document_index');
         }
@@ -78,9 +78,18 @@ class SocDocumentsController extends AbstractController
 
             $this->getDoctrine()->getManager()->flush();
 
-            $this->addFlash('success', 'Document updated!');
+            $this->addFlash('success', 'Document "'. $document->getReferenceName().'" updated!');
 
             return $this->redirectToRoute('soc_document_index');
+        }
+        if($form->isSubmitted() && $form->isValid() === false) {
+            $this->addFlash('danger', 'Error saving changes');
+            $errors = $form->getErrors(true, true);
+            foreach ($errors as $error)
+            {
+                $this->addFlash('danger', $error->getMessage());
+            }
+
         }
 
           return $this->render('soc_documents/new_edit.html.twig', [

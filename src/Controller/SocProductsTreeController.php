@@ -53,15 +53,17 @@ class SocProductsTreeController extends AbstractController
         if($form->isSubmitted() && $form->isValid()){
             $em = $this->getDoctrine()->getManager();
 
-            if($product->getFile() && $product->getFile()->getFile() === null)
+            if($product->getFile() && $product->getFile()->getFile() === null) {
                 $product->setFile(null);
+            }
 
-            if($product->getImage() && $product->getImage()->getImageFile() === null)
+            if($product->getImage() && $product->getImage()->getImageFile() === null) {
                 $product->setImage(null);
+            }
             $em->persist($product);
             $em->flush();
 
-            $this->addFlash('success', 'Product created!');
+            $this->addFlash('success', 'Product  "'. $product->getReferenceName().'"created!');
 
             return $this->redirectToRoute('soc_product_index');
         }
@@ -103,7 +105,7 @@ class SocProductsTreeController extends AbstractController
 
                 $this->getDoctrine()->getManager()->flush();
 
-                $this->addFlash('success', 'Product updated!');
+                $this->addFlash('success', 'Product "'. $product->getReferenceName().'" updated!');
                 $bus->dispatch(new ProductUpdated($product->getId()));
 
 

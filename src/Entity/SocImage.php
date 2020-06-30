@@ -121,6 +121,9 @@ class SocImage
      */
     function createThumbnail($src, $dest, $targetWidth, $targetHeight = null) {
 
+        if(file_exists($src) === false || is_file($src) === false)
+            return;
+
         // 1. Load the image from the given $src
         // - see if the file actually exists
         // - check if it's of a valid image type

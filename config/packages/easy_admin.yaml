@@ -75,9 +75,29 @@ easy_admin:
         class: App\Entity\SocProduct
         form:
           - { property: product, type: 'App\Form\SocProductType'}
+        list:
+            actions:
+                - { name: 'soc_product_edit', type: 'route', label: 'Edit' }
+                - '-edit'
+                - '-delete'
+        show:
+            actions:
+                - { name: 'soc_product_edit', type: 'route', label: 'Edit', css_class: 'btn btn-primary' }
+                - '-edit'
+                - '-delete'
 
       Document:
         class: App\Entity\Document
+        list:
+            actions:
+                - { name: 'soc_document_edit', type: 'route', label: 'Edit' }
+                - '-edit'
+                - '-delete'
+        show:
+            actions:
+                - { name: 'soc_document_edit', type: 'route', label: 'Edit', css_class: 'btn btn-primary' }
+                - '-edit'
+                - '-delete'
 
 #        # List the entity class name you want to manage
 #        - App\Entity\Product
