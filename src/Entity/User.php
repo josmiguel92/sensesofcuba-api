@@ -357,5 +357,13 @@ public function addHiddenProduct(SocProduct $hiddenProduct): self
         return $this->email;
     }
 
+    /**
+     * @return string URL for generate an unique robot like avatar per user name
+     */
+    public function getRobotavatar(): string
+    {
+        return 'https://robohash.org/bgset_bg2/' . $this->getName();
+    }
+
 
 }

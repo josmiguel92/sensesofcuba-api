@@ -75,7 +75,7 @@
                                 </span>
                             </div>
                             <input type="password" class="form-control" placeholder="Password"
-                                v-model="credentials.password" required>
+                                v-model="credentials.password" required autocomplete="new-password">
                         </div>
                         <div class="form-group input-group">
                             <div class="input-group-prepend">

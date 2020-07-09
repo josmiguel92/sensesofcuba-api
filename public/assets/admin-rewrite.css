@@ -10,3 +10,10 @@ body{
 .form-actions {
     align-items: center !important;
 }
+
+
+/* Username and avatar on dashboard**/
+.navbar-custom-menu img.user-avatar{
+    max-height: 32px;
+    max-width: 32px;
+}

@@ -1,6 +1,7 @@
 easy_admin:
     user:
-      name_property_path: 'originUsername'
+        avatar_property_path: 'robotavatar'
+        name_property_path: 'originUsername'
     site_name: 'Senses of Cuba <em style="font-size: 80%;">Management</em>'
     list:
       # hide actions by default in a dropdown menu...
@@ -29,6 +30,8 @@ easy_admin:
       Users:
         class: App\Entity\User
         disabled_actions: ['new']
+        edit:
+            item_permission: ['ROLE_ADMIN']
         show:
           fields:
             - { property: 'id' }
@@ -41,7 +44,7 @@ easy_admin:
             - { property: 'travelAgency' }
             - { property: 'country' }
             - { property: 'web' }
-            - { property: 'role' }
+            - { property: 'role',  permission: 'ROLE_ADMIN' }
             - { property: 'subscribedProducts', help: 'Products about the user will receive notifications' }
             - { property: 'hiddenProducts', help: 'Select the products hidden for this user' }
         form:
