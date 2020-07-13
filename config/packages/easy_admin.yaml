@@ -1,6 +1,5 @@
 easy_admin:
     user:
-        avatar_property_path: 'robotavatar'
         name_property_path: 'originUsername'
     site_name: 'Senses of Cuba <em style="font-size: 80%;">Management</em>'
     list:
