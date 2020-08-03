@@ -40,7 +40,7 @@ class ConfirmUserAccountHandler implements MessageHandlerInterface
         /** @var \App\Entity\User $user */
         if($user)
         {
-            $user->confirm();
+           $user->confirm();
         }
         $this->repository->save($user);
 

@@ -3,6 +3,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\IsEnglishGlobalTranslationTrait;
 use Doctrine\ORM\Mapping as ORM;
 use MsgPhp\Domain\Model\CanBeEnabled;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -17,9 +18,10 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 class Document
 {
 
-    use ORMBehaviors\Translatable\Translatable,
-       ORMBehaviors\Timestampable\Timestampable,
-        CanBeEnabled;
+    use ORMBehaviors\Translatable\Translatable;
+    use ORMBehaviors\Timestampable\Timestampable;
+    use CanBeEnabled;
+    use IsEnglishGlobalTranslationTrait;
 
     /**
      * @ORM\Id()

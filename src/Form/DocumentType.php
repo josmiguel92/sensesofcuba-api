@@ -22,6 +22,12 @@ class DocumentType extends AbstractType
             ])
             ->add('importance')
             ->add('translations',TranslationsType::class)
+            ->add('isEnglishGlobalTranslation',
+                CheckboxType::class, [
+                    'label_attr' => ['class' => 'switch-custom'],
+                    'label' => "Use english version as fallback",
+                    'required' => false
+                ])
             ->add('translatedDocument', TranslatedDocumentType::class)
         ;
     }

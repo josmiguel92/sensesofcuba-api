@@ -89,12 +89,15 @@ class TranslatedDocument
     public function getDocuments()
     {
         $docs = [];
-        if($this->esFile and $this->esFile->getFileName())
-            $docs[] = ['lang'=>'Spanish','file'=> $this->esFile];
-        if($this->enFile and $this->enFile->getFileName())
-            $docs[] = ['lang'=>'English','file'=>  $this->enFile];
-        if($this->deFile and $this->deFile->getFileName())
-            $docs[] = ['lang'=>'German','file'=>  $this->deFile];
+        if($this->esFile && $this->esFile->getFileName()) {
+            $docs[] = ['lang' => 'Spanish', 'file' => $this->esFile];
+        }
+        if($this->enFile && $this->enFile->getFileName()) {
+            $docs[] = ['lang' => 'English', 'file' => $this->enFile];
+        }
+        if($this->deFile && $this->deFile->getFileName()) {
+            $docs[] = ['lang' => 'German', 'file' => $this->deFile];
+        }
 
         return $docs;
 
@@ -102,27 +105,36 @@ class TranslatedDocument
     }
 
 
-    public function getTranlation($lang)
+    public function getTranslation($lang): ?SocFile
     {
-        if(!in_array($lang, ['en', 'es', 'de']))
+        if(!in_array($lang, ['en', 'es', 'de'])) {
             return null;
+        }
 
         switch ($lang)
         {
-            case 'es' : return $this->getEsFile() ?: $this->getEnFile();
-            case 'de' : return $this->getDeFile()?: $this->getEnFile();
-            default : return $this->getEnFile();
+            case 'es' : return $this->getEsFile();
+            case 'de' : return $this->getDeFile();
+            case 'en' : return $this->getEnFile();
         }
     }
 
     /**
      * @return string
      */
-    public function translate($lang): ?SocFile
+    public function translate($lang, $fallbackEnglish = false): ?SocFile
     {
-        if(in_array($lang, ['en', 'es', 'de']))
+        if(in_array($lang, ['en', 'es', 'de'])) {
             $this->lang = $lang;
-        return $this->getTranlation($lang);
+        }
+
+        $translation = $this->getTranslation($lang);
+
+        if($fallbackEnglish && $translation === null) {
+            return $this->getEnFile();
+        }
+
+        return $translation;
     }
 
     public function __toString() {

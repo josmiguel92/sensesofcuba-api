@@ -71,13 +71,15 @@ class ApiController extends AbstractController
     {
         $user = null;
         $hiddenProducts = null;
-        if($username = $this->getUserNameFromCookie($request))
-            $user = $userRepository->findOneBy(['email'=>$username]);
-        if($user)
+        if($username = $this->getUserNameFromCookie($request)) {
+            $user = $userRepository->findOneBy(['email' => $username]);
+        }
+        if($user !== null) {
             $hiddenProducts = $user->getHiddenProducts();
+        }
 
         $products = $productRepository->findBy(['enabled'=>true], ['importance'=>'DESC']);
-        //dump($categories);
+
         $lang = substr($request->headers->get('Accept-Language'), 0, 2);
         $lang = in_array($lang, ['en', 'es', 'de', 'fr']) ? $lang : 'en';
 
@@ -89,12 +91,26 @@ class ApiController extends AbstractController
                 continue;
             }
 
+            if(!$product->getTranslatedDocument())
+            {
+                continue;
+            }
+
+            $fallbackEnglish = $product->isEnglishGlobalTranslation();
+            if($lang !== 'en'
+                && !$fallbackEnglish
+                && $product->translate($lang, false)->getName() === null)
+            {
+                continue;
+            }
+
             $file = null;
-            if($product->getTranslatedDocument()
-                && $product->getTranslatedDocument()->translate($lang)
-                && $filename = $product->getTranslatedDocument()->translate($lang)->getFileName()) {
+
+            if($product->getTranslatedDocument()->translate($lang, $fallbackEnglish)
+                && $filename = $product->getTranslatedDocument()->translate($lang, $fallbackEnglish)->getFileName()) {
                 $file = 'uploads/files/' . $filename;
             }
+
             $items[] = [
                 'id' => $product->getId(),
                 'title' => $product->translate($lang)->getName() ?: $product->getReferenceName(),
@@ -124,16 +140,29 @@ class ApiController extends AbstractController
 
         $docs = $documentRepository->findBy(['enabled'=>true], ['importance'=>'DESC']);
 
-
         $items = [];
 
         foreach ($docs as $doc)
         {
 
+            if(!$doc->getTranslatedDocument()) {
+                continue;
+            }
+
+            $fallbackEnglish = $doc->isEnglishGlobalTranslation();
+            if($lang !== 'en'
+                && !$fallbackEnglish
+                && $doc->translate($lang, false)->getName() === null)
+            {
+                continue;
+            }
+
+
             $file = null;
-            if($doc->getTranslatedDocument() &&
-                $doc->getTranslatedDocument()->translate($lang) &&
-                $filename = $doc->getTranslatedDocument()->translate($lang)->getFileName()
+            if(
+                $doc->getTranslatedDocument()->translate($lang, $fallbackEnglish)
+                &&
+                $filename = $doc->getTranslatedDocument()->translate($lang, $fallbackEnglish)->getFileName()
             ) {
                 $file = "uploads/files/" . $filename;
             }

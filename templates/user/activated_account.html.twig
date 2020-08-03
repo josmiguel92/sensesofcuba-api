@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+{% block title %}Reset your password{% endblock %}
+
+{% block container %}
+
+<div class="container" style="width: 80vw; padding: 4em 0;transform: translate(calc(50vw - 40em));">
+
+    <div class="row">
+        <img src="{{ asset('logo.png') }}" alt="" style="height: 4em;margin: 0 auto">
+    </div>
+    <div class="row mt-5 mb-2" style="">
+        <h2 style="margin:  auto">
+            Hello {{ user.name }},
+            your account is now activated.
+        </h2>
+        <h3 style="font-size: 1.5em; margin: auto" class=" mt-3 text-center align-middle content-center">
+            An administrator has to approve your account before you will gain full access to our product.
+        </h3>
+
+
+
+
+
+    </div>
+    <div class="row mt-5 pt-2">
+        <a href="{{ path('homepage') }}" class="btn-warning btn" style="
+        background: #f9ce1c linear-gradient(180deg,#fad53e,#f9ce1c) repeat-x;
+        font-weight: 500 !important;
+        color: #212529;
+	    border-color: #f9ce1c;
+        margin: auto">
+            Login
+        </a>
+    </div>
+
+
+</div>
+
+
+{% endblock %}

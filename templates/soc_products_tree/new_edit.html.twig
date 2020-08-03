@@ -36,7 +36,7 @@
              {{ form_start(form) }}
     <div class="row">
         {% if product.hasImage() %}
-            <img src="{{ asset('uploads/images/' ~ product.image.imageName)}}" class="img-thumbnail" style="max-width: 7em; border-radius: 50%; transform: translate(-20%,-30%)">
+            <img src="{{ asset('uploads/images/thumbs/' ~ product.image.imageName)}}" class="img-thumbnail" style="width: 7em; height: 7em; border-radius: 50%; transform: translate(-20%,-30%)">
         {% endif %}
         <h2 style="text-transform: uppercase">{{ product.referenceName }}</h2>
     </div>
@@ -89,7 +89,9 @@
             <br>
             <small>Add the name and some description in English, German and Spanish for this product. </small>
             <br>
-            <small>If a translation isn't available, the english one will be used.</small>
+            <aside class="mt-4">
+                {{ form_widget(form.isEnglishGlobalTranslation) }}
+            </aside>
         </div>
         <div class="col-md-6">
             {{ form_widget(form.translations) }}

@@ -17,3 +17,6 @@ body{
     max-height: 32px;
     max-width: 32px;
 }
+img.img-thumbnail{
+    object-fit: cover;
+}

@@ -76,7 +76,9 @@
             <br>
             <small>Add the name and some description in English, German and Spanish for this document. </small>
             <br>
-            <small>If a translation isn't available, the english one will be used.</small>
+            <aside class="mt-4">
+                {{ form_widget(form.isEnglishGlobalTranslation) }}
+            </aside>
         </div>
         <div class="col-md-6">
             {{ form_widget(form.translations) }}

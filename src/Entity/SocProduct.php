@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\IsEnglishGlobalTranslationTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -13,10 +14,12 @@ use MsgPhp\Domain\Model\CanBeEnabled;
  */
 class SocProduct
 {
-    use ORMBehaviors\Translatable\Translatable,
-       ORMBehaviors\Timestampable\Timestampable,
-        CanBeEnabled;
+    use ORMBehaviors\Translatable\Translatable;
+    use ORMBehaviors\Timestampable\Timestampable;
+    use CanBeEnabled;
     use HasImageTrait;
+    use IsEnglishGlobalTranslationTrait;
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
