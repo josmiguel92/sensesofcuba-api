@@ -1,0 +1,14 @@
+{% extends 'email/abacus/base.html.twig' %}
+
+{% set subject = 'We have a new user registered at Infonet!' %}
+{% block subject %}{{ subject }}{% endblock subject %}
+
+{% block primary %}
+    {{ include('email/abacus/modules/_transaction.html.twig', {
+        'message_title': subject,
+        'username': 'Hello there!',
+        'messages': ['There is a new user awaiting for confirm his account', username, 'You can see the details from your admin panel'],
+        'action_url': action_url,
+        'action_text': 'Go to Admin Panel'
+    }) }}
+{% endblock primary %}

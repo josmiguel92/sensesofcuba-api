@@ -62,13 +62,18 @@ class NotifyUserAboutProductUpdateHandler implements MessageHandlerInterface
         /** @var User $user */
         $email->addTo($user->getEmail());
 
+
+        $productThumbnail = $product->hasImage() ? $product->getImage()->getThumbnailPath() : null;
+
          $email
             ->subject('We updated one of your subscribed products at Senses of Cuba Infonet')
-            ->htmlTemplate('email/foundation/cases/product-notify.html.twig')
+            ->htmlTemplate('email/abacus/cases/product-notify.html.twig')
             ->context([
-                'subject' => 'New account on Senses of Cuba',
+                'subject' => 'We updated one of your subscribed products at Senses of Cuba Infonet',
                 'username' =>  $user->getName(),
-                'product_name' => $product->getReferenceName(),
+                'product_name' => $product->translate()->getName(),
+                'product_thumb' => $productThumbnail,
+                'product_desc' => $product->translate()->getDescription(),
 //                'product_updated' => $product->getUpdatedAt()->format('M j, H:i'),
                 'action_url' => $this->router->generate('homepage', [], 0 ) ,
             ])

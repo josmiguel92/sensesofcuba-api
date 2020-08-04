@@ -77,7 +77,7 @@ class UserRegisteredHandler implements MessageHandlerInterface
 
          $email
             ->subject('There is a new user registered at Senses of Cuba')
-            ->htmlTemplate('email/foundation/cases/new-user.html.twig')
+            ->htmlTemplate('email/abacus/cases/new-user.html.twig')
             ->context([
                 'subject' => 'New account on Senses of Cuba',
                 'username' =>  $newUser->getName(),

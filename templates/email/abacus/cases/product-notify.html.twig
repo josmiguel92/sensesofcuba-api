@@ -1,0 +1,26 @@
+{% extends 'email/abacus/base.html.twig' %}
+
+{% block subject %}{{ subject }}{% endblock subject %}
+{#{% set _showDivider = true %}#}
+
+{% block primary %}
+    {{ include('email/abacus/modules/_transaction.html.twig', {
+        'message_title': subject,
+        'username': username,
+        'messages': [
+            'We updated our product "'~product_name~'"',
+            'Go to our Senses of Cuba Infonet to see the new product contents'
+                    ],
+        'action_url': action_url,
+        'action_text': 'Log in'
+    }) }}
+{% endblock primary %}
+
+{#{% block secondary %}#}
+{#    {{ include('email/abacus/modules/_big_image_section.html.twig', {#}
+{#        'section_img_url': asset(product_thumb),#}
+{#        'section_title': product_name,#}
+{#        'section_text': product_desc,#}
+{#    }) }}#}
+{#{% endblock secondary %}#}
+

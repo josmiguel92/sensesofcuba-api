@@ -39,12 +39,14 @@ final class SendPasswordResetUrl implements MessageHandlerInterface
             return;
         }
 
+        $subject = 'Password recovery requested via SensesOfCuba';
         $email = (new TemplatedEmail())
             ->to($user->getEmail())
-            ->subject('PasswordRequested via SensesOfCuba')
-            ->htmlTemplate('email/foundation/cases/password.html.twig')
+            ->subject($subject)
+            ->htmlTemplate('email/abacus/cases/password.html.twig')
             ->context([
-                'subject' => 'PasswordRequested via SensesOfCuba',
+                'subject' => $subject,
+                'username' => $user->getName(),
                 'action_url' => $this->router->generate('reset_password', ['token'=> $user->getPasswordResetToken()], 0) ,
             ])
           ->priority(Email::PRIORITY_HIGH);

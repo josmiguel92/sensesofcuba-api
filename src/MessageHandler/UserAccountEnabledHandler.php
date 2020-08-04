@@ -55,7 +55,7 @@ class UserAccountEnabledHandler implements MessageHandlerInterface
         $email = (new TemplatedEmail())
             ->to($user->getEmail())
             ->subject('Your Senses of Cuba Infonet account has been approved')
-            ->htmlTemplate('email/foundation/cases/account-enabled.html.twig')
+            ->htmlTemplate('email/abacus/cases/account-enabled.html.twig')
             ->context([
                 'subject' => 'Your account at Senses of Cuba was enabled',
                 'username' => $user->getName(),

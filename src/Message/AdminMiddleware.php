@@ -13,9 +13,6 @@ class AdminMiddleware implements MiddlewareInterface
 
     public function handle(Envelope $envelope, StackInterface $stack): Envelope
     {
-        // TODO: Implement handle() method.
-        dump($envelope, $stack);
-
         return $stack->next()->handle($envelope, $stack);
     }
 }

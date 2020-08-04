@@ -17,7 +17,7 @@ easy_admin:
           - { label: 'Your Products', icon: 'receipt',  route: 'soc_product_index' }
           - { label: 'Documents About Cuba',  icon: 'book',  route: 'soc_document_index'}
           - { entity: 'Users', icon: 'users', label: 'Users and clients' }
-#          - { label: 'Tools',  icon: 'gear',  route: 'admin_tools_index'}
+          - { label: 'Tools',  icon: 'gear',  route: 'admin_tools_index'}
           - { label: 'Back to Homepage', route: 'homepage', icon: 'home' }
 
       #form_theme: ['@FOSCKEditor/Form/ckeditor_widget.html.twig']

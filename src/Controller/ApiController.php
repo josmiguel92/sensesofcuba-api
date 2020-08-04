@@ -224,8 +224,9 @@ class ApiController extends AbstractController
     public function getUserNameFromCookie($request)
     {
         $cookieStr = $request->cookies->get(OnJWTAuthenticationSuccess::$cookieName);
-        if($cookie = json_decode($cookieStr, true))
+        if($cookie = json_decode($cookieStr, true)) {
             return $cookie['username'];
+        }
         return false;
     }
 }
