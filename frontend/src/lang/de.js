@@ -17,9 +17,9 @@ export default {
         },
         hero: {
             welcome: {
-                text1: 'Kuba ist...',
-                text2: 'unsere',
-                text3: 'Leidenschaft'
+                text1: 'Cuba',
+                text2: 'is Our',
+                text3: 'Passion'
             },
             lead: 'Willkommen in unserem Kunden-Infonet'
         },
@@ -46,7 +46,9 @@ export default {
             general_contact: "Allgemeiner Kontakt",
             sales: "Sales",
             product_management: "Produkt Management",
-            opening_times: "Öffnungszeiten"
+            opening_times: "Öffnungszeiten",
+            opening_times_week: "Montag - Freitag 09:00 - 17:00 Uhr",
+            opening_times_weekend: "Samstag und Sonntag (und Feiertage): 10:00 - 16:00 Uhr"
         },
         footer: {
             links: {

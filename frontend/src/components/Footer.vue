@@ -48,9 +48,9 @@
                         <div class="nav-item">
                             <strong>{{ $t('home.contact.opening_times') }}</strong>
                             <br>
-                            <span>Monday - Sunday: 9:00-17:00</span>
+                            <span>{{ $t('home.contact.opening_times_week') }}</span>
                             <br>
-                            <span>Saturday - Sunday (and public holidays): 10:00-16:00</span>
+                            <span>{{ $t('home.contact.opening_times_weekend') }}</span>
                         </div>
                     </div>
                 </div>
@@ -64,15 +64,23 @@
                 <div class="col d-flex align-items-center flex-column">
                     <div class="nav flex-column flex-md-row align-items-center justify-content-center">
                         <div class="nav-item">
-                            <a href="#" class="nav-link">{{ $t('home.footer.links.imprint') }}</a>
+                            <a href="#" class="nav-link" v-on:click="openModals(
+                                $t('home.footer.links.imprint'), 
+                                'https://sensesofcuba.com/wp-content/themes/Theme/static_impresum.html')">
+                                {{ $t('home.footer.links.imprint') }}
+                            </a>
                         </div>
-                        <div class="nav-item">
+                        <div class="nav-item" v-on:click="openModals(
+                                $t('home.footer.links.privacy_policy'), 
+                                'https://sensesofcuba.com/wp-content/themes/Theme/static_datens.html')">
                             <a href="#" class="nav-link">{{ $t('home.footer.links.privacy_policy') }}</a>
                         </div>
-                        <div class="nav-item">
-                            <a href="#" class="nav-link">{{ $t('home.footer.links.cooperations') }}</a>
-                        </div>
-                        <div class="nav-item">
+<!--                        <div class="nav-item">-->
+<!--                            <a href="#" class="nav-link">{{ $t('home.footer.links.cooperations') }}</a>-->
+<!--                        </div>-->
+                        <div class="nav-item"  v-on:click="openModals(
+                                $t('home.footer.links.general_and_conditions'), 
+                                'https://sensesofcuba.com/wp-content/themes/Theme/static_generalConditions.html')">
                             <a href="#" class="nav-link">{{ $t('home.footer.links.general_and_conditions') }}</a>
                         </div>
                     </div>
@@ -101,6 +109,11 @@ export default {
     computed: {
         year() {
             return new Date().getFullYear();
+        }
+    },
+    methods: {
+        openModals(title, url) {
+            this.$pdfModal.show(title, url, this.$t('general.close'));
         }
     }
 }

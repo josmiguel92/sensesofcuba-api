@@ -46,7 +46,9 @@ export default {
             general_contact: "General Contact",
             sales: "Sales",
             product_management: "Product Management",
-            opening_times: "Opening Times"
+            opening_times: "Opening Times",
+            opening_times_week: "Monday - Friday: 9:00-17:00",
+            opening_times_weekend: "Saturday - Sunday (and public holidays): 10:00-16:00"
         },
         footer: {
             links: {

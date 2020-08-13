@@ -9,10 +9,10 @@
                     <span v-if="!isParent" class="mr-2"> | </span>
                     <small v-if="!isParent && item.modified_on" class="d-none d-md-inline">{{ $t('general.updated') }}: {{ item.modified_on | date }}</small>
                 </div>
-                <div class="d-flex" v-if="item.file">
+                <div class="d-flex">
                     <SubscribeButton :item="item"></SubscribeButton>
-                    <OpenDocumentButton :item="item"></OpenDocumentButton>
-                    <a role="button" :href="`${item.file}`" class="btn btn-secondary btn-sm" :download="item.title">
+                    <OpenDocumentButton :item="item"  v-if="item.file"></OpenDocumentButton>
+                    <a role="button" :href="`${item.file}`" class="btn btn-secondary btn-sm" :download="item.title"  v-if="item.file">
                         <i class="fa fa-download"></i> <span class="d-none d-md-inline">Download</span>
                     </a>
                 </div>
