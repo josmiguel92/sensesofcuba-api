@@ -87,40 +87,40 @@ class ApiController extends AbstractController
 
         foreach ($products as $product)
         {
+
             if($hiddenProducts && $hiddenProducts->contains($product)) {
                 continue;
             }
 
-            if(!$product->getTranslatedDocument())
+            if($product->isAvailableForLang($lang) || !$product->getSocProducts()->isEmpty())
             {
-                continue;
+
+                $file = $product->getTranslatedDocumentFilePathByLang($lang);
+                $current = [
+                    'id' => $product->getId(),
+                    'title' => $product->getTranslatedNameOrReference($lang),
+                    'description' =>  $product->getTranslatedDescOrNull($lang),
+                    'file' => $file,
+                    'modified_on' =>  $product->getUpdatedAt()->format(self::DATE_FORMAT),
+                    'image' => $product->hasImage() ? 'uploads/images/'.$product->getImage()->getThumbnailPath() : null,
+                    'child_of' => $product->getParent() ? $product->getParent()->getId() : null,
+                    'subscribed' => $product->getSubscribedUsers()->contains($user),
+                ];
+
+                if(!$product->getSocProducts()->isEmpty() || !is_null($current['description']) || !is_null($current['file'])) {
+                    $items[] = $current;
+//
+//                    if($product->getId()== 28)
+//                    {
+//                        $product->setParent(null);
+//                        dump($product);
+//                        exit();
+//                    }
+                }
             }
 
-            $fallbackEnglish = $product->isEnglishGlobalTranslation();
-            if($lang !== 'en'
-                && !$fallbackEnglish
-                && $product->translate($lang, false)->getName() === null)
-            {
-                continue;
-            }
 
-            $file = null;
 
-            if($product->getTranslatedDocument()->translate($lang, $fallbackEnglish)
-                && $filename = $product->getTranslatedDocument()->translate($lang, $fallbackEnglish)->getFileName()) {
-                $file = 'uploads/files/' . $filename;
-            }
-
-            $items[] = [
-                'id' => $product->getId(),
-                'title' => $product->translate($lang)->getName() ?: $product->getReferenceName(),
-                'description' => $product->translate($lang)->getDescription(),
-                'file' => $file,
-                'modified_on' =>  $product->getUpdatedAt()->format(self::DATE_FORMAT),
-                'image' => $product->hasImage() ? 'uploads/images/'.$product->getImage()->getThumbnailPath() : null,
-                'child_of' => $product->getParent() ? $product->getParent()->getId() : null,
-                'subscribed' => $product->getSubscribedUsers()->contains($user),
-            ];
         }
 
         return new JsonResponse($items);

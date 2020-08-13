@@ -223,4 +223,45 @@ class SocProduct
         return $this;
     }
 
+    public function isAvailableForLang(string $lang): bool
+    {
+        if($this->translate($lang, $this->isEnglishGlobalTranslation())) {
+            return true;
+        }
+
+        if($this->getTranslatedDocument()
+            && $this->getTranslatedDocument()->translate($lang, $this->isEnglishGlobalTranslation)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function getTranslatedDocumentFilePathByLang($lang): ?string
+    {
+        if($this->getTranslatedDocument()
+        && $this->getTranslatedDocument()->translate($lang, $this->isEnglishGlobalTranslation)
+        && $filename = $this->getTranslatedDocument()->translate($lang, $this->isEnglishGlobalTranslation)->getFileName())
+        {
+            return 'uploads/files/' . $filename;
+        }
+        return null;
+    }
+
+    public function getTranslatedNameOrReference($lang): string
+    {
+        if($this->translate($lang) !== null && $this->translate($lang)->getName()) {
+            return $this->translate($lang)->getName();
+        }
+        else {
+            return $this->getReferenceName();
+        }
+    }
+
+    public function getTranslatedDescOrNull($lang): ?string
+    {
+        if($this->translate($lang) !== null && $this->translate($lang)->getDescription())
+            return $this->translate($lang)->getDescription();
+        else return null;
+    }
 }

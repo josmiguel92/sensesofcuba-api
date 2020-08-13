@@ -74,7 +74,7 @@ class SocImage
 
     public function __toString()
     {
-        return $this->imageName;
+        return $this->imageName ?? '';
     }
 
     public function getThumbnailPath() :string
