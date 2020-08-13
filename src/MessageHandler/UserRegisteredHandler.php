@@ -37,6 +37,7 @@ class UserRegisteredHandler implements MessageHandlerInterface
      * PasswordRequestHandler constructor.
      * @param MailerInterface $mailer
      * @param UserRepository $userRepository
+     * @param RouterInterface $router
      */
        public function __construct(MailerInterface $mailer, UserRepository $userRepository, RouterInterface $router)
     {

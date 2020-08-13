@@ -50,11 +50,14 @@ final class SendRegistrationConfirmationUrl implements MessageHandlerInterface
 
             ->to($user->getEmail())
             ->subject('You have created a Senses of Cuba Infonet account')
-            ->htmlTemplate('email/foundation/cases/welcome.html.twig')
+            ->htmlTemplate('email/abacus/cases/welcome.html.twig')
             ->context([
-                'subject' => 'New account on Senses of Cuba',
+                'subject' => 'You have created a Senses of Cuba Infonet account',
                 'username' =>  $user->getName(),
-                'action_url' => $this->router->generate('confirm_registration', ['token'=> $user->getConfirmationToken()], 0) ,
+                'action_url' => $this->router->generate(
+                    'confirm_registration',
+                    ['token'=> $user->getConfirmationToken()],
+                    0) ,
             ])
           ->priority(Email::PRIORITY_HIGH);
 

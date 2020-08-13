@@ -75,7 +75,11 @@ class NotifyUserAboutProductUpdateHandler implements MessageHandlerInterface
                 'product_thumb' => $productThumbnail,
                 'product_desc' => $product->translate()->getDescription(),
 //                'product_updated' => $product->getUpdatedAt()->format('M j, H:i'),
-                'action_url' => $this->router->generate('homepage', [], 0 ) ,
+                'action_url' => $this->router->generate('homepage', [], 0 ),
+                'unsubscribe_url' => $this->router->generate('products_updates_unsubscribe', [
+                    'email' => $user->getEmail(),
+                    'token' => $user->getStaticUserHash()
+                ], 0 ),
             ])
           ->priority(Email::PRIORITY_NORMAL);
 

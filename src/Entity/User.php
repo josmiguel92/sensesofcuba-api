@@ -308,6 +308,12 @@ public function removeSubscribedProduct(SocProduct $subscribedProduct): self
     return $this;
 }
 
+public function unsubscribeFromAllProducts(): self
+{
+    $this->subscribedProducts->clear();
+    return $this;
+}
+
 /**
  * @return Collection|SocProduct[]
  */
@@ -363,6 +369,11 @@ public function addHiddenProduct(SocProduct $hiddenProduct): self
     public function getRobotavatar(): string
     {
         return 'https://robohash.org/bgset_bg2/' . $this->getName();
+    }
+
+    public function getStaticUserHash(): string
+    {
+        return hash('md5', $this->getName().$this->getEmail().$this->getCreatedAt()->format('thLzmhyytLzm'));
     }
 
 

@@ -1,29 +1,19 @@
-{% extends 'email/foundation/base.html.twig' %}
+{% extends 'email/abacus/base.html.twig' %}
 
-{% block title %}Welcome to our Senses of Cuba Infonet{% endblock title %}
+{% block subject %}{{ subject }}{% endblock subject %}
+{#{% set _showDivider = true %}#}
 
-{% block message %}
-    <h4>
-        <center>
-           Hello {{ username }},
-        </center>
-    </h4>
-       <h4><center> thanks for joining our Senses of Cuba Infonet.</center></h4>
-
-        <table class="spacer">
-        <tbody>
-          <tr>
-            <td height="10px" style="font-size:16px;line-height:16px;">&#xA0;</td>
-          </tr>
-        </tbody>
-      </table>
-
-        <center>
-         <p class="text-center">An administrator has to approve your account before you will gain full access to our product.</p>
-        </center>
-
-{% endblock message %}
-
-{% block action %}
-   <center data-parsed=""><p class="text-center">Please confirm your account by clicking <strong><a href="{{ action_url }}" title="Activate account">here</a></strong>.</p></center>
-{% endblock action %}
+{% block primary %}
+    {{ include('email/abacus/modules/_transaction.html.twig', {
+        'message_title': subject,
+        'username': username,
+        'messages': [
+            'Thanks for joining our Senses of Cuba Infonet.',
+            'An administrator has to approve your account before you will gain full access to our product.',
+            'Please confirm your account by clicking the next link'
+        ],
+        'action_url': action_url,
+        'action_text': 'Activate account'
+    }) }}
+{% endblock primary %}
+{% block unsubcribe %}{# NO unsubcribe link on welcome message #}{% endblock %}
