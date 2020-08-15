@@ -225,12 +225,12 @@ class SocProduct
 
     public function isAvailableForLang(string $lang): bool
     {
-        if($this->translate($lang, $this->isEnglishGlobalTranslation())) {
+        if($this->translate($lang, $this->isEnglishGlobalTranslation())->getId() != null) {
             return true;
         }
 
         if($this->getTranslatedDocument()
-            && $this->getTranslatedDocument()->translate($lang, $this->isEnglishGlobalTranslation)) {
+            && $this->getTranslatedDocument()->translate($lang, $this->isEnglishGlobalTranslation())) {
             return true;
         }
 

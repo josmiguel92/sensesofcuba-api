@@ -92,11 +92,13 @@ class ApiController extends AbstractController
                 continue;
             }
 
-            if($product->isAvailableForLang($lang) || !$product->getSocProducts()->isEmpty())
+
+            $currentIsAvailable = $product->isAvailableForLang($lang);
+            if($currentIsAvailable || !$product->getSocProducts()->isEmpty())
             {
 
                 $file = $product->getTranslatedDocumentFilePathByLang($lang);
-                $current = [
+                $items[] = [
                     'id' => $product->getId(),
                     'title' => $product->getTranslatedNameOrReference($lang),
                     'description' =>  $product->getTranslatedDescOrNull($lang),
@@ -107,22 +109,13 @@ class ApiController extends AbstractController
                     'subscribed' => $product->getSubscribedUsers()->contains($user),
                 ];
 
-                if(!$product->getSocProducts()->isEmpty() || !is_null($current['description']) || !is_null($current['file'])) {
-                    $items[] = $current;
-//
-//                    if($product->getId()== 28)
-//                    {
-//                        $product->setParent(null);
-//                        dump($product);
-//                        exit();
-//                    }
-                }
             }
-
-
 
         }
 
+        // Some items with non-approved children are included. (The rule is: have children)
+        // If this items are too non-approved (haven't description in current lang or downloadable file)
+        // Those items must be removed on other foreach (maybe at render time)
         return new JsonResponse($items);
     }
 

@@ -1,7 +1,10 @@
 <template>
     <div id="login-page" class="d-flex flex-column align-items-center justify-content-center h-100">
+        
         <div class="container d-flex flex-column align-items-center">
             <div class="card p-4 shadow w-30">
+                <Dropdown @select="onLangOptions" icon="fa fa-language" class="text-primary" :title="currentLocale" :options="menuOptions" style="text-align: center"></Dropdown>
+
                 <form @submit.prevent="handleSubmit" class="d-flex flex-column">
                     <div class="d-flex flex-column align-items-center flex-grow-1 text-center">
                         <img src="~/assets/images/logo.png" class="img-fluid mb-2" alt="" style="max-width: 150px">
@@ -46,6 +49,9 @@
 <script>
 import { mapActions } from 'vuex';
 import Loader from 'vue-spinner/src/PulseLoader.vue';
+import Dropdown from '~/components/Dropdown.vue';
+
+import { setLocale } from '~/i18n.js';
 
 export default {
     data() {
@@ -57,7 +63,8 @@ export default {
         }
     },
     components: {
-        Loader
+        Loader,
+        Dropdown
     },
     methods: {
         ...mapActions(['loginUser']),
@@ -86,7 +93,30 @@ export default {
                     this.error = 'Network error. Check your internet connection.';
                 }
             });
+        },
+        onLangOptions(option) {
+            setLocale(option);
+           // this.$router.go();
         }
+    },
+    computed: {
+        currentLocale() {
+            return this.$i18n.locale;
+        },
+        menuOptions() {
+            return [
+                {
+                    title: this.$t('home.navbar.lang.en'),
+                    value: 'en',
+                    icon: 'fa fa-language'
+                },
+                {
+                    title: this.$t('home.navbar.lang.de'),
+                    value: 'de',
+                    icon: 'fa fa-language'
+                }
+            ]
+        },
     }
 }
 </script>

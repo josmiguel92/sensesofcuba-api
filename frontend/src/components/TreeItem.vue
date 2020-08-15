@@ -1,5 +1,5 @@
 <template>
-    <div @click.stop="toggle" class="tree-item">
+    <div @click.stop="toggle" class="tree-item"  v-if="item.children || item.file || item.description">
         <div class="content d-flex flex-column p-2 justify-content-center">
             <div class="d-flex align-items-center">
                 <div class="d-flex flex-grow-1 align-items-center">
