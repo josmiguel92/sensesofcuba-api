@@ -45,10 +45,10 @@ class PasswordResetHandler implements MessageHandlerInterface
 
         $email = (new TemplatedEmail())
             ->to($user->getEmail())
-            ->subject('Your password at Senses of Cuba was reset')
+            ->subject('Your password at Senses of Cuba has been reset')
             ->htmlTemplate('email/abacus/cases/password-reset.html.twig')
             ->context([
-                'subject' => 'Your password at Senses of Cuba was reset',
+                'subject' => 'Your password at Senses of Cuba has been reset',
                 'username' => $user->getName(),
             ])
             ->priority(Email::PRIORITY_HIGH);

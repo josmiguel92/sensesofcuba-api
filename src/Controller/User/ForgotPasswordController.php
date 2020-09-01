@@ -39,7 +39,11 @@ class ForgotPasswordController extends AbstractController
             return $this->json(['_token'=>RegisterController::getToken()]);
         }
 
-        $data = json_decode($request->getContent(), true);
+        try {
+            $data = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        } catch (\JsonException $e) {
+            $data = null;
+        }
 
         $form = $formFactory->create(ForgotPasswordType::class);
 

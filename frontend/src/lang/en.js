@@ -77,7 +77,7 @@ export default {
         subtitle: 'If you are one of our registered clients, we will send you a new password to your email address',
         reset: 'Reset',
         reset_completed: 'Password reset completed',
-        login_with_credentials: 'Login with your new credentials'
+        login_with_credentials: 'Check your inbox and login with your new credentials'
     },
     general: {
         open: 'Open',

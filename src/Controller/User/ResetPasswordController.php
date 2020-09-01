@@ -18,6 +18,8 @@ use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Twig\Environment;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 /**
  * @Route("/reset-password/{token}", name="reset_password", host="%app.main_domain%")
@@ -26,6 +28,13 @@ final class ResetPasswordController extends AbstractController
 {
     /**
      * @ParamConverter("user", converter="doctrine.orm", options={"mapping": {"token": "passwordResetToken"}})
+     * @param User $user
+     * @param Request $request
+     * @param FormFactoryInterface $formFactory
+     * @param FlashBagInterface $flashBag
+     * @param Environment $twig
+     * @param MessageBusInterface $bus
+     * @return Response
      */
     public function __invoke(
         User $user,

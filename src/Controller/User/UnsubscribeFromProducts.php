@@ -43,7 +43,8 @@ final class UnsubscribeFromProducts extends AbstractController
 
             return $this->render('user/unsubscribed.html.twig', ['user'=>$user]);
         }
-        else throw new NotFoundHttpException('wrong unsubscribe link');
+
+        throw new NotFoundHttpException('wrong unsubscribe link');
 
     }
 }

@@ -21,10 +21,9 @@ final class SendPasswordResetUrl implements MessageHandlerInterface
     private $twig;
     private $router;
 
-    public function __construct(MailerInterface $mailer, Environment $twig, RouterInterface $router)
+    public function __construct(MailerInterface $mailer, RouterInterface $router)
     {
         $this->mailer = $mailer;
-        $this->twig = $twig;
         $this->router = $router;
     }
 

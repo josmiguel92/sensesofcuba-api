@@ -20,6 +20,5 @@ class PasswordRequestHandler implements MessageHandlerInterface
 
     public function __invoke(PasswordRequest $message)
     {
-//        dump("password request", $message->getUserId());
     }
 }

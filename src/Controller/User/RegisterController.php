@@ -41,17 +41,23 @@ final class RegisterController extends AbstractController
             return $this->json(['_token'=>self::getToken()]);
         }
 
-        $data = json_decode($request->getContent(), true);
+        try {
+            $data = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        } catch (\JsonException $e) {
+            $data = null;
+        }
 
         $form = $formFactory->create(RegisterType::class);
         $dataNormalized = [];
-        if($data)
+        if($data) {
             foreach ($data as $key => $value) {
-                if($key === 'password')
+                if ($key === 'password') {
                     $value = ['plain' => $value];
+                }
                 $dataNormalized[$key] = $value;
             }
-        
+        }
+
         if(!self::isValidToken($data['_token'])){
             return $this->json(['_error' => "Invalid CSRF Token"], 400);
         }

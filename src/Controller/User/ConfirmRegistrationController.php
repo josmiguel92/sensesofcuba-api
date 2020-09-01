@@ -22,6 +22,14 @@ final class ConfirmRegistrationController
 {
     /**
      * @ParamConverter("user", converter="doctrine.orm", options={"mapping": {"token": "confirmationToken"}})
+     * @param User $user
+     * @param Responder $responder
+     * @param MessageBusInterface $bus
+     * @param Environment $templating
+     * @return Response
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function __invoke(
         User $user,
