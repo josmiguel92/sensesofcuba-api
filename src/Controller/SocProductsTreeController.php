@@ -166,8 +166,17 @@ class SocProductsTreeController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($product);
-            $em->flush();
+
+            if($product->getSocProducts()->isEmpty())
+            {
+                $em->remove($product);
+                $em->flush();
+                $this->addFlash('success', 'Product  "'. $product->getReferenceName().'" deleted!');
+            }
+            else
+            {
+                $this->addFlash('danger','This product contains child products and can not be deleted.');
+            }
         }
 
         return $this->redirectToRoute('soc_product_index');
