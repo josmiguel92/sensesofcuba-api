@@ -2,7 +2,7 @@
     "type": "project",
     "license": "proprietary",
     "require": {
-        "php": "^7.3.19",
+        "php": "^7.3.21",
         "ext-ctype": "*",
         "ext-gd": "*",
         "ext-iconv": "*",
@@ -12,7 +12,7 @@
         "erusev/parsedown": "^1.7",
         "friendsofsymfony/ckeditor-bundle": "^2.1",
         "knplabs/doctrine-behaviors": "^1.6",
-        "lexik/jwt-authentication-bundle": "2.6.5.*",
+        "lexik/jwt-authentication-bundle": "^2.8.0",
         "msgphp/user-bundle": "0.13.0.*",
         "sensio/framework-extra-bundle": "^5.5",
         "symfony/console": "^4.4",
@@ -34,11 +34,11 @@
         "twig/cssinliner-extra": "^3.0",
         "twig/inky-extra": "^3.0",
         "twig/markdown-extra": "^3.0",
-        "vich/uploader-bundle": "^1.12"
+        "vich/uploader-bundle": "^1.15"
     },
     "require-dev": {
-        "symfony/maker-bundle": "^1.13",
-        "doctrine/doctrine-migrations-bundle": "^2.1"
+        "symfony/maker-bundle": "^1.21",
+        "doctrine/doctrine-migrations-bundle": "^3.0"
     },
     "config": {
         "preferred-install": {
@@ -46,7 +46,7 @@
         },
         "sort-packages": true,
         "platform": {
-            "php": "7.3.19"
+            "php": "7.3.21"
         }
     },
     "autoload": {

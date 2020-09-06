@@ -15,38 +15,30 @@ use Symfony\Component\HttpKernel\KernelEvents;
 
 class ControllerSubscriber implements  EventSubscriberInterface{
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         // return the subscribed events, their methods and priorities
         return [
-            KernelEvents::CONTROLLER_ARGUMENTS => [
-                ['setLanguageRequestAsGlobal', 0],
-
-            ],
-            KernelEvents::RESPONSE => [
-                ['addContentAllowHeader', 0],
-
-            ],
+            KernelEvents::CONTROLLER_ARGUMENTS => ['setLanguageRequestAsGlobal', 0],
+            KernelEvents::RESPONSE => ['addContentAllowHeader', 0],
         ];
     }
-
 
     /**
      * @param ControllerArgumentsEvent $event
      * Set the current language from the request in controller event as global in the $_SESSION var
      */
-    public function setLanguageRequestAsGlobal(ControllerArgumentsEvent $event)
+    public function setLanguageRequestAsGlobal(ControllerArgumentsEvent $event): void
     {
         $parameters = $event->getRequest()->attributes->all();
 
-        if(isset($parameters['_locale']))
+        if(isset($parameters['_locale'])) {
             $_SESSION['_locale'] = $parameters['_locale'];
+        }
     }
 
-    public function addContentAllowHeader(ResponseEvent $event)
+    public function addContentAllowHeader(ResponseEvent $event): void
     {
-//        $event->getResponse()->headers->set("Access-Control-Allow-Origin", '192.168.43.139');
         $event->getResponse()->headers->set("Access-Control-Allow-Methods", 'POST, GET, OPTIONS');
-        //$event->getResponse()->headers->set("Access-Control-Allow-Headers", 'X-PINGOTHER');
     }
 }

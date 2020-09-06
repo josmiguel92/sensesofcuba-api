@@ -3,6 +3,7 @@ twig:
     debug: '%kernel.debug%'
     strict_variables: '%kernel.debug%'
     form_themes: ['bootstrap_4_layout.html.twig']
+    exception_controller: null
     paths:
         'templates/email': 'email'
         'templates/admin': 'admin'

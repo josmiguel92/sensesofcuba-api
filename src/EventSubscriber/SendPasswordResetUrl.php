@@ -18,7 +18,6 @@ use Symfony\Component\Routing\RouterInterface;
 final class SendPasswordResetUrl implements MessageHandlerInterface
 {
     private $mailer;
-    private $twig;
     private $router;
 
     public function __construct(MailerInterface $mailer, RouterInterface $router)

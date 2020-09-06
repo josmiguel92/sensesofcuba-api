@@ -7,16 +7,6 @@ security:
 
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
-        chain_provider:
-            chain:
-                providers: [msgphp_user, msgphp_user_jwt, in_memory]
-        in_memory:
-            memory:
-                users:
-                    admin@habana.tech:
-                        password: $2y$13$u8oayTragV6c8Pu5l3pOx.iAJ8slNdWeWbI25fFMs3ELvqRR3rhLq
-                        roles: ['ROLE_USER', 'ROLE_EDITOR', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN']
-
         msgphp_user: { id: MsgPhp\User\Infrastructure\Security\UserIdentityProvider }
         msgphp_user_jwt: { id: MsgPhp\User\Infrastructure\Security\Jwt\UserIdentityProvider }
 
@@ -35,7 +25,7 @@ security:
             pattern: ^/api/login
             anonymous: true
             stateless: true
-            provider: chain_provider
+            provider: msgphp_user_jwt
             json_login:
                 check_path: /api/login
                 username_path: email
@@ -47,19 +37,19 @@ security:
             pattern: ^/api/register
             anonymous: true
             stateless: true
-            provider: chain_provider
+            provider: msgphp_user_jwt
 
         api_reset_password:
             pattern: ^/api/reset-password
             anonymous: true
             stateless: true
-            provider: chain_provider
+            provider: msgphp_user_jwt
 
         api:
             pattern: ^/api
             anonymous: true
             stateless: true
-            provider: chain_provider
+            provider: msgphp_user_jwt
             guard:
                 authenticators:
                     - lexik_jwt_authentication.jwt_token_authenticator
@@ -68,7 +58,7 @@ security:
         main_admin:
             pattern: ^/admin
             anonymous: true
-            provider: chain_provider
+            provider: msgphp_user_jwt
             form_login:
                 login_path: /
                 check_path: login

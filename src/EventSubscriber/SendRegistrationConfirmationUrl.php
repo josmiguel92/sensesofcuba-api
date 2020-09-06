@@ -7,20 +7,17 @@ namespace App\EventSubscriber;
 use App\Entity\User;
 use App\Message\Events\UserRegistered;
 use MsgPhp\User\Event\UserCreated;
-use Symfony\Bridge\Twig\Mime\NotificationEmail;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\RouterInterface;
-use Twig\Environment;
 use Symfony\Component\Mailer\MailerInterface;
-
+use MsgPhp\User\Infrastructure\Security\UserIdentity;
 final class SendRegistrationConfirmationUrl implements MessageHandlerInterface
 {
     private $mailer;
-    private $twig;
     private $router;
     /**
      * @var MessageBusInterface

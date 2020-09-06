@@ -4,15 +4,11 @@ declare(strict_types=1);
 
 namespace App\EventSubscriber;
 
-use App\Entity\User;
-use App\Entity\UserRole;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Events as AuthenticationEvents;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
-use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use Symfony\Component\Security\Core\AuthenticationEvents as SecurityAuthEvents;
-use Symfony\Component\Security\Core\Event\AuthenticationSuccessEvent as SecurityAuthenticationSuccessEvent;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
@@ -22,19 +18,23 @@ use MsgPhp\User\Infrastructure\Security\UserIdentity;
 
 final class OnJWTAuthenticationSuccess implements EventSubscriberInterface
 {
-    private $JWTTokenManager;
+    /**
+     * @var string
+     */
     public static $cookieName = '_socAuth';
+
+    /**
+     * @var UserRepository
+     */
     private $userRepository;
 
     /**
      * OnJWTAuthenticationSuccess constructor.
-     * @param JWTTokenManagerInterface $JWTTokenManager
      * @param UserRepository $userRepository
      */
-    public function __construct(JWTTokenManagerInterface $JWTTokenManager, UserRepository $userRepository)
+    public function __construct(UserRepository $userRepository)
     {
         $this->userRepository = $userRepository;
-        $this->JWTTokenManager = $JWTTokenManager;
     }
 
     public static function getSubscribedEvents(): array
@@ -42,10 +42,7 @@ final class OnJWTAuthenticationSuccess implements EventSubscriberInterface
         // return the subscribed events, their methods and priorities
         return [
             AuthenticationEvents::AUTHENTICATION_SUCCESS => [
-                ['addUserInfoOnJWTAuthenticationSuccess', 0],
-            ],
-            SecurityAuthEvents::AUTHENTICATION_SUCCESS => [
-                ['addUserInfoOnSymfonyAuthenticationSuccess', 0]
+                ['addUserInfoOnJWTAuthenticationSuccess', 250],
             ],
             KernelEvents::REQUEST => [
                 ['addRequestAuthorizationIfCookieExist', 250]
@@ -57,9 +54,19 @@ final class OnJWTAuthenticationSuccess implements EventSubscriberInterface
     {
 
         $token = null;
-        if(isset($_COOKIE[self::$cookieName]))
+
+        if(($authorization = $event->getRequest()->headers->get('Authorization')) && str_contains($authorization, 'Bearer '))
         {
-            $cookie = json_decode($_COOKIE[self::$cookieName], true);
+            return;
+        }
+
+        if($event->getRequest()->cookies->get(self::$cookieName))
+        {
+            try {
+                $cookie = json_decode($_COOKIE[self::$cookieName], true, 512, JSON_THROW_ON_ERROR);
+            } catch (\JsonException $e) {
+                $cookie = ['token' => null];
+            }
             $token = $cookie['token'];
         }
 
@@ -72,6 +79,7 @@ final class OnJWTAuthenticationSuccess implements EventSubscriberInterface
     /**
      * @param AuthenticationSuccessEvent $event
      * Add to JWT response the user info on AuthenticationSuccessEvent
+     * @throws \JsonException
      */
     public function addUserInfoOnJWTAuthenticationSuccess(AuthenticationSuccessEvent $event): void
     {
@@ -82,47 +90,25 @@ final class OnJWTAuthenticationSuccess implements EventSubscriberInterface
             $data[$key] = $value;
         }
 
-        setcookie(
+        $cookieExpire = time() + (int)(60 * 60 * 1.5);
+        $cookie = Cookie::create(
             self::$cookieName,
-            json_encode($data),
-            [
-                'expires'  => time() + (int)(60 * 60 * 1.5),
-                'path'     => '/',
-                'domain'   => $_SERVER['HTTP_HOST'],
-                'samesite' => 'Strict'
-            ]
+            json_encode($data, JSON_THROW_ON_ERROR),
+            $cookieExpire,
+            null,
+            null,
+            null,
+            true,
+            false,
+            Cookie::SAMESITE_STRICT
         );
+
+        $event->getResponse()->headers->setCookie($cookie);
+
         $event->setData($data);
 
     }
 
-    /**
-     * @param SecurityAuthenticationSuccessEvent $event
-     */
-    public function addUserInfoOnSymfonyAuthenticationSuccess(SecurityAuthenticationSuccessEvent $event): void
-    {
-        if($event->getAuthenticationToken()->getRoleNames())
-        {
-            $data = [];
-            $user = $event->getAuthenticationToken()->getUser();
-
-            if($user instanceof UserInterface)
-            {
-                if ($user instanceof UserIdentity) {
-                    $this->JWTTokenManager->setUserIdentityField('originUsername');
-                }
-                else {
-                    $this->JWTTokenManager->setUserIdentityField('username');
-                }
-
-                $data = $this->getUserDetails($user);
-                $data['token'] = $this->JWTTokenManager->create($user);
-            }
-
-            $this->setCookie($data);
-        }
-
-    }
 
         /**
      * @param UserInterface $user
@@ -130,19 +116,9 @@ final class OnJWTAuthenticationSuccess implements EventSubscriberInterface
      */
     private function getUserDetails(UserInterface $user): array
     {
-        if($user instanceof \Symfony\Component\Security\Core\User\User)
-        {
-            if($user->getUsername() === 'admin@habana.tech')
-            return [
-                'username' => $user->getUsername(),
-                'roles' => 0,
-                'active' => 1
-                ];
-            $user['originUsername'] = 'admin@habana.tech';
-        }
-        else
-        {
+        if($user instanceof UserIdentity) {
             $username = $user->getOriginUsername();
+
             $_user = $this->userRepository->find($user->getUserId());
             if($_user)
             {
@@ -158,30 +134,16 @@ final class OnJWTAuthenticationSuccess implements EventSubscriberInterface
                 ];
             }
         }
-
+        return [];
     }
 
-    private function setCookie($data)
-    {
-
-        setcookie(
-            self::$cookieName,
-            json_encode($data),
-            [
-                'expires'  => time() + (int)(60 * 60 * 2),
-                'path'     => '/',
-                'samesite' => 'Strict'
-            ]
-        );
-    }
-
-    public static function unsetCookie()
+    public static function unsetCookie(): void
     {
         setcookie(
             self::$cookieName,
             "",
             [
-                'expires'  => time() - (int)(3600),
+                'expires'  => time() - 3600 * 3600,
                 'path'     => '/',
                 'samesite' => 'Strict'
             ]
