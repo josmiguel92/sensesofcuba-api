@@ -153,8 +153,46 @@
                 </div>
     </div>
 
+    <div class="row">
+        <div class="col-md-12">
+            <h5>Alternative Product PDF File (Only for users with alternative prices)</h5>
+        </div>
+    </div>
+    <div class="row">
 
-              <button type="submit" class="btn btn-primary action-save">
+        <div class="col-md-4 card-body">
+            <div class="form-group">
+                {#                        {{ form_row(form.file.title) }}#}
+                {#                        {{ form_row(form.file.file) }}#}
+                {{ form_row(form.alternativeTranslatedDocument.enFile) }}
+
+
+            </div>
+        </div>
+
+        <div class="col-md-4 card-body">
+            <div class="form-group">
+                {#                        {{ form_row(form.file.title) }}#}
+                {#                        {{ form_row(form.file.file) }}#}
+                {{ form_row(form.alternativeTranslatedDocument.deFile) }}
+
+
+            </div>
+        </div>
+
+        <div class="col-md-4 card-body">
+            <div class="form-group">
+                {#                        {{ form_row(form.file.title) }}#}
+                {#                        {{ form_row(form.file.file) }}#}
+                {{ form_row(form.alternativeTranslatedDocument.esFile) }}
+
+
+            </div>
+        </div>
+    </div>
+
+
+            <button type="submit" class="btn btn-primary action-save">
                         <span class="btn-label">Save changes</span>
             </button>
             {{ form(form) }}

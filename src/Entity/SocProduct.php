@@ -57,6 +57,12 @@ class SocProduct
      */
     private $translatedDocument;
 
+
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\TranslatedDocument", cascade={"persist", "remove"})
+     */
+    private $alternativeTranslatedDocument;
+
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\User", mappedBy="subscribedProducts")
      */
@@ -248,6 +254,20 @@ class SocProduct
         return null;
     }
 
+
+    public function getAlternativeTranslatedDocumentFilePathByLang($lang): ?string
+    {
+        if($this->getAlternativeTranslatedDocument()
+            && $this->getAlternativeTranslatedDocument()->translate($lang, $this->isEnglishGlobalTranslation)
+            && $filename = $this->getAlternativeTranslatedDocument()
+                ->translate($lang, $this->isEnglishGlobalTranslation)
+                ->getFileName())
+        {
+            return 'uploads/files/' . $filename;
+        }
+        return null;
+    }
+
     public function getTranslatedNameOrReference($lang): string
     {
         if($this->translate($lang) !== null && $this->translate($lang)->getName()) {
@@ -264,4 +284,24 @@ class SocProduct
             return $this->translate($lang)->getDescription();
         else return null;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getAlternativeTranslatedDocument()
+    {
+        return $this->alternativeTranslatedDocument;
+    }
+
+    /**
+     * @param mixed $alternativeTranslatedDocument
+     * @return SocProduct
+     */
+    public function setAlternativeTranslatedDocument($alternativeTranslatedDocument)
+    {
+        $this->alternativeTranslatedDocument = $alternativeTranslatedDocument;
+        return $this;
+    }
+
+
 }

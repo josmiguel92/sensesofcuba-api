@@ -24,9 +24,11 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
  */
 class ApiController extends AbstractController
 {
-    const DATE_FORMAT = 'Y/m/d H:i:s';
+    public const DATE_FORMAT = 'Y/m/d H:i:s';
+
     /**
      * @Route("/", name="homepage")
+     * @throws NotFoundHttpException
      */
     public function homepage(): \Symfony\Component\HttpFoundation\Response
     {
@@ -71,12 +73,18 @@ class ApiController extends AbstractController
     {
         $user = null;
         $hiddenProducts = null;
+        $useAlternativeDocuments = false;
         if($username = $this->getUserNameFromCookie($request)) {
             $user = $userRepository->findOneBy(['email' => $username]);
         }
         if($user !== null) {
             $hiddenProducts = $user->getHiddenProducts();
         }
+        if($user->getRole() == 'ROLE_ALTERNATIVE_PRICES_CLIENT')
+        {
+            $useAlternativeDocuments = true;
+        }
+
 
         $products = $productRepository->findBy(['enabled'=>true], ['importance'=>'DESC']);
 
@@ -96,8 +104,11 @@ class ApiController extends AbstractController
             $currentIsAvailable = $product->isAvailableForLang($lang);
             if($currentIsAvailable || !$product->getSocProducts()->isEmpty())
             {
+                if($useAlternativeDocuments && $product->getAlternativeTranslatedDocumentFilePathByLang($lang))
+                    $file = $product->getAlternativeTranslatedDocumentFilePathByLang($lang);
+                else
+                    $file = $product->getTranslatedDocumentFilePathByLang($lang);
 
-                $file = $product->getTranslatedDocumentFilePathByLang($lang);
                 $items[] = [
                     'id' => $product->getId(),
                     'title' => $product->getTranslatedNameOrReference($lang),
@@ -184,6 +195,7 @@ class ApiController extends AbstractController
      * @param UserRepository $userRepository
      * @param ManagerRegistry $managerRegistry
      * @return JsonResponse
+     * @throws NotFoundHttpException
      */
     public function subscribe_to_product(SocProduct $product,
                                          $action,

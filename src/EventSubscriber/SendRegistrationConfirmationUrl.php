@@ -8,6 +8,7 @@ use App\Entity\User;
 use App\Message\Events\UserRegistered;
 use MsgPhp\User\Event\UserCreated;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -61,6 +62,9 @@ final class SendRegistrationConfirmationUrl implements MessageHandlerInterface
         try {
             $this->mailer->send($email);
         } catch (TransportExceptionInterface $e) {
+            return;
+        }
+        catch (HandlerFailedException  $e) {
             return;
         }
     }

@@ -46,6 +46,7 @@ class SocProductType extends EasyAdminFormType
                     'required' => false
                 ])
             ->add('translatedDocument', TranslatedDocumentType::class)
+            ->add('alternativeTranslatedDocument', TranslatedDocumentType::class)
         ;
     }
 

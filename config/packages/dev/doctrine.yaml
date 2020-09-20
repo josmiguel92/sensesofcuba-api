@@ -1,0 +1,5 @@
+doctrine:
+    dbal:
+        # configure these for your database server
+        driver: 'pdo_mysql'
+        server_version: 'mariadb-10.3.23'

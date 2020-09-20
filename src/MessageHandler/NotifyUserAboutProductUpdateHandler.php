@@ -10,6 +10,7 @@ use App\Repository\UserRepository;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
@@ -57,6 +58,12 @@ class NotifyUserAboutProductUpdateHandler implements MessageHandlerInterface
         if(!$user || !$product)
             return;
 
+        $hiddenProducts = $user->getHiddenProducts();
+        if($hiddenProducts && $hiddenProducts->contains($product)) {
+            return;
+        }
+
+
         $email = new TemplatedEmail();
 
         /** @var User $user */
@@ -71,7 +78,7 @@ class NotifyUserAboutProductUpdateHandler implements MessageHandlerInterface
             ->context([
                 'subject' => 'We updated one of your subscribed products at Senses of Cuba Infonet',
                 'username' =>  $user->getName(),
-                'product_name' => $product->translate()->getName(),
+                'product_name' => $product->getTranslatedNameOrReference('en'),
                 'product_thumb' => $productThumbnail,
                 'product_desc' => $product->translate()->getDescription(),
 //                'product_updated' => $product->getUpdatedAt()->format('M j, H:i'),
@@ -86,6 +93,8 @@ class NotifyUserAboutProductUpdateHandler implements MessageHandlerInterface
         try {
             $this->mailer->send($email);
         } catch (TransportExceptionInterface $e) {
+            return;
+        }catch (HandlerFailedException  $e) {
             return;
         }
     }

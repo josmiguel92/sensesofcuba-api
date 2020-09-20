@@ -4,11 +4,15 @@
 namespace App\MessageHandler;
 
 
+use App\Entity\ProductNotification;
 use App\Message\Events\NotifyUserAboutProductUpdate;
 use App\Message\Events\PasswordReset;
 use App\Message\Events\ProductUpdated;
 use App\Repository\SocProductRepository;
 use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -23,6 +27,10 @@ class ProductUpdatedHandler implements MessageHandlerInterface
      * @var MessageBusInterface
      */
     private $bus;
+    /**
+     * @var EntityManager
+     */
+    private $manager;
 
     /**
      * PasswordRequestHandler constructor.
@@ -30,14 +38,17 @@ class ProductUpdatedHandler implements MessageHandlerInterface
      * @param UserRepository $userRepository
      * @param SocProductRepository $productRepository
      * @param MessageBusInterface $bus
+     * @param EntityManagerInterface $manager
      */
        public function __construct(MailerInterface $mailer, UserRepository $userRepository,
-                                   SocProductRepository $productRepository, MessageBusInterface $bus)
+                                   SocProductRepository $productRepository, MessageBusInterface $bus,
+                                   EntityManagerInterface $manager)
     {
         $this->mailer = $mailer;
         $this->userRepository = $userRepository;
         $this->productRepository = $productRepository;
         $this->bus = $bus;
+        $this->manager = $manager;
     }
 
 
@@ -49,10 +60,15 @@ class ProductUpdatedHandler implements MessageHandlerInterface
 
         $subscribedUsers = $product->getSubscribedUsers();
 
-        foreach ($subscribedUsers as $user)
-        {
-            $this->bus->dispatch(new NotifyUserAboutProductUpdate($user->getId(), $product->getId()));
-        }
+        $notification = new ProductNotification($product, $message->getChangesStr(), $subscribedUsers->getValues());
+        $this->manager->persist($notification);
+        $this->manager->flush();
+
+//
+//        foreach ($subscribedUsers as $user)
+//        {
+//            $this->bus->dispatch(new NotifyUserAboutProductUpdate($user->getId(), $product->getId()));
+//        }
     }
 
 }

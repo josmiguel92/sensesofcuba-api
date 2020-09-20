@@ -17,6 +17,7 @@ easy_admin:
           - { label: 'Your Products', icon: 'receipt',  route: 'soc_product_index' }
           - { label: 'Documents About Cuba',  icon: 'book',  route: 'soc_document_index'}
           - { entity: 'Users', icon: 'users', label: 'Users and clients' }
+          - { entity: 'ProductNotification', icon: 'bell', label: 'Product Notifications' }
           - { label: 'Tools',  icon: 'gear',  route: 'admin_tools_index'}
           - { label: 'Back to Homepage', route: 'homepage', icon: 'home' }
 
@@ -57,7 +58,7 @@ easy_admin:
             - { property: 'web' }
             - { property: 'receiveEmails' , help: 'Select if this user will receive the new users subscriptions notifications'}
 #            - { property: 'userRoles', type: 'entity', type_options:{ class: 'App\Entity\Role'}}
-            - { property: 'role', label: 'User Role',  help: 'Select one role', type: 'choice',  type_options: { choices: { Client: 'ROLE_CLIENT' , 'Premium Client': 'ROLE_PREMIUM_CLIENT', '____________': '____________', Editor: 'ROLE_EDITOR', Administrator: 'ROLE_ADMIN'} } }
+            - { property: 'role', label: 'User Role',  help: 'Select one role', type: 'choice',  type_options: { choices: { Client: 'ROLE_CLIENT' , 'Premium Client': 'ROLE_PREMIUM_CLIENT', 'Alternative prices Client': 'ROLE_ALTERNATIVE_PRICES_CLIENT', '____________': '____________', Editor: 'ROLE_EDITOR', Administrator: 'ROLE_ADMIN'} } }
             - { property: 'subscribedProducts', help: 'Products about the user will receive notifications' }
             - { property: 'hiddenProducts', help: 'Select the products hidden for this user' }
         list:
@@ -100,6 +101,21 @@ easy_admin:
                 - { name: 'soc_document_edit', type: 'route', label: 'Edit', css_class: 'btn btn-primary' }
                 - '-edit'
                 - '-delete'
+
+
+      ProductNotification:
+          class: App\Entity\ProductNotification
+#          disabled_actions: ['new']
+          list:
+            batch_actions: [{ name: 'delete' }, { name: 'send' }]
+            fields:
+                - { property: id}
+                - { property: 'isCompleted', type: 'boolean' }
+                - { property: 'createdAt' }
+                - { property: 'product' }
+                - { property: 'targetUsersCount', label: 'Target users' }
+
+                #            - { property: 'web' }
 
 #        # List the entity class name you want to manage
 #        - App\Entity\Product

@@ -3,9 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\SocProduct;
+use App\EntityAudition\EntityAuditor;
 use App\Form\SocProductType;
 use App\Message\Events\ProductUpdated;
 use App\Repository\SocProductRepository;
+use Doctrine\ORM\UnitOfWork;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormInterface;
@@ -103,11 +105,21 @@ class SocProductsTreeController extends AbstractController
             }
             else{
 
+
+                $em = $this->getDoctrine()->getManager();
+                $uow = $em->getUnitOfWork();
+                $auditor = new EntityAuditor($em, $uow);
+
+                if($auditor->areUpdates())
+                {
+
+                    $bus->dispatch(new ProductUpdated($product->getId(), $auditor->getFormattedDiffStr()));
+                    $this->addFlash('success', 'Product "'. $product->getReferenceName().'" updated!');
+                }
+
+                else $this->addFlash('warning', 'There aren\'t changes on "'. $product->getReferenceName().'"!');
+
                 $this->getDoctrine()->getManager()->flush();
-
-                $this->addFlash('success', 'Product "'. $product->getReferenceName().'" updated!');
-                $bus->dispatch(new ProductUpdated($product->getId()));
-
 
                 return $this->redirectToRoute('soc_product_index');
             }

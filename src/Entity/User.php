@@ -99,6 +99,11 @@ class User extends BaseUser implements DomainEventHandler
      */
     private $wasEnabled;
 
+    /**
+     * @ORM\Column(type="string", length=2, nullable=true)
+     */
+    private $preferedLang;
+
 
     public function __construct(UserId $id, string $email, string $password, string  $name,
                                 string  $enterprise, string $travelAgency, string $country, ?string $web)
@@ -259,7 +264,10 @@ class User extends BaseUser implements DomainEventHandler
     {
         $this->receiveEmails = ($role === 'ROLE_ADMIN' OR $role === 'ROLE_EDITOR');
 
-        $role = in_array($role, ['ROLE_ADMIN', 'ROLE_EDITOR', 'ROLE_PREMIUM_CLIENT', 'ROLE_CLIENT'])? $role : 'ROLE_CLIENT';
+        $role = in_array(
+            $role,
+            ['ROLE_ADMIN', 'ROLE_EDITOR', 'ROLE_PREMIUM_CLIENT', 'ROLE_CLIENT', 'ROLE_ALTERNATIVE_PRICES_CLIENT']
+        )? $role : 'ROLE_CLIENT';
         $this->role = $role;
 
         return $this;
@@ -376,5 +384,11 @@ public function addHiddenProduct(SocProduct $hiddenProduct): self
         return hash('md5', $this->getName().$this->getEmail().$this->getCreatedAt()->format('thLzmhyytLzm'));
     }
 
+
+    public function getPreferedLang(): string
+    {
+        return $this->preferedLang ? $this->preferedLang : 'en';
+
+    }
 
 }

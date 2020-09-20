@@ -10,6 +10,7 @@ use Symfony\Bridge\Twig\Mime\NotificationEmail;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
@@ -76,6 +77,9 @@ class UserAccountEnabledHandler implements MessageHandlerInterface
         try {
             $this->mailer->send($email);
         } catch (TransportExceptionInterface $e) {
+            return;
+        }
+        catch (HandlerFailedException  $e) {
             return;
         }
 

@@ -11,12 +11,19 @@ class ProductUpdated
     private $productId;
 
     /**
+     * @var string
+     */
+    private $changes;
+
+    /**
      * UserAccountConfirmed constructor.
      * @param $productId
+     * @param string $changes
      */
-    public function __construct($productId)
+    public function __construct($productId, $changes)
     {
         $this->productId = $productId;
+        $this->changes = $changes;
     }
 
     /**
@@ -26,6 +33,23 @@ class ProductUpdated
     {
         return $this->productId;
     }
+
+    /**
+     * @return array
+     */
+    public function getChanges(): array
+    {
+        return $this->changes;
+    }
+
+    /**
+     * @return string
+     */
+    public function getChangesStr(): ?string
+    {
+        return $this->changes;
+    }
+
 
 
 

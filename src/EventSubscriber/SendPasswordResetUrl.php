@@ -8,6 +8,7 @@ use App\Entity\User;
 use MsgPhp\User\Event\UserPasswordRequested;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Symfony\Component\Mime\Email;
 use Twig\Environment;
@@ -52,6 +53,10 @@ final class SendPasswordResetUrl implements MessageHandlerInterface
         try {
             $this->mailer->send($email);
         } catch (TransportExceptionInterface $e) {
+            return;
+        }
+
+        catch (HandlerFailedException  $e) {
             return;
         }
 
