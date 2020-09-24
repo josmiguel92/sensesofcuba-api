@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\EntityAudition;
-
 
 use App\Entity\SocFile;
 use App\Entity\SocImage;
@@ -53,32 +51,33 @@ class EntityAuditor
     public function getChanges()
     {
         $this->changes = [];
-        foreach ($this->updatesEntities as $entity)
-        {
+        foreach ($this->updatesEntities as $entity) {
             $_changes = $this->uow->getEntityChangeSet($entity);
-            if(is_array($_changes))
+            if (is_array($_changes)) {
                 $this->changes[$this->getClassDescription($entity)] = $_changes;
+            }
         }
         return $this->changes;
     }
 
     private function getClassDescription($entity)
     {
-        $className = str_replace("Proxies\\__CG__\\",null,get_class($entity));
+        $className = str_replace("Proxies\\__CG__\\", null, get_class($entity));
 
 
-        switch ($className){
+        switch ($className) {
             case 'App\\Entity\\SocProduct':
                 /**
                  * @var SocProduct $entity
                  */
-                return 'Product: '.$entity->getReferenceName();
+                return 'Product: ' . $entity->getReferenceName();
 
             case 'App\\Entity\\SocProductTranslation':
                 /**
                  * @var SocProductTranslation $entity
                  */
-                return 'Product content translation: ('.$entity->getLocale().') ['.$entity->getTranslatable()->getReferenceName().']';
+                return 'Product content translation: ('
+                    . $entity->getLocale() . ') [' . $entity->getTranslatable()->getReferenceName() . ']';
 
             case 'App\\Entity\\TranslatedDocument':
                 /**
@@ -98,9 +97,8 @@ class EntityAuditor
                  */
                 return 'Product image';
             default:
-                return str_replace("App\\Entity\\",null,$className);
+                return str_replace("App\\Entity\\", null, $className);
         }
-
     }
 
     public function getFormattedDiffStr()
@@ -109,31 +107,25 @@ class EntityAuditor
         $str = '';
         $allowedTypes = ["boolean","integer",'string', 'NULL', 'double', 'object'];
         $allowedClasses = [SocProduct::class, SocFile::class, SocImage::class];
-        if(is_array($changes))
-        {
+        if (is_array($changes)) {
             $index = 1;
-            foreach ($changes as $key => $change)
-            {
+            foreach ($changes as $key => $change) {
                 $str .= " ■ ($index) $key \n";
                 $index++;
-                foreach ($change as $field => $values)
-                {
-                    if(
+                foreach ($change as $field => $values) {
+                    if (
                         in_array(gettype($values[0]), $allowedTypes) || in_array(gettype($values[0]), $allowedClasses)
-                        ||
+                        &&
                         in_array(gettype($values[1]), $allowedTypes) || in_array(gettype($values[1]), $allowedClasses)
-                      )
-                    {
+                    ) {
                         $str .= "  ● $field\n";
-                        $str .= '    Before: '.$values[0]."\n";
-                        $str .= '    After: '.$values[1]."\n";
+                        $str .= '    Before: ' . $values[0] . "\n";
+                        $str .= '    After: ' . $values[1] . "\n";
                         $str .= "\n\n\n";
                     }
                 }
-
             }
             return $str;
         }
-
     }
 }

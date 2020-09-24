@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\MessageHandler;
-
 
 use App\Entity\ProductNotification;
 use App\Message\Events\NotifyUserAboutProductUpdate;
@@ -31,6 +29,14 @@ class ProductUpdatedHandler implements MessageHandlerInterface
      * @var EntityManager
      */
     private $manager;
+    /**
+     * @var UserRepository
+     */
+    private $userRepository;
+    /**
+     * @var MailerInterface
+     */
+    private $mailer;
 
     /**
      * PasswordRequestHandler constructor.
@@ -40,10 +46,13 @@ class ProductUpdatedHandler implements MessageHandlerInterface
      * @param MessageBusInterface $bus
      * @param EntityManagerInterface $manager
      */
-       public function __construct(MailerInterface $mailer, UserRepository $userRepository,
-                                   SocProductRepository $productRepository, MessageBusInterface $bus,
-                                   EntityManagerInterface $manager)
-    {
+    public function __construct(
+        MailerInterface $mailer,
+        UserRepository $userRepository,
+        SocProductRepository $productRepository,
+        MessageBusInterface $bus,
+        EntityManagerInterface $manager
+    ) {
         $this->mailer = $mailer;
         $this->userRepository = $userRepository;
         $this->productRepository = $productRepository;
@@ -54,7 +63,7 @@ class ProductUpdatedHandler implements MessageHandlerInterface
 
     public function __invoke(ProductUpdated $message)
     {
-        if(!$product = $this->productRepository->find($message->getProductId())) {
+        if (!$product = $this->productRepository->find($message->getProductId())) {
             return;
         }
 
@@ -63,12 +72,5 @@ class ProductUpdatedHandler implements MessageHandlerInterface
         $notification = new ProductNotification($product, $message->getChangesStr(), $subscribedUsers->getValues());
         $this->manager->persist($notification);
         $this->manager->flush();
-
-//
-//        foreach ($subscribedUsers as $user)
-//        {
-//            $this->bus->dispatch(new NotifyUserAboutProductUpdate($user->getId(), $product->getId()));
-//        }
     }
-
 }

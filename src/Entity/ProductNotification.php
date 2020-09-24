@@ -72,7 +72,7 @@ class ProductNotification
         return $this;
     }
 
-    public function getIsCompleted(): ?bool
+    public function isCompleted(): ?bool
     {
         return $this->isCompleted;
     }

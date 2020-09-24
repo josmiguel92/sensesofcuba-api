@@ -117,7 +117,7 @@ class SocProductsTreeController extends AbstractController
                     $this->addFlash('success', 'Product "'. $product->getReferenceName().'" updated!');
                 }
 
-                else $this->addFlash('warning', 'There aren\'t changes on "'. $product->getReferenceName().'"!');
+                else $this->addFlash('warning', 'There are not changes on "'. $product->getReferenceName().'"!');
 
                 $this->getDoctrine()->getManager()->flush();
 
