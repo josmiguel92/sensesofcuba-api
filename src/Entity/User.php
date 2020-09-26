@@ -105,9 +105,16 @@ class User extends BaseUser implements DomainEventHandler
     private $preferedLang;
 
 
-    public function __construct(UserId $id, string $email, string $password, string  $name,
-                                string  $enterprise, string $travelAgency, string $country, ?string $web)
-    {
+    public function __construct(
+        UserId $id,
+        string $email,
+        string $password,
+        string $name,
+        string $enterprise,
+        string $travelAgency,
+        string $country,
+        ?string $web
+    ) {
         $this->id = $id;
         $this->credential = new EmailPassword($email, $password);
         $this->email = $email;
@@ -242,16 +249,18 @@ class User extends BaseUser implements DomainEventHandler
 
     public function setEnabled(bool $enabled)
     {
-        if($enabled)
+        if ($enabled) {
             $this->enable();
-        else
+        } else {
             $this->disable();
+        }
     }
 
     public function getRole(): ?string
     {
-        if($this->enabled && $this->confirmedAt)
+        if ($this->enabled) {
             return $this->role;
+        }
         return null;
     }
 
@@ -262,82 +271,82 @@ class User extends BaseUser implements DomainEventHandler
 
     public function setRole($role): self
     {
-        $this->receiveEmails = ($role === 'ROLE_ADMIN' OR $role === 'ROLE_EDITOR');
+        $this->receiveEmails = ($role === 'ROLE_ADMIN' || $role === 'ROLE_EDITOR');
 
         $role = in_array(
             $role,
             ['ROLE_ADMIN', 'ROLE_EDITOR', 'ROLE_PREMIUM_CLIENT', 'ROLE_CLIENT', 'ROLE_ALTERNATIVE_PRICES_CLIENT']
-        )? $role : 'ROLE_CLIENT';
+        ) ? $role : 'ROLE_CLIENT';
         $this->role = $role;
 
         return $this;
     }
 //
-    public function isAdmin():bool
+    public function isAdmin(): bool
     {
-        return ('ROLE_ADMIN' === $this->getRole() OR 'ROLE_EDITOR' === $this->getRole()) ;
+        return ('ROLE_ADMIN' === $this->getRole() || 'ROLE_EDITOR' === $this->getRole()) ;
     }
 
-public function getReceiveEmails(): ?bool
-{
-    return $this->receiveEmails;
-}
+    public function getReceiveEmails(): ?bool
+    {
+        return $this->receiveEmails;
+    }
 
-public function setReceiveEmails(bool $receiveEmails): self
-{
-    $this->receiveEmails = $receiveEmails;
+    public function setReceiveEmails(bool $receiveEmails): self
+    {
+        $this->receiveEmails = $receiveEmails;
 
-    return $this;
-}
+        return $this;
+    }
 
 /**
  * @return Collection|SocProduct[]
  */
-public function getSubscribedProducts(): Collection
-{
-    return $this->subscribedProducts;
-}
-
-public function addSubscribedProduct(SocProduct $subscribedProduct): self
-{
-    if (!$this->subscribedProducts->contains($subscribedProduct)) {
-        $this->subscribedProducts[] = $subscribedProduct;
+    public function getSubscribedProducts(): Collection
+    {
+        return $this->subscribedProducts;
     }
 
-    return $this;
-}
+    public function addSubscribedProduct(SocProduct $subscribedProduct): self
+    {
+        if (!$this->subscribedProducts->contains($subscribedProduct)) {
+            $this->subscribedProducts[] = $subscribedProduct;
+        }
 
-public function removeSubscribedProduct(SocProduct $subscribedProduct): self
-{
-    if ($this->subscribedProducts->contains($subscribedProduct)) {
-        $this->subscribedProducts->removeElement($subscribedProduct);
+        return $this;
     }
 
-    return $this;
-}
+    public function removeSubscribedProduct(SocProduct $subscribedProduct): self
+    {
+        if ($this->subscribedProducts->contains($subscribedProduct)) {
+            $this->subscribedProducts->removeElement($subscribedProduct);
+        }
 
-public function unsubscribeFromAllProducts(): self
-{
-    $this->subscribedProducts->clear();
-    return $this;
-}
+        return $this;
+    }
+
+    public function unsubscribeFromAllProducts(): self
+    {
+        $this->subscribedProducts->clear();
+        return $this;
+    }
 
 /**
  * @return Collection|SocProduct[]
  */
-public function getHiddenProducts(): Collection
-{
-    return $this->hiddenProducts;
-}
-
-public function addHiddenProduct(SocProduct $hiddenProduct): self
-{
-    if (!$this->hiddenProducts->contains($hiddenProduct)) {
-        $this->hiddenProducts[] = $hiddenProduct;
+    public function getHiddenProducts(): Collection
+    {
+        return $this->hiddenProducts;
     }
 
-    return $this;
-}
+    public function addHiddenProduct(SocProduct $hiddenProduct): self
+    {
+        if (!$this->hiddenProducts->contains($hiddenProduct)) {
+            $this->hiddenProducts[] = $hiddenProduct;
+        }
+
+        return $this;
+    }
 
     public function removeHiddenProduct(SocProduct $hiddenProduct): self
     {
@@ -381,14 +390,12 @@ public function addHiddenProduct(SocProduct $hiddenProduct): self
 
     public function getStaticUserHash(): string
     {
-        return hash('md5', $this->getName().$this->getEmail().$this->getCreatedAt()->format('thLzmhyytLzm'));
+        return hash('md5', $this->getName() . $this->getEmail() . $this->getCreatedAt()->format('thLzmhyytLzm'));
     }
 
 
     public function getPreferedLang(): string
     {
         return $this->preferedLang ? $this->preferedLang : 'en';
-
     }
-
 }
