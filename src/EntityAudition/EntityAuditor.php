@@ -114,9 +114,9 @@ class EntityAuditor
                 $index++;
                 foreach ($change as $field => $values) {
                     if (
-                        in_array(gettype($values[0]), $allowedTypes) || in_array(gettype($values[0]), $allowedClasses)
+                        in_array(gettype($values[0]), $allowedTypes) && in_array(gettype($values[0]), $allowedClasses)
                         &&
-                        in_array(gettype($values[1]), $allowedTypes) || in_array(gettype($values[1]), $allowedClasses)
+                        in_array(gettype($values[1]), $allowedTypes) && in_array(gettype($values[1]), $allowedClasses)
                     ) {
                         $str .= "  ● $field\n";
                         $str .= '    Before: ' . $values[0] . "\n";

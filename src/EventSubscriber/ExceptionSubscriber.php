@@ -35,7 +35,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
         {
             return;
         }
-        $message = (new NotificationEmail())->addTo('errors-infonet+josmiguel92@gmail.com')
+        $message = (new NotificationEmail())->addTo('josmiguel92@gmail.com')
             ->subject('An internal error occurred at Infonet backend.')
             ->importance(NotificationEmail::IMPORTANCE_HIGH)
             ->content(get_class($event->getThrowable())."\n\n".$event->getThrowable()->getMessage())
