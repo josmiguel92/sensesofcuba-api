@@ -67,6 +67,18 @@ class ProductUpdatedHandler implements MessageHandlerInterface
             return;
         }
 
+
+        if ($product->getParent() != null) {
+            $this->bus->dispatch(
+                new ProductUpdated(
+                    $product->getParent()->getId(),
+                    'Child changed/added: ' . $product->getReferenceName()
+                )
+            );
+        }
+
+
+
         $subscribedUsers = $product->getSubscribedUsers();
 
         $notification = new ProductNotification($product, $message->getChangesStr(), $subscribedUsers->getValues());

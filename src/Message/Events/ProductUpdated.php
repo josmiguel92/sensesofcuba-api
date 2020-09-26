@@ -18,9 +18,9 @@ class ProductUpdated
     /**
      * UserAccountConfirmed constructor.
      * @param $productId
-     * @param string $changes
+     * @param string|null $changes
      */
-    public function __construct($productId, $changes)
+    public function __construct($productId, $changes = null)
     {
         $this->productId = $productId;
         $this->changes = $changes;
@@ -35,9 +35,9 @@ class ProductUpdated
     }
 
     /**
-     * @return array
+     * @return string|null
      */
-    public function getChanges(): array
+    public function getChanges(): ?string
     {
         return $this->changes;
     }

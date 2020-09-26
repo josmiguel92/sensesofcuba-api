@@ -36,48 +36,49 @@ class SocProductsTreeController extends AbstractController
     public function index(SocProductRepository $productRepository)
     {
         return $this->render('soc_products_tree/index.html.twig', [
-            'products' => $productRepository->findBy(['parent'=>null])
+            'products' => $productRepository->findBy(['parent' => null])
         ]);
     }
 
     /**
      * @Route("/new", name="new", methods="GET|POST")
      * @param Request $request
-     * @param MimeTypeGuesserInterface $guesser
+     * @param MessageBusInterface $bus
      * @return RedirectResponse|Response
      */
-    public function new(Request $request)
+    public function new(Request $request, MessageBusInterface $bus)
     {
         $product = new SocProduct();
         $form = $this->createForm(SocProductType::class, $product);
         $form->handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid()){
+        if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
 
-            if($product->getFile() && $product->getFile()->getFile() === null) {
+            if ($product->getFile() && $product->getFile()->getFile() === null) {
                 $product->setFile(null);
             }
 
-            if($product->getImage() && $product->getImage()->getImageFile() === null) {
+            if ($product->getImage() && $product->getImage()->getImageFile() === null) {
                 $product->setImage(null);
             }
             $em->persist($product);
             $em->flush();
 
-            $this->addFlash('success', 'Product  "'. $product->getReferenceName().'"created!');
+            //send product creation notification
+            $bus->dispatch(new ProductUpdated($product->getId()));
+
+            $this->addFlash('success', 'Product  "' . $product->getReferenceName() . '"created!');
 
             return $this->redirectToRoute('soc_product_index');
         }
 
-        if($form->isSubmitted() && $form->isValid() === false) {
+        if ($form->isSubmitted() && $form->isValid() === false) {
             $this->addFlash('danger', 'Error saving changes');
             $errors = $form->getErrors(true, true);
-            foreach ($errors as $error)
-            {
+            foreach ($errors as $error) {
                 $this->addFlash('danger', $error->getMessage());
             }
-
         }
 
         return $this->render('soc_products_tree/new_edit.html.twig', [
@@ -91,6 +92,7 @@ class SocProductsTreeController extends AbstractController
      * @Route("/{id}/edit", name="edit", methods="GET|POST")
      * @param SocProduct $product
      * @param Request $request
+     * @param MessageBusInterface $bus
      * @return RedirectResponse|Response
      */
     public function edit(SocProduct $product, Request $request, MessageBusInterface $bus)
@@ -100,40 +102,32 @@ class SocProductsTreeController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            if($product && $product->getParent() && $product->getId() === $product->getParent()->getId()){
+            if ($product && $product->getParent() && $product->getId() === $product->getParent()->getId()) {
                 $this->addFlash('warning', 'The product parent is not valid. It must be different than himself');
-            }
-            else{
-
-
+            } else {
                 $em = $this->getDoctrine()->getManager();
                 $uow = $em->getUnitOfWork();
                 $auditor = new EntityAuditor($em, $uow);
 
-                if($auditor->areUpdates())
-                {
-
+                if ($auditor->areUpdates()) {
                     $bus->dispatch(new ProductUpdated($product->getId(), $auditor->getFormattedDiffStr()));
-                    $this->addFlash('success', 'Product "'. $product->getReferenceName().'" updated!');
+                    $this->addFlash('success', 'Product "' . $product->getReferenceName() . '" updated!');
+                } else {
+                    $this->addFlash('warning', 'There are not changes on "' . $product->getReferenceName() . '"!');
                 }
-
-                else $this->addFlash('warning', 'There are not changes on "'. $product->getReferenceName().'"!');
 
                 $this->getDoctrine()->getManager()->flush();
 
                 return $this->redirectToRoute('soc_product_index');
             }
-
         }
 
-        if($form->isSubmitted() && $form->isValid() === false) {
+        if ($form->isSubmitted() && $form->isValid() === false) {
             $this->addFlash('danger', 'Error saving changes');
             $errors = $form->getErrors(true, true);
-            foreach ($errors as $error)
-            {
+            foreach ($errors as $error) {
                 $this->addFlash('danger', $error->getMessage());
             }
-
         }
 
 
@@ -141,8 +135,7 @@ class SocProductsTreeController extends AbstractController
            'product' => $product,
            'form' => $form->createView(),
            'deleteForm' => $deleteForm->createView(),
-        ]);
-
+          ]);
     }
 
 
@@ -179,15 +172,12 @@ class SocProductsTreeController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
 
-            if($product->getSocProducts()->isEmpty())
-            {
+            if ($product->getSocProducts()->isEmpty()) {
                 $em->remove($product);
                 $em->flush();
-                $this->addFlash('success', 'Product  "'. $product->getReferenceName().'" deleted!');
-            }
-            else
-            {
-                $this->addFlash('danger','This product contains child products and can not be deleted.');
+                $this->addFlash('success', 'Product  "' . $product->getReferenceName() . '" deleted!');
+            } else {
+                $this->addFlash('danger', 'This product contains child products and can not be deleted.');
             }
         }
 
