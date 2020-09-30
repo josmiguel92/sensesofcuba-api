@@ -2,6 +2,7 @@
 
 namespace App\MessageHandler;
 
+use App\Entity\SocProduct;
 use App\Entity\User;
 use App\Repository\SocProductRepository;
 use App\Repository\UserRepository;
@@ -74,13 +75,18 @@ class NotifyUserAboutProductUpdateHandler implements MessageHandlerInterface
 
         $productThumbnail = $product->hasImage() ? $product->getImage()->getThumbnailPath() : null;
 
+        $productParentName = null;
+        if ($product->getParent() instanceof SocProduct) {
+            $productParentName = $product->getParent()->getTranslatedNameOrReference('en') . ' / ';
+        }
+
          $email
             ->subject('We updated one of your subscribed products at Senses of Cuba Infonet')
             ->htmlTemplate('email/abacus/cases/product-notify.html.twig')
             ->context([
                 'subject' => 'We updated one of your subscribed products at Senses of Cuba Infonet',
                 'username' =>  $user->getName(),
-                'product_name' => $product->getTranslatedNameOrReference('en'),
+                'product_name' => $productParentName . $product->getTranslatedNameOrReference('en'),
                 'product_thumb' => $productThumbnail,
                 'product_desc' => $product->translate()->getDescription(),
 //                'product_updated' => $product->getUpdatedAt()->format('M j, H:i'),

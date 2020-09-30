@@ -61,7 +61,7 @@ export default {
         }
     },
     login: {
-        title: 'Login in Ihrem Account',
+        title: 'Login  zu Ihrem Account',
         forgot_password: 'Passwort vergessen?',
         no_account: "Sie haben noch keinen Account?"
     },

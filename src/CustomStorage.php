@@ -28,7 +28,7 @@ class CustomStorage extends FileSystemStorage
 
     protected function doUpload(PropertyMapping $mapping, UploadedFile $file, ?string $dir, string $name)
     {
-        $uploadDir = $mapping->getUploadDestination().\DIRECTORY_SEPARATOR.$dir;
+        $uploadDir = $mapping->getUploadDestination() . \DIRECTORY_SEPARATOR . $dir;
 
         return $file->move($uploadDir, $name);
     }
@@ -75,15 +75,15 @@ class CustomStorage extends FileSystemStorage
         return $this->doRemove($mapping, $mapping->getUploadDir($obj), $name);
     }
 
-        protected function doResolvePath(PropertyMapping $mapping, ?string $dir, string $name, ?bool $relative = false): string
+    protected function doResolvePath(PropertyMapping $mapping, ?string $dir, string $name, ?bool $relative = false): string
     {
-        $path = !empty($dir) ? $dir.\DIRECTORY_SEPARATOR.$name : $name;
+        $path = !empty($dir) ? $dir . \DIRECTORY_SEPARATOR . $name : $name;
 
         if ($relative) {
             return $path;
         }
 
-        return $mapping->getUploadDestination().\DIRECTORY_SEPARATOR.$path;
+        return $mapping->getUploadDestination() . \DIRECTORY_SEPARATOR . $path;
     }
 
     public function resolvePath($obj, ?string $fieldName = null, ?string $className = null, ?bool $relative = false): ?string
@@ -106,9 +106,9 @@ class CustomStorage extends FileSystemStorage
         }
 
         $dir = $mapping->getUploadDir($obj);
-        $path = !empty($dir) ? $dir.'/'.$filename : $filename;
+        $path = !empty($dir) ? $dir . '/' . $filename : $filename;
 
-        return $mapping->getUriPrefix().'/'.$path;
+        return $mapping->getUriPrefix() . '/' . $path;
     }
 
     public function resolveStream($obj, string $fieldName, ?string $className = null)

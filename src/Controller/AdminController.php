@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\ProductNotification;
+use App\Entity\SocProduct;
+use App\Entity\User;
 use App\Message\Events\NotifyUserAboutProductUpdate;
 use App\Repository\ProductNotificationRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\EasyAdminController;
@@ -26,10 +28,18 @@ class AdminController extends EasyAdminController
                 $notification instanceof ProductNotification
                 && !$notification->isCompleted() && $notification->getTargetUsersCount() > 0
             ) {
+                if ($notification->getProduct() instanceof SocProduct) {
+                    $productId = $notification->getProduct()->getId();
+                } else {
+                    $productId = null;
+                }
+
                 foreach ($notification->getTargetUsers() as $user) {
-                    $bus->dispatch(
-                        new NotifyUserAboutProductUpdate($user->getId(), $notification->getProduct()->getId())
-                    );
+                    if ($user instanceof User) {
+                        $bus->dispatch(
+                            new NotifyUserAboutProductUpdate($user, $productId)
+                        );
+                    }
                 }
 
                 $notification->markAsCompleted();

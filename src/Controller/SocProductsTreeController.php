@@ -65,7 +65,7 @@ class SocProductsTreeController extends AbstractController
             $em->persist($product);
             $em->flush();
 
-            //send product creation notification
+            //send product creation/update notification
             $bus->dispatch(new ProductUpdated($product->getId()));
 
             $this->addFlash('success', 'Product  "' . $product->getReferenceName() . '"created!');
@@ -174,8 +174,17 @@ class SocProductsTreeController extends AbstractController
 
             if ($product->getSocProducts()->isEmpty()) {
                 $em->remove($product);
-                $em->flush();
-                $this->addFlash('success', 'Product  "' . $product->getReferenceName() . '" deleted!');
+                $wasError = false;
+                try {
+                    $em->flush();
+                } catch (\Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException $e) {
+                    $wasError = true;
+                    $this->addFlash('danger', 'An exception occurred while deleting.
+                    This product contains child products or documents that must be deleted first.');
+                }
+                if (!$wasError) {
+                    $this->addFlash('success', 'Product  "' . $product->getReferenceName() . '" deleted!');
+                }
             } else {
                 $this->addFlash('danger', 'This product contains child products and can not be deleted.');
             }

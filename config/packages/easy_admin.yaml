@@ -105,7 +105,7 @@ easy_admin:
 
       ProductNotification:
           class: App\Entity\ProductNotification
-          disabled_actions: ['new']
+          disabled_actions: ['new', 'edit']
           list:
             batch_actions: [{ name: 'delete' }, { name: 'send' }]
             fields:

@@ -19,10 +19,6 @@ class EntityAuditor
     private $uow;
 
     private $updatesEntities;
-    /**
-     * @var array
-     */
-    private $changes;
 
     /**
      * AbstractAuditor constructor.
@@ -50,14 +46,14 @@ class EntityAuditor
 
     public function getChanges()
     {
-        $this->changes = [];
+        $changes = [];
         foreach ($this->updatesEntities as $entity) {
             $_changes = $this->uow->getEntityChangeSet($entity);
             if (is_array($_changes)) {
-                $this->changes[$this->getClassDescription($entity)] = $_changes;
+                $changes[$this->getClassDescription($entity)] = $_changes;
             }
         }
-        return $this->changes;
+        return $changes;
     }
 
     private function getClassDescription($entity)
@@ -105,27 +101,36 @@ class EntityAuditor
     {
         $changes = $this->getChanges();
         $str = '';
-        $allowedTypes = ["boolean","integer",'string', 'NULL', 'double', 'object'];
-        $allowedClasses = [SocProduct::class, SocFile::class, SocImage::class];
+
         if (is_array($changes)) {
             $index = 1;
             foreach ($changes as $key => $change) {
                 $str .= " ■ ($index) $key \n";
                 $index++;
                 foreach ($change as $field => $values) {
-                    if (
-                        in_array(gettype($values[0]), $allowedTypes) && in_array(gettype($values[0]), $allowedClasses)
-                        &&
-                        in_array(gettype($values[1]), $allowedTypes) && in_array(gettype($values[1]), $allowedClasses)
-                    ) {
-                        $str .= "  ● $field\n";
+                    $str .= "  ● $field\n";
+                    if (self::canBeString($values[0]) && self::canBeString($values[1])) {
                         $str .= '    Before: ' . $values[0] . "\n";
                         $str .= '    After: ' . $values[1] . "\n";
-                        $str .= "\n\n\n";
                     }
+                    $str .= "\n\n";
                 }
             }
-            return $str;
         }
+        return $str;
+    }
+
+    public static function canBeString($var)
+    {
+        if (
+            ( !is_array($var) ) &&
+            (
+                ( !is_object($var) && settype($var, 'string') !== false ) ||
+                ( is_object($var) && method_exists($var, '__toString') )
+            )
+        ) {
+            return true;
+        }
+        return false;
     }
 }

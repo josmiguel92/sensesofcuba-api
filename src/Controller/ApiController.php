@@ -33,11 +33,11 @@ class ApiController extends AbstractController
     public function homepage(): \Symfony\Component\HttpFoundation\Response
     {
      //   return new RedirectResponse('index.html');
-         $file = __DIR__. '/../../public/index.html';
+         $file = __DIR__ . '/../../public/index.html';
 
-    if (file_exists($file)) {
-        return new Response(file_get_contents($file));
-    }
+        if (file_exists($file)) {
+            return new Response(file_get_contents($file));
+        }
         throw new NotFoundHttpException('file index.html Not Found.');
     }
 
@@ -67,47 +67,45 @@ class ApiController extends AbstractController
      * @param UserRepository $userRepository
      * @return JsonResponse
      */
-    public function api_products(Request $request,
-                                 SocProductRepository $productRepository,
-                                 UserRepository $userRepository): JsonResponse
-    {
+    public function api_products(
+        Request $request,
+        SocProductRepository $productRepository,
+        UserRepository $userRepository
+    ): JsonResponse {
         $user = null;
         $hiddenProducts = null;
         $useAlternativeDocuments = false;
-        if($username = $this->getUserNameFromCookie($request)) {
+        if ($username = $this->getUserNameFromCookie($request)) {
             $user = $userRepository->findOneBy(['email' => $username]);
         }
-        if($user !== null) {
+        if ($user !== null) {
             $hiddenProducts = $user->getHiddenProducts();
         }
-        if($user->getRole() == 'ROLE_ALTERNATIVE_PRICES_CLIENT')
-        {
+        if ($user->getRole() == 'ROLE_ALTERNATIVE_PRICES_CLIENT') {
             $useAlternativeDocuments = true;
         }
 
 
-        $products = $productRepository->findBy(['enabled'=>true], ['importance'=>'DESC']);
+        $products = $productRepository->findBy(['enabled' => true], ['importance' => 'DESC']);
 
         $lang = substr($request->headers->get('Accept-Language'), 0, 2);
         $lang = in_array($lang, ['en', 'es', 'de', 'fr']) ? $lang : 'en';
 
         $items = [];
 
-        foreach ($products as $product)
-        {
-
-            if($hiddenProducts && $hiddenProducts->contains($product)) {
+        foreach ($products as $product) {
+            if ($hiddenProducts && $hiddenProducts->contains($product)) {
                 continue;
             }
 
 
             $currentIsAvailable = $product->isAvailableForLang($lang);
-            if($currentIsAvailable || !$product->getSocProducts()->isEmpty())
-            {
-                if($useAlternativeDocuments && $product->getAlternativeTranslatedDocumentFilePathByLang($lang))
+            if ($currentIsAvailable || !$product->getSocProducts()->isEmpty()) {
+                if ($useAlternativeDocuments && $product->getAlternativeTranslatedDocumentFilePathByLang($lang)) {
                     $file = $product->getAlternativeTranslatedDocumentFilePathByLang($lang);
-                else
+                } else {
                     $file = $product->getTranslatedDocumentFilePathByLang($lang);
+                }
 
                 $items[] = [
                     'id' => $product->getId(),
@@ -115,13 +113,11 @@ class ApiController extends AbstractController
                     'description' =>  $product->getTranslatedDescOrNull($lang),
                     'file' => $file,
                     'modified_on' =>  $product->getUpdatedAt()->format(self::DATE_FORMAT),
-                    'image' => $product->hasImage() ? 'uploads/images/'.$product->getImage()->getThumbnailPath() : null,
+                    'image' => $product->hasImage() ? 'uploads/images/' . $product->getImage()->getThumbnailPath() : null,
                     'child_of' => $product->getParent() ? $product->getParent()->getId() : null,
                     'subscribed' => $product->getSubscribedUsers()->contains($user),
                 ];
-
             }
-
         }
 
         // Some items with non-approved children are included. (The rule is: have children)
@@ -142,28 +138,27 @@ class ApiController extends AbstractController
         $lang = substr($request->headers->get('Accept-Language'), 0, 2);
         $lang = in_array($lang, ['en', 'es', 'de', 'fr']) ? $lang : 'en';
 
-        $docs = $documentRepository->findBy(['enabled'=>true], ['importance'=>'DESC']);
+        $docs = $documentRepository->findBy(['enabled' => true], ['importance' => 'DESC']);
 
         $items = [];
 
-        foreach ($docs as $doc)
-        {
-
-            if(!$doc->getTranslatedDocument()) {
+        foreach ($docs as $doc) {
+            if (!$doc->getTranslatedDocument()) {
                 continue;
             }
 
             $fallbackEnglish = $doc->isEnglishGlobalTranslation();
-            if($lang !== 'en'
+            if (
+                $lang !== 'en'
                 && !$fallbackEnglish
-                && $doc->translate($lang, false)->getName() === null)
-            {
+                && $doc->translate($lang, false)->getName() === null
+            ) {
                 continue;
             }
 
 
             $file = null;
-            if(
+            if (
                 $doc->getTranslatedDocument()->translate($lang, $fallbackEnglish)
                 &&
                 $filename = $doc->getTranslatedDocument()->translate($lang, $fallbackEnglish)->getFileName()
@@ -197,25 +192,26 @@ class ApiController extends AbstractController
      * @return JsonResponse
      * @throws NotFoundHttpException
      */
-    public function subscribe_to_product(SocProduct $product,
-                                         $action,
-                                         Request $request,
-                                         UserRepository $userRepository,
-                                         ManagerRegistry $managerRegistry): JsonResponse
-    {
+    public function subscribe_to_product(
+        SocProduct $product,
+        $action,
+        Request $request,
+        UserRepository $userRepository,
+        ManagerRegistry $managerRegistry
+    ): JsonResponse {
         $user = null;
-        if($username = $this->getUserNameFromCookie($request))
-            $user = $userRepository->findOneBy(['email'=>$username]);
+        if ($username = $this->getUserNameFromCookie($request)) {
+            $user = $userRepository->findOneBy(['email' => $username]);
+        }
 
-        if(!$user || !$product) {
+        if (!$user || !$product) {
             throw new NotFoundHttpException();
         }
 
-        if($action === 'subscribe') {
+        if ($action === 'subscribe') {
             $product->addSubscribedUser($user);
         }
-        if($action === 'unsubscribe')
-        {
+        if ($action === 'unsubscribe') {
             $product->removeSubscribedUser($user);
         }
 
@@ -223,13 +219,13 @@ class ApiController extends AbstractController
         $em->persist($product);
         $em->flush();
 
-        return $this->json(['status'=>'product updated']);
+        return $this->json(['status' => 'product updated']);
     }
 
     public function getUserNameFromCookie($request)
     {
         $cookieStr = $request->cookies->get(OnJWTAuthenticationSuccess::$cookieName);
-        if($cookie = json_decode($cookieStr, true)) {
+        if ($cookie = json_decode($cookieStr, true)) {
             return $cookie['username'];
         }
         return false;
