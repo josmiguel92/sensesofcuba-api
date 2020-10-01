@@ -3,7 +3,7 @@
         
         <div class="container d-flex flex-column align-items-center">
             <div class="card p-4 shadow w-30">
-                <Dropdown @select="onLangOptions" icon="fa fa-language" class="text-primary" :title="currentLocale" :options="menuOptions" style="text-align: center"></Dropdown>
+                <LangDropdown @select="onLangOptions" :options="menuOptions" class="text-primary" :title="currentLocale" style="text-align: center; color: black !important;"></LangDropdown>
 
                 <form @submit.prevent="handleSubmit" class="d-flex flex-column">
                     <div class="d-flex flex-column align-items-center flex-grow-1 text-center">
@@ -49,9 +49,9 @@
 <script>
 import { mapActions } from 'vuex';
 import Loader from 'vue-spinner/src/PulseLoader.vue';
-import Dropdown from '~/components/Dropdown.vue';
 
 import { setLocale } from '~/i18n.js';
+import LangDropdown from "./LangDropdown.vue";
 
 export default {
     data() {
@@ -64,7 +64,7 @@ export default {
     },
     components: {
         Loader,
-        Dropdown
+        LangDropdown
     },
     methods: {
         ...mapActions(['loginUser']),
@@ -97,7 +97,7 @@ export default {
         onLangOptions(option) {
             setLocale(option);
            // this.$router.go();
-        }
+        },
     },
     computed: {
         currentLocale() {
@@ -108,15 +108,16 @@ export default {
                 {
                     title: this.$t('home.navbar.lang.en'),
                     value: 'en',
-                    icon: 'fa fa-language'
+                    icon: 'flag-icon flag-icon-en'
                 },
                 {
                     title: this.$t('home.navbar.lang.de'),
                     value: 'de',
-                    icon: 'fa fa-language'
+                    icon: 'flag-icon flag-icon-de'
                 }
             ]
         },
+        
     }
 }
 </script>

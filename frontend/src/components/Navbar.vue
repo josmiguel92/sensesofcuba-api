@@ -23,7 +23,8 @@
                 :class="{show: toggled}">
                 <div class="navbar-collapse-header d-flex">
                     <Dropdown @select="onUserOptions" class="text-primary d-lg-none" icon="fa fa-user-circle" :title="currentUser.username" :options="userOptions"></Dropdown>
-                    <Dropdown @select="onLangOptions" icon="fa fa-language" class="text-primary" :title="currentLocale" :options="menuOptions"></Dropdown>
+                    <LangDropdown @select="onLangOptions" :options="menuOptions" class="text-primary" :title="currentLocale" style="text-align: center;"></LangDropdown>
+
                 </div>
                 <div class="dropdown-divider"></div>
                 <ul class="navbar-nav">
@@ -45,6 +46,7 @@
 <script>
 import Dropdown from '~/components/Dropdown.vue';
 import UserModal from '~/components/UserModal.vue';
+import LangDropdown from '~/components/LangDropdown.vue'
 import { mapGetters, mapActions } from 'vuex';
 
 import { setLocale } from '~/i18n.js';
@@ -52,7 +54,9 @@ import { setLocale } from '~/i18n.js';
 export default {
     components: {
         Dropdown,
-        UserModal
+        UserModal,
+        LangDropdown,
+        
     },
     data() {
         return {
@@ -66,12 +70,12 @@ export default {
                 {
                     title: this.$t('home.navbar.lang.en'),
                     value: 'en',
-                    icon: 'fa fa-language'
+                    icon: 'flag-icon flag-icon-en'
                 },
                 {
                     title: this.$t('home.navbar.lang.de'),
                     value: 'de',
-                    icon: 'fa fa-language'
+                    icon: 'flag-icon flag-icon-de'
                 }
             ]
         },
@@ -109,6 +113,7 @@ export default {
                     break;
             }
         },
+        
         onLangOptions(option) {
             setLocale(option);
             this.$router.go();

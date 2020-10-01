@@ -2,13 +2,15 @@
     <div class="modal-backdrop" v-show="isOpen" @click.stop>
         <div class="d-flex flex-column align-items-center justify-content-center flex-grow-1">
             <div class="content card d-flex flex-column">
-                <h4 class="card-title p-2"><i class="fa fa-tag"></i> {{ title }}</h4>
+               
+                <div class="card-actions mt-2 d-flex align-items-center justify-content-between">
+                    <h4 class="card-title p-2"><i class="fa fa-tag"></i> {{ title }}</h4>
+                    <button @click="close" class="btn btn-link" :title="closeText"><i class="fa fa-times-circle fa-2x text-black" style="color: black !important;"></i> </button>
+                </div>
                 <div class="card-content flex-grow-1">
                     <iframe id="view" :src="file"></iframe>
                 </div>
-                <div class="card-actions mt-2 d-flex align-items-center justify-content-end">
-                    <button @click="close" class="btn btn-secondary">{{ closeText }}</button>
-                </div>
+                
             </div>
         </div>
     </div>
@@ -62,9 +64,9 @@ export default {
     display: flex;
     background-color: rgba(0,0,0,0.3);
     .content {
-        width: 90%;
+        width: 96%;
         height: 96%;
-        padding: 1em;
+        padding: .5em;
     }
     #view {
         width: 100%;
