@@ -37,9 +37,9 @@ easy_admin:
             - { property: 'id' }
             - { property: 'enabled' }
             - { property: 'confirmedAt' }
+            - { property: 'lastLogin' }
             - { property: 'email' }
             - { property: 'name' }
-#            - { property: 'lastName' }
             - { property: 'enterprise' }
             - { property: 'travelAgency' }
             - { property: 'country' }
@@ -51,7 +51,6 @@ easy_admin:
           fields:
             - { property: 'enabled', help: 'Select if this user can log in and see products'}
             - { property: 'name' }
-#            - { property: 'lastName' }
             - { property: 'enterprise' }
             - { property: 'travelAgency' }
             - { property: 'country' }
@@ -66,10 +65,10 @@ easy_admin:
             - { property: id}
             - { property: 'enabled' }
             - { property: 'confirmedAt' }
+            - { property: 'lastLogin' }
             - { property: 'name' }
 #            - { property: 'lastName' }
             - { property: 'enterprise' }
-            - { property: 'travelAgency' }
             - { property: 'Admin', type: 'boolean' }
 #            - { property: 'web' }
 

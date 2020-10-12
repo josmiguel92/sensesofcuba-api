@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\EventSubscriber;
 
+use App\Entity\User;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Events as AuthenticationEvents;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
@@ -13,8 +15,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManager;
 use MsgPhp\User\Infrastructure\Security\UserIdentity;
-
 
 final class OnJWTAuthenticationSuccess implements EventSubscriberInterface
 {
@@ -29,12 +31,19 @@ final class OnJWTAuthenticationSuccess implements EventSubscriberInterface
     private $userRepository;
 
     /**
+     * @var EntityManager
+     */
+    private $em;
+
+    /**
      * OnJWTAuthenticationSuccess constructor.
      * @param UserRepository $userRepository
+     * @param EntityManagerInterface $em
      */
-    public function __construct(UserRepository $userRepository)
+    public function __construct(UserRepository $userRepository, EntityManagerInterface $em)
     {
         $this->userRepository = $userRepository;
+        $this->em = $em;
     }
 
     public static function getSubscribedEvents(): array
@@ -43,10 +52,12 @@ final class OnJWTAuthenticationSuccess implements EventSubscriberInterface
         return [
             AuthenticationEvents::AUTHENTICATION_SUCCESS => [
                 ['addUserInfoOnJWTAuthenticationSuccess', 250],
+                ['addLastLoginUserDateTime', 350],
             ],
             KernelEvents::REQUEST => [
                 ['addRequestAuthorizationIfCookieExist', 250]
-            ]
+            ],
+
         ];
     }
 
@@ -55,13 +66,11 @@ final class OnJWTAuthenticationSuccess implements EventSubscriberInterface
 
         $token = null;
 
-        if(($authorization = $event->getRequest()->headers->get('Authorization')) && str_contains($authorization, 'Bearer '))
-        {
+        if (($authorization = $event->getRequest()->headers->get('Authorization')) && str_contains($authorization, 'Bearer ')) {
             return;
         }
 
-        if($event->getRequest()->cookies->get(self::$cookieName))
-        {
+        if ($event->getRequest()->cookies->get(self::$cookieName)) {
             try {
                 $cookie = json_decode($_COOKIE[self::$cookieName], true, 512, JSON_THROW_ON_ERROR);
             } catch (\JsonException $e) {
@@ -71,9 +80,8 @@ final class OnJWTAuthenticationSuccess implements EventSubscriberInterface
         }
 
         $event->getRequest()->headers->add(
-            ['Authorization' => 'Bearer '.$token ]
+            ['Authorization' => 'Bearer ' . $token ]
         );
-
     }
 
     /**
@@ -86,7 +94,7 @@ final class OnJWTAuthenticationSuccess implements EventSubscriberInterface
         $user = $event->getUser();
         $data = $event->getData();
 
-        foreach ($this->getUserDetails($user) as $key => $value){
+        foreach ($this->getUserDetails($user) as $key => $value) {
             $data[$key] = $value;
         }
 
@@ -106,28 +114,27 @@ final class OnJWTAuthenticationSuccess implements EventSubscriberInterface
         $event->getResponse()->headers->setCookie($cookie);
 
         $event->setData($data);
-
     }
 
 
-        /**
+    /**
      * @param UserInterface $user
      * @return array
      */
     private function getUserDetails(UserInterface $user): array
     {
-        if($user instanceof UserIdentity) {
+        if ($user instanceof UserIdentity) {
             $username = $user->getOriginUsername();
 
             $_user = $this->userRepository->find($user->getUserId());
-            if($_user)
-            {
-                if(!$_user->isEnabled()) {
+            if ($_user) {
+                if (!$_user->isEnabled()) {
+                    //TODO: change exception using a simple message to user
                     throw new AccessDeniedHttpException('Account disabled');
                 }
 
-            $roleAdmin = ('ROLE_ADMIN' === $_user->getRole() OR 'ROLE_EDITOR' === $_user->getRole()) ? 0 : -1;
-            return [
+                $roleAdmin = ('ROLE_ADMIN' === $_user->getRole() or 'ROLE_EDITOR' === $_user->getRole()) ? 0 : -1;
+                return [
                 'username' => $username,
                 'roles' => $roleAdmin,
                 'active' => $_user->isEnabled()
@@ -152,5 +159,16 @@ final class OnJWTAuthenticationSuccess implements EventSubscriberInterface
 
 
 
+    public function addLastLoginUserDateTime(AuthenticationSuccessEvent $event)
+    {
 
+        $username = $event->getUser()->getOriginUsername();
+        $user = $this->userRepository->findOneBy(['email' => $username]);
+        if ($user instanceof User) {
+            $user->setLastLogin();
+
+            $this->em->persist($user);
+            $this->em->flush();
+        }
+    }
 }

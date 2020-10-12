@@ -43,11 +43,6 @@ class User extends BaseUser implements DomainEventHandler
      */
     private $name;
 
-//    /**
-//     * @ORM\Column(type="string", length=180)
-//     */
-//    private $lastName;
-
     /**
      * @ORM\Column(type="string", length=180)
      */
@@ -104,6 +99,11 @@ class User extends BaseUser implements DomainEventHandler
      */
     private $preferedLang;
 
+    /**
+     * @ORM\Column(type="datetime_immutable", nullable=true)
+     */
+    private $lastLogin;
+
 
     public function __construct(
         UserId $id,
@@ -156,24 +156,6 @@ class User extends BaseUser implements DomainEventHandler
         $this->name = $name;
         return $this;
     }
-
-//    /**
-//     * @return mixed
-//     */
-//    public function getLastName()
-//    {
-//        return $this->lastName;
-//    }
-//
-//    /**
-//     * @param mixed $lastName
-//     * @return User
-//     */
-//    public function setLastName($lastName): User
-//    {
-//        $this->lastName = $lastName;
-//        return $this;
-//    }
 
     /**
      * @return mixed
@@ -281,7 +263,7 @@ class User extends BaseUser implements DomainEventHandler
 
         return $this;
     }
-//
+
     public function isAdmin(): bool
     {
         return ('ROLE_ADMIN' === $this->getRole() || 'ROLE_EDITOR' === $this->getRole()) ;
@@ -299,9 +281,9 @@ class User extends BaseUser implements DomainEventHandler
         return $this;
     }
 
-/**
- * @return Collection|SocProduct[]
- */
+    /**
+     * @return Collection|SocProduct[]
+     */
     public function getSubscribedProducts(): Collection
     {
         return $this->subscribedProducts;
@@ -331,9 +313,9 @@ class User extends BaseUser implements DomainEventHandler
         return $this;
     }
 
-/**
- * @return Collection|SocProduct[]
- */
+    /**
+     * @return Collection|SocProduct[]
+     */
     public function getHiddenProducts(): Collection
     {
         return $this->hiddenProducts;
@@ -397,5 +379,17 @@ class User extends BaseUser implements DomainEventHandler
     public function getPreferedLang(): string
     {
         return $this->preferedLang ? $this->preferedLang : 'en';
+    }
+
+    public function getLastLogin(): ?\DateTimeImmutable
+    {
+        return $this->lastLogin;
+    }
+
+    public function setLastLogin(): self
+    {
+        $this->lastLogin = new \DateTimeImmutable('now');
+
+        return $this;
     }
 }
