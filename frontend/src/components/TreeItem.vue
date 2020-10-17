@@ -2,14 +2,14 @@
     <div @click.stop="toggle" class="tree-item"  v-if="item.children || item.file || item.description">
         <div class="content d-flex flex-column p-2 justify-content-center">
             <div class="d-flex align-items-center">
-                <div class="d-flex flex-grow-1 align-items-center">
+                <div class="d-flex flex-grow-1 align-items-center justify-content-between">
                     <span class="label d-flex align-items-center ml-2 mr-2">
                         <i class="mr-2" :class="iconClass"></i> {{ item.title }}
                     </span>
-                    <span v-if="!isParent" class="mr-2"> | </span>
-                    <small v-if="!isParent && item.modified_on" class="d-none d-md-inline">{{ $t('general.updated') }}: {{ item.modified_on | date }}</small>
+                    <small v-if="item.modified_on" class="d-none d-md-inline pr-2 pl-1 text-muted">{{ $t('general.updated') }}: {{ item.modified_on | date }}</small>
                 </div>
                 <div class="d-flex">
+                    
                     <SubscribeButton :item="item"></SubscribeButton>
                     <OpenDocumentButton :item="item"  v-if="item.file"></OpenDocumentButton>
                     <a role="button" :href="`${item.file}`" class="btn btn-secondary btn-sm" :download="item.title"  v-if="item.file">
