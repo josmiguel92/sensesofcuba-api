@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\SocProduct;
+use App\Entity\SocProductTranslation;
 use App\EventSubscriber\OnJWTAuthenticationSuccess;
 use App\Form\User\RegisterType;
 use App\Repository\DocumentRepository;
@@ -80,13 +81,14 @@ class ApiController extends AbstractController
         }
         if ($user !== null) {
             $hiddenProducts = $user->getHiddenProducts();
-        }
-        if ($user->getRole() == 'ROLE_ALTERNATIVE_PRICES_CLIENT') {
-            $useAlternativeDocuments = true;
+
+            if ($user->getRole() == 'ROLE_ALTERNATIVE_PRICES_CLIENT') {
+                $useAlternativeDocuments = true;
+            }
         }
 
+        $products = $productRepository->findByEnabledOrdered();
 
-        $products = $productRepository->findBy(['enabled' => true], ['importance' => 'DESC']);
 
         $lang = substr($request->headers->get('Accept-Language'), 0, 2);
         $lang = in_array($lang, ['en', 'es', 'de', 'fr']) ? $lang : 'en';
@@ -94,10 +96,13 @@ class ApiController extends AbstractController
         $items = [];
 
         foreach ($products as $product) {
-            if ($hiddenProducts && $hiddenProducts->contains($product)) {
+            if ($product instanceof  SocProductTranslation or $product === null) {
                 continue;
             }
 
+            if ($hiddenProducts && $hiddenProducts->contains($product)) {
+                continue;
+            }
 
             $currentIsAvailable = $product->isAvailableForLang($lang);
             if ($currentIsAvailable || !$product->getSocProducts()->isEmpty()) {
@@ -115,7 +120,7 @@ class ApiController extends AbstractController
                     'modified_on' =>  $product->getUpdatedAt()->format(self::DATE_FORMAT),
                     'image' => $product->hasImage() ? 'uploads/images/' . $product->getImage()->getThumbnailPath() : null,
                     'child_of' => $product->getParent() ? $product->getParent()->getId() : null,
-                    'subscribed' => $product->getSubscribedUsers()->contains($user),
+                    'subscribed' => $user ? $user->getSubscribedProducts()->contains($product) : false,
                 ];
             }
         }
