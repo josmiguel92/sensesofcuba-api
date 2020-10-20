@@ -43,13 +43,22 @@ class AdminToolsController extends AbstractController
         return $this->render('admin/tools/index.html.twig', [
             'tools' => [
                 [
-                    'name' => 'Send test emails to admin',
-                    'link' => $this->generateUrl('admin_tools_send_test_email')
+                    'name' => 'Export Users data as Excel',
+                    'link' => $this->generateUrl('admin_tools_export_users_as_xls'),
+                    'color' => 'primary',
+                    'icon' => 'fa fa-users'
                 ],
                 [
-                    'name' => 'Register fake user',
-                    'link' => $this->generateUrl('admin_tools_register_fake_user')
+                    'name' => 'Send test emails to admin',
+                    'link' => $this->generateUrl('admin_tools_send_test_email'),
+                    'color' => 'secondary',
+                    'icon' => 'fa fa-send-o'
                 ],
+
+//                [
+//                    'name' => 'Register fake user',
+//                    'link' => $this->generateUrl('admin_tools_register_fake_user')
+//                ],
 
             ]
         ]);
@@ -64,31 +73,24 @@ class AdminToolsController extends AbstractController
         $email = $currentUser->getUsername();
 
         try {
-
             $product = $productRepository->findAll()[0];
             $bus->dispatch(
-            (new Envelope(new ProductUpdated($product->getId())))->with(new SerializerStamp([
-        // groups are applied to the whole message, so make sure
-        // to define the group for every embedded object
-        'groups' => ['my_serialization_groups'],
-            ]))
-        );
+                (new Envelope(new ProductUpdated($product->getId())))->with(new SerializerStamp([
+                // groups are applied to the whole message, so make sure
+                // to define the group for every embedded object
+                'groups' => ['my_serialization_groups'],
+                ]))
+            );
 
             $user = $userRepository->findByUsername($email);
             if ($user instanceof MsgPhpUserBundle\User) {
                 $bus->dispatch(new NotifyUserAboutProductUpdate($user->getId(), $product->getId()));
             }
-
-        }
-        catch (\MsgPhp\Domain\Exception\EntityNotFound $e)
-        {
+        } catch (\MsgPhp\Domain\Exception\EntityNotFound $e) {
             $this->addFlash('warning', $e->getMessage());
         }
 
         return $this->redirectToRoute('admin_tools_index');
-
-
-
     }
 
     /**
@@ -96,7 +98,7 @@ class AdminToolsController extends AbstractController
      */
     public function register_fake_user(MessageBusInterface $bus)
     {
-        $email = uniqid('fakeuser-', false).'@'.'sensesofcuba.com';
+        $email = uniqid('fakeuser-', false) . '@' . 'sensesofcuba.com';
         $userRaw = [
             'email' => $email,
             'password' => $email,
@@ -122,8 +124,7 @@ class AdminToolsController extends AbstractController
     {
         $images = $repository->findAll();
 
-        foreach ($images as $image)
-        {
+        foreach ($images as $image) {
             $image->createCustomThumbnail();
         }
 
@@ -133,6 +134,56 @@ class AdminToolsController extends AbstractController
     }
 
 
+    /**
+     * @Route("/export_users_as_xls", name="export_users_as_xls")
+     * @param \App\Repository\UserRepository $repository
+     * @return Response
+     */
+    public function exportUsersAsXls(\App\Repository\UserRepository $repository)
+    {
+        $usersArray = $repository->findAllAsArray(
+            [
+                'name',
+                'enterprise',
+                'travelAgency',
+                'country',
+                'web',
+                'email',
+                'enabled',
+                'createdAt'
+            ]
+        );
 
+        $objToStr = function ($obj) {
+            if ($obj instanceof \DateTime) {
+                return $obj->format("Y-m-d H:i:s");
+            }
+            if (is_string($obj)) {
+                return $obj;
+            }
+            return  null;
+        };
 
+        $timeStamp = time();
+        $filename = "SoC_infonet_users_export_" . $timeStamp . '.csv';
+
+        $isPrintHeader = false;
+
+        $dumpData = "";
+        foreach ($usersArray as $row) {
+            $row = array_map($objToStr, $row);
+            if (!$isPrintHeader) {
+                $dumpData .= implode("\t", array_keys($row)) . "\n";
+                $isPrintHeader = true;
+            }
+            $dumpData .= implode("\t", array_values($row)) . "\n";
+        }
+
+        return new Response($dumpData, Response::HTTP_OK, [
+            'Content-Type' => "application/vnd.ms-excel",
+            "Content-Disposition" => "attachment; filename=\"$filename\"",
+            "Content-Encoding" => 'UTF-8'
+
+        ]);
+    }
 }
