@@ -141,45 +141,51 @@ class AdminToolsController extends AbstractController
      */
     public function exportUsersAsXls(\App\Repository\UserRepository $repository)
     {
-        $usersArray = $repository->findAllAsArray(
-            [
-                'name',
-                'enterprise',
-                'travelAgency',
-                'country',
-                'web',
-                'email',
-                'enabled',
-                'createdAt'
-            ]
-        );
+        $users = $repository->findAll();
 
-        $objToStr = function ($obj) {
-            if ($obj instanceof \DateTime) {
-                return $obj->format("Y-m-d H:i:s");
-            }
-            if (is_string($obj)) {
-                return $obj;
-            }
-            return  null;
-        };
+        $userPropertyMap = [
+            'name',
+            'enterprise',
+            'travelAgency',
+            'country',
+            'web',
+            'email',
+            'enabled',
+            'createdAt',
+            'lastLogin',
+            'subscribedProducts',
+            'hiddenProducts'
+        ];
 
-        $timeStamp = time();
-        $filename = "SoC_infonet_users_export_" . $timeStamp . '.csv';
+        $dataStr = implode("\t", $userPropertyMap) . "\n";
 
-        $isPrintHeader = false;
-
-        $dumpData = "";
-        foreach ($usersArray as $row) {
-            $row = array_map($objToStr, $row);
-            if (!$isPrintHeader) {
-                $dumpData .= implode("\t", array_keys($row)) . "\n";
-                $isPrintHeader = true;
-            }
-            $dumpData .= implode("\t", array_values($row)) . "\n";
+        foreach ($users as $user) {
+            /**
+             * @var User $user
+             */
+            $createdAt = $user->getCreatedAt() ? $user->getCreatedAt()->format('Y-m-d') : null;
+            $lastLogin = $user->getLastLogin() ? $user->getLastLogin()->format('Y-m-d') : null;
+            $enabled = $user->isEnabled() ? 'Yes' : 'No';
+            $row = [
+                $user->getName(),
+                $user->getEnterprise(),
+                $user->getTravelAgency(),
+                $user->getCountry(),
+                $user->getWeb(),
+                $user->getEmail(),
+                $enabled,
+                $createdAt,
+                $lastLogin,
+                $user->getSubscribedProductsListAsString(),
+                $user->getHiddenProductsListAsString()
+            ];
+            $dataStr .= implode("\t", $row) . "\n";
         }
 
-        return new Response($dumpData, Response::HTTP_OK, [
+        $timeStamp = date("d.m.Y-H.i");
+        $filename = "SoC_infonet_users_export_" . $timeStamp . '.csv';
+
+        return new Response($dataStr, Response::HTTP_OK, [
             'Content-Type' => "application/vnd.ms-excel",
             "Content-Disposition" => "attachment; filename=\"$filename\"",
             "Content-Encoding" => 'UTF-8'
