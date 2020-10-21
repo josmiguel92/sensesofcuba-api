@@ -1,13 +1,13 @@
 {% extends 'email/abacus/base.html.twig' %}
 
-{% set subject = 'Your Senses of Cuba Infonet account has been approved' %}
+{% set subject = 'Your SENSES OF CUBA Infonet account has been approved' %}
 {% block subject %}{{ subject }}{% endblock subject %}
 
 {% block primary %}
     {{ include('email/abacus/modules/_transaction.html.twig', {
         'message_title': subject,
         'username': username,
-        'messages': ['Thank you for joining our Senses of Cuba Infonet.', 'You can access your account at anytime using the link below.'],
+        'messages': ['Thank you for joining our SENSES OF CUBA Infonet.', 'You can access your account at anytime using the link below.'],
         'action_url': action_url,
         'action_text': 'Log in'
     }) }}
