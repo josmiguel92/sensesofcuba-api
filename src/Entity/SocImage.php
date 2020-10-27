@@ -100,7 +100,7 @@ class SocImage
         IMAGETYPE_JPEG => [
             'load' => 'imagecreatefromjpeg',
             'save' => 'imagejpeg',
-            'quality' => 100
+            'quality' => 80
         ],
         IMAGETYPE_PNG => [
             'load' => 'imagecreatefrompng',

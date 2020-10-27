@@ -164,7 +164,7 @@ class AdminToolsController extends AbstractController
              * @var User $user
              */
             $createdAt = $user->getCreatedAt() ? $user->getCreatedAt()->format('Y-m-d') : null;
-            $lastLogin = $user->getLastLogin() ? $user->getLastLogin()->format('Y-m-d') : null;
+            $lastLogin = $user->getLastLogin() ? $user->getLastLogin()->format('Y-m-d Y-m-d H:i') : null;
             $enabled = $user->isEnabled() ? 'Yes' : 'No';
             $row = [
                 $user->getName(),
