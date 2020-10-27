@@ -54,6 +54,12 @@ class AdminToolsController extends AbstractController
                     'color' => 'secondary',
                     'icon' => 'fa fa-send-o'
                 ],
+                [
+                    'name' => 'Remake image thumbnails for products images',
+                    'link' => $this->generateUrl('admin_tools_remake_thumbs'),
+                    'color' => 'secondary',
+                    'icon' => 'fa fa-image'
+                ],
 
 //                [
 //                    'name' => 'Register fake user',
@@ -164,7 +170,7 @@ class AdminToolsController extends AbstractController
              * @var User $user
              */
             $createdAt = $user->getCreatedAt() ? $user->getCreatedAt()->format('Y-m-d') : null;
-            $lastLogin = $user->getLastLogin() ? $user->getLastLogin()->format('Y-m-d Y-m-d H:i') : null;
+            $lastLogin = $user->getLastLogin() ? $user->getLastLogin()->format('Y-m-d H:i') : null;
             $enabled = $user->isEnabled() ? 'Yes' : 'No';
             $row = [
                 $user->getName(),
