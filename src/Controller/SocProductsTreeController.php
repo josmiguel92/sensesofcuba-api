@@ -3,24 +3,16 @@
 namespace App\Controller;
 
 use App\Entity\SocProduct;
-use App\EntityAudition\EntityAuditor;
 use App\Form\SocProductType;
 use App\Message\Events\ProductUpdated;
 use App\Repository\SocProductRepository;
-use Doctrine\ORM\UnitOfWork;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesser;
-use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Messenger\MessageBus;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Mime\MimeTypeGuesserInterface;
-use Symfony\Component\Mime\MimeTypes;
-use Symfony\Component\Mime\MimeTypesInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -103,19 +95,16 @@ class SocProductsTreeController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             if ($product && $product->getParent() && $product->getId() === $product->getParent()->getId()) {
-                $this->addFlash('warning', 'The product parent is not valid. It must be different than himself');
+                $this->addFlash('warning', 'The product cant be its own parent');
             } else {
-                $em = $this->getDoctrine()->getManager();
-                $uow = $em->getUnitOfWork();
-                $auditor = new EntityAuditor($em, $uow);
-
-                if ($auditor->areUpdates()) {
-                    $bus->dispatch(new ProductUpdated($product->getId(), $auditor->getFormattedDiffStr()));
-                    $this->addFlash('success', 'Product "' . $product->getReferenceName() . '" updated!');
-                } else {
-                    $this->addFlash('warning', 'There are not changes on "' . $product->getReferenceName() . '"!');
+                if ($form->get('saveAndAddNotification')->isClicked()) {
+                    $bus->dispatch(new ProductUpdated($product->getId(), ''));
+                    $this->addFlash('success', 'A new notification was added for send to users.');
                 }
 
+                    $this->addFlash('success', 'Product "' . $product->getReferenceName() . '" updated!');
+
+                $this->getDoctrine()->getManager()->persist($product);
                 $this->getDoctrine()->getManager()->flush();
 
                 return $this->redirectToRoute('soc_product_index');
