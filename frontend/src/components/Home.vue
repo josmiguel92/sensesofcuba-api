@@ -10,6 +10,17 @@
                 <path fill="#f9ce1c" stroke="#f9ce1c" stroke-width="2px" class="divider-fg" d="M 0 100 C 40 0 60 0 100 100 Z"></path>
             </svg>
         </section>
+
+        <section id="documents" class="d-flex flex-column align-items-center w-100 bg-light">
+            <h3 class="title p-4">{{ $t('home.documents.title.text1') }} <br> <em class="text-primary">{{ $t('home.documents.title.text2') }}</em></h3>
+            <PulseLoader :loading="inProgress" color="#212121"></PulseLoader>
+            <Documents :items="documents" v-show="!inProgress"></Documents>
+        </section>
+        <svg class="section-divider" viewBox="0 0 100 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path fill="transparent" class="divider-bg" d="M 0 0 L 0 100 L 100 100 L 100 0 Z"></path>
+            <path fill="#f8f9fa" stroke="#f8f9fa" stroke-width="2px" class="divider-fg" d="M 0 100 C 40 0 60 0 100 100 Z"></path>
+        </svg>
+        
         <section id="products" class="d-flex flex-column align-items-center w-100 bg-primary p-2">
             <h3 class="title p-4 text-light">{{ $t('home.products.title.text1') }} <br> <em class="text-dark">{{ $t('home.products.title.text2') }}</em></h3>
             <PulseLoader :loading="inProgress" color="#212121"></PulseLoader>

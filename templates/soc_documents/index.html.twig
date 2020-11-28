@@ -1,7 +1,7 @@
 {% trans_default_domain easyadmin_config('translation_domain') %}
 {% extends easyadmin_config('design.templates.layout') %}
 
-{% block title %}Documents{% endblock %}
+{% block title %}{% if className is defined %}{{ className|title }}{% else %}Documents{% endif %}{% endblock %}
 
 {% block card_document %}
     <div class="accordion" id="accordion-{{ document.id }}">
@@ -57,7 +57,7 @@
         <section class="content-header ">
             <div class="d-flex flex-row justify-content-between align-content-center w-100">
                 <div class="content-header-title">
-                    <h1 class="title">    Documents</h1>
+                    <h1 class="title">    {% if className is defined %}{{ className|title }}{% else %}Documents{% endif %}</h1>
                 </div>
 
                 <div class="global-actions">

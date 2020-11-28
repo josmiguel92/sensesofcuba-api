@@ -16,6 +16,7 @@ easy_admin:
 #          - Products
           - { label: 'Your Products', icon: 'receipt',  route: 'soc_product_index' }
           - { label: 'Documents About Cuba',  icon: 'book',  route: 'soc_document_index'}
+          - { label: 'News',  icon: 'book',  route: 'soc_news_index'}
           - { entity: 'Users', icon: 'users', label: 'Users and clients' }
           - { entity: 'ProductNotification', icon: 'bell', label: 'Product Notifications' }
           - { label: 'Export data & Tools',  icon: 'gear',  route: 'admin_tools_index'}
@@ -100,6 +101,18 @@ easy_admin:
                 - { name: 'soc_document_edit', type: 'route', label: 'Edit', css_class: 'btn btn-primary' }
                 - '-edit'
                 - '-delete'
+      News:
+          class: App\Entity\News
+          list:
+              actions:
+                  - { name: 'soc_news_edit', type: 'route', label: 'Edit' }
+                  - '-edit'
+                  - '-delete'
+          show:
+              actions:
+                  - { name: 'soc_news_edit', type: 'route', label: 'Edit', css_class: 'btn btn-primary' }
+                  - '-edit'
+                  - '-delete'
 
 
       ProductNotification:
