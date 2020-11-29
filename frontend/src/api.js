@@ -31,6 +31,9 @@ class API {
     getDocuments() {
         return this.client.get('documents');
     }
+    getNews() {
+        return this.client.get('news');
+    }
 
     login(email, password) {
         return this.client.post('login', {

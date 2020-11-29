@@ -11,10 +11,10 @@
             </svg>
         </section>
 
-        <section id="documents" class="d-flex flex-column align-items-center w-100 bg-light">
-            <h3 class="title p-4">{{ $t('home.documents.title.text1') }} <br> <em class="text-primary">{{ $t('home.documents.title.text2') }}</em></h3>
+        <section id="news" class="d-flex flex-column align-items-center w-100 bg-light">
+            <h3 class="title p-4">{{ $t('home.news.title.text1') }} <br> <em class="text-primary">{{ $t('home.news.title.text2') }}</em></h3>
             <PulseLoader :loading="inProgress" color="#212121"></PulseLoader>
-            <Documents :items="documents" v-show="!inProgress"></Documents>
+            <News :items="news" v-show="!inProgress"></News>
         </section>
         <svg class="section-divider" viewBox="0 0 100 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
             <path fill="transparent" class="divider-bg" d="M 0 0 L 0 100 L 100 100 L 100 0 Z"></path>
@@ -45,6 +45,7 @@
 <script>
 import ProductGrid from '~/components/ProductGrid.vue';
 import Documents from '~/components/Documents.vue';
+import News from '~/components/News.vue';
 import PulseLoader from 'vue-spinner/src/PulseLoader.vue';
 import { mapActions, mapGetters } from 'vuex';
 import heroImgSrc from '~/assets/images/hero.jpg';
@@ -63,18 +64,19 @@ export default {
     components: {
         ProductGrid,
         Documents,
+        News,
         PulseLoader
     },
     computed: {
-        ...mapGetters(['products', 'documents'])
+        ...mapGetters(['products', 'documents', 'news'])
     },
     methods: {
-        ...mapActions(['fetchProducts', 'fetchDocuments', 'logoutUser'])
+        ...mapActions(['fetchProducts', 'fetchDocuments', 'fetchNews', 'logoutUser'])
     },
     mounted() {
         console.log('Loading data...');
         this.inProgress = true;
-        Promise.all([this.fetchProducts(), this.fetchDocuments()]).then(() => {
+        Promise.all([this.fetchProducts(), this.fetchDocuments(), this.fetchNews()]).then(() => {
             console.log('Data loaded sucessfully!');
             this.inProgress = false;
         }).catch(e => {
@@ -116,7 +118,7 @@ export default {
     bottom: 0;
 }
 
-#products, #documents {
+#products, #documents, #news {
     min-height: 50vh;
 }
 </style>

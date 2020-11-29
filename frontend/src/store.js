@@ -24,12 +24,14 @@ const store = new Vuex.Store({
     state: {
         user: JSON.parse(localStorage.getItem('user')),
         products: [],
-        documents: []
+        documents: [],
+        news: [],
     },
     getters: {
         currentUser: state => state.user,
         products: state => state.products,
-        documents: state => state.documents
+        documents: state => state.documents,
+        news: state => state.news
     },
     mutations: {
         setAuth(state, user) {
@@ -51,6 +53,9 @@ const store = new Vuex.Store({
         },
         setDocuments(state, docs) {
             state.documents = docs;
+        },
+        setNews(state, news) {
+            state.news = news;
         }
     },
     actions: {
@@ -96,6 +101,16 @@ const store = new Vuex.Store({
                 .then(res => {
                     const docs = res.data;
                     commit('setDocuments', docs);
+                    return Promise.resolve();
+                }).catch(e => {
+                    return Promise.reject(e);
+                })
+        },
+        fetchNews({ commit }) {
+            return API.getNews()
+                .then(res => {
+                    const news = res.data;
+                    commit('setNews', news);
                     return Promise.resolve();
                 }).catch(e => {
                     return Promise.reject(e);
