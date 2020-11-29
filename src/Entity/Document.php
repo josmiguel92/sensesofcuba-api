@@ -5,6 +5,8 @@
 namespace App\Entity;
 
 use App\Entity\Traits\IsEnglishGlobalTranslationTrait;
+use App\Entity\Traits\TranslatedDocumentFilesTrait;
+use App\Entity\Traits\CreatedOrUpdatedDatePropertyTrait;
 use Doctrine\ORM\Mapping as ORM;
 use MsgPhp\Domain\Model\CanBeEnabled;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -20,8 +22,10 @@ class Document
 {
     use ORMBehaviors\Translatable\Translatable;
     use ORMBehaviors\Timestampable\Timestampable;
+    use CreatedOrUpdatedDatePropertyTrait;
     use CanBeEnabled;
     use IsEnglishGlobalTranslationTrait;
+    use TranslatedDocumentFilesTrait;
 
     /**
      * @ORM\Id()

@@ -2,7 +2,9 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\CreatedOrUpdatedDatePropertyTrait;
 use App\Entity\Traits\IsEnglishGlobalTranslationTrait;
+use App\Entity\Traits\TranslatedDocumentFilesTrait;
 use App\Repository\NewsRepository;
 use Doctrine\ORM\Mapping as ORM;
 use MsgPhp\Domain\Model\CanBeEnabled;
@@ -16,6 +18,8 @@ class News
 {
     use ORMBehaviors\Translatable\Translatable;
     use ORMBehaviors\Timestampable\Timestampable;
+    use CreatedOrUpdatedDatePropertyTrait;
+    use TranslatedDocumentFilesTrait;
     use CanBeEnabled;
     use IsEnglishGlobalTranslationTrait;
 

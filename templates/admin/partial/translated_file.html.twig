@@ -1,0 +1,5 @@
+{% if value is not empty %}
+    <a href="{{ asset('uploads/files/' ~ value)  }}">View document ({{ field_options.language}})</a>
+{% else %}
+    N/A
+{% endif %}

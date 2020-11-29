@@ -48,12 +48,12 @@ class AdminToolsController extends AbstractController
                     'color' => 'primary',
                     'icon' => 'fa fa-users'
                 ],
-                [
-                    'name' => 'Send test emails to admin',
-                    'link' => $this->generateUrl('admin_tools_send_test_email'),
-                    'color' => 'secondary',
-                    'icon' => 'fa fa-send-o'
-                ],
+//                [
+//                    'name' => 'Send test emails to admin',
+//                    'link' => $this->generateUrl('admin_tools_send_test_email'),
+//                    'color' => 'secondary',
+//                    'icon' => 'fa fa-send-o'
+//                ],
                 [
                     'name' => 'Remake image thumbnails for products images',
                     'link' => $this->generateUrl('admin_tools_remake_thumbs'),
@@ -73,7 +73,7 @@ class AdminToolsController extends AbstractController
     /**
      * @Route("/send_test_email", name="send_test_email")
      */
-    public function send_test_email(MessageBusInterface $bus, SocProductRepository $productRepository, UserRepository $userRepository)
+    public function sendTestEmail(MessageBusInterface $bus, SocProductRepository $productRepository, UserRepository $userRepository)
     {
         $currentUser = $this->getUser();
         $email = $currentUser->getUsername();
@@ -102,7 +102,7 @@ class AdminToolsController extends AbstractController
     /**
      * @Route("/register_fake_user", name="register_fake_user")
      */
-    public function register_fake_user(MessageBusInterface $bus)
+    public function registerFakeUser(MessageBusInterface $bus)
     {
         $email = uniqid('fakeuser-', false) . '@' . 'sensesofcuba.com';
         $userRaw = [
@@ -125,8 +125,10 @@ class AdminToolsController extends AbstractController
 
     /**
      * @Route("/thumbs", name="remake_thumbs")
+     * @param SocImageRepository $repository
+     * @return RedirectResponse
      */
-    public function remake_thumbs(SocImageRepository $repository)
+    public function remakeThumbs(SocImageRepository $repository)
     {
         $images = $repository->findAll();
 

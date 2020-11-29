@@ -20,3 +20,18 @@ body{
 img.img-thumbnail{
     object-fit: cover;
 }
+
+.field-soc_file .form-widget-compound .field-vich_file > legend{
+    display: none;
+}
+.field-soc_file .form-widget-compound .field-vich_file .form-widget  .vich-file{
+    display: grid;
+    grid-template-columns: minmax(15em,35em) auto;
+    grid-gap: 1em;
+}
+.a2lix_translationsFields.tab-content input,
+.a2lix_translationsFields.tab-content textarea
+{
+    width: 100%;
+    min-width: 35em;
+}

@@ -7,6 +7,7 @@ use App\Entity\SocProductTranslation;
 use App\EventSubscriber\OnJWTAuthenticationSuccess;
 use App\Form\User\RegisterType;
 use App\Repository\DocumentRepository;
+use App\Repository\NewsRepository;
 use App\Repository\SocProductRepository;
 use App\Repository\UserRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -131,59 +132,6 @@ class ApiController extends AbstractController
         return new JsonResponse($items);
     }
 
-
-    /**
-     * @Route("/api/documents", name="api_document")
-     * @param DocumentRepository $documentRepository
-     * @return JsonResponse
-     */
-    public function api_document(DocumentRepository $documentRepository, Request $request): JsonResponse
-    {
-
-        $lang = substr($request->headers->get('Accept-Language'), 0, 2);
-        $lang = in_array($lang, ['en', 'es', 'de', 'fr']) ? $lang : 'en';
-
-        $docs = $documentRepository->findBy(['enabled' => true], ['importance' => 'DESC']);
-
-        $items = [];
-
-        foreach ($docs as $doc) {
-            if (!$doc->getTranslatedDocument()) {
-                continue;
-            }
-
-            $fallbackEnglish = $doc->isEnglishGlobalTranslation();
-            if (
-                $lang !== 'en'
-                && !$fallbackEnglish
-                && $doc->translate($lang, false)->getName() === null
-            ) {
-                continue;
-            }
-
-
-            $file = null;
-            if (
-                $doc->getTranslatedDocument()->translate($lang, $fallbackEnglish)
-                &&
-                $filename = $doc->getTranslatedDocument()->translate($lang, $fallbackEnglish)->getFileName()
-            ) {
-                $file = "uploads/files/" . $filename;
-            }
-
-            $items[] = [
-                'id' => $doc->getId(),
-                'title' => $doc->translate($lang)->getName() ?: $doc->getReferenceName(),
-                'description' => $doc->translate($lang)->getDescription(),
-                'file' => $file,
-                'created_on' =>  $doc->getCreatedAt()->format(self::DATE_FORMAT),
-                'modified_on' =>  $doc->getUpdatedAt()->format(self::DATE_FORMAT),
-            ];
-        }
-
-        return new JsonResponse($items);
-    }
-
     /**
      * @Route("/api/product_subscribe/{id}/{action}",
      *     name="api_product_subscribe",
@@ -235,4 +183,116 @@ class ApiController extends AbstractController
         }
         return false;
     }
+
+
+    /**
+     * @Route("/api/documents", name="api_document")
+     * @param DocumentRepository $documentRepository
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function apiDocument(DocumentRepository $documentRepository, Request $request): JsonResponse
+    {
+
+        $lang = $this->getLangFromHeaders($request);
+
+        $docs = $documentRepository->findBy(['enabled' => true], ['importance' => 'DESC']);
+
+        $items = [];
+
+        foreach ($docs as $doc) {
+            if (!$doc->getTranslatedDocument()) {
+                continue;
+            }
+
+            $fallbackEnglish = $doc->isEnglishGlobalTranslation();
+            if (
+                $lang !== 'en'
+                && !$fallbackEnglish
+                && $doc->translate($lang, false)->getName() === null
+            ) {
+                continue;
+            }
+
+
+            $file = null;
+            if (
+                $doc->getTranslatedDocument()->translate($lang, $fallbackEnglish)
+                &&
+                $filename = $doc->getTranslatedDocument()->translate($lang, $fallbackEnglish)->getFileName()
+            ) {
+                $file = "uploads/files/" . $filename;
+            }
+
+            $items[] = [
+                'id' => $doc->getId(),
+                'title' => $doc->translate($lang)->getName() ?: $doc->getReferenceName(),
+                'description' => $doc->translate($lang)->getDescription(),
+                'file' => $file,
+                'created_on' =>  $doc->getCreatedAt()->format(self::DATE_FORMAT),
+                'modified_on' =>  $doc->getUpdatedAt()->format(self::DATE_FORMAT),
+            ];
+        }
+
+        return new JsonResponse($items);
+    }
+
+
+
+    /**
+     * @Route("/api/news", name="api_news")
+     * @param NewsRepository $newRepository
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function apiNews(NewsRepository $newsRepository, Request $request): JsonResponse
+    {
+
+        $lang = $this->getLangFromHeaders($request);
+
+        $news = $newsRepository->findBy(['enabled' => true], ['createdAt' => 'DESC']);
+
+        $items = [];
+
+        foreach ($news as $item) {
+
+            $fallbackEnglish = $item->isEnglishGlobalTranslation();
+            if (
+                $lang !== 'en'
+                && !$fallbackEnglish
+                && $item->translate($lang, false)->getTitle() === null
+            ) {
+                continue;
+            }
+
+
+            $file = null;
+            if (
+                $item->getTranslatedDocument()->translate($lang, $fallbackEnglish)
+                &&
+                $filename = $item->getTranslatedDocument()->translate($lang, $fallbackEnglish)->getFileName()
+            ) {
+                $file = "uploads/files/" . $filename;
+            }
+
+            $updatedAt = $item->getUpdatedAt() == null ? $item->getUpdatedAt()->format(self::DATE_FORMAT) : $item->getCreatedAt()->format(self::DATE_FORMAT);
+            $items[] = [
+                'id' => $item->getId(),
+                'title' => $item->translate($lang)->getTitle() ?: $item->getReferenceName(),
+                'description' => $item->translate($lang)->getDescription(),
+                'file' => $file,
+                'modified_on' =>  $updatedAt,
+            ];
+        }
+
+        return new JsonResponse($items);
+    }
+
+    private function getLangFromHeaders($request): string
+    {
+        $lang = substr($request->headers->get('Accept-Language'), 0, 2);
+        $lang = in_array($lang, ['en', 'es', 'de', 'fr']) ? $lang : 'en';
+        return $lang;
+    }
+
 }
