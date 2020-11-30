@@ -28,6 +28,9 @@
                 </div>
                 <div class="dropdown-divider"></div>
                 <ul class="navbar-nav">
+                    <li class="nav-item active" v-if="news.length > 0">
+                        <a class="nav-link text-primary text-nowrap" href="#news">{{ $t('home.navbar.links.news') }}</a>
+                    </li>
                     <li class="nav-item active">
                         <a class="nav-link text-primary text-nowrap" href="#products">{{ $t('home.navbar.links.products') }}</a>
                     </li>
@@ -93,7 +96,7 @@ export default {
                 //}
             ]
         },
-        ...mapGetters(['currentUser']),
+        ...mapGetters(['currentUser', 'news']),
         currentLocale() {
             return this.$i18n.locale;
         }

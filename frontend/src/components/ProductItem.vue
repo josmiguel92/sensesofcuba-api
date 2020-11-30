@@ -133,4 +133,7 @@ export default {
         background-color: rgba(0,0,0,0.6);
         text-decoration: underline;
 }
+#products.bg-light .container-fluid .item.selected > .panel{
+    background-color: #f9ce1c;
+}
 </style>

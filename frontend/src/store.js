@@ -5,19 +5,20 @@ import API from './api';
 Vue.use(Vuex);
 
 /**
- * Finds all the childrens for a parent node
- * @param {Object} root 
- * @param {Array} data 
+ * Finds all the children for a parent node
+ * @param {Object} root
+ * @param {Array} data
  */
-function buildTree(root, data) {
-	let children = data.filter(e => e.child_of == root.id);
-	if (children.length) {
-		Object.assign(root, { children: children });
-		root.children.map(e => {
-			buildTree(e, data);
-			return e;
-		});
-	}
+function buildTree(root, data)
+{
+    let children = data.filter(e => e.child_of === root.id);
+    if (children.length) {
+        Object.assign(root, { children: children });
+        root.children.map(e => {
+            buildTree(e, data);
+            return e;
+        });
+    }
 }
 
 const store = new Vuex.Store({
@@ -44,12 +45,12 @@ const store = new Vuex.Store({
         },
         setProducts(state, products) {
             console.log('Building Products tree...');
-			const pTree = products.filter(p => !p.child_of).map(p => {
-				buildTree(p, products);
-				return p;
-			});
-			console.log('Done!');
-			state.products = pTree;
+            const pTree = products.filter(p => !p.child_of).map(p => {
+                buildTree(p, products);
+                return p;
+            });
+            console.log('Done!');
+            state.products = pTree;
         },
         setDocuments(state, docs) {
             state.documents = docs;
@@ -61,9 +62,9 @@ const store = new Vuex.Store({
     actions: {
         loginUser({commit}, {email, password}) {
             return API.login(email, password).then(res => {
-               const user = res.data;
-               commit('setAuth', user);
-               return Promise.resolve();
+                const user = res.data;
+                commit('setAuth', user);
+                return Promise.resolve();
             }).catch(e => {
                 return Promise.reject(e);
             })
@@ -140,6 +141,7 @@ const store = new Vuex.Store({
     }
 });
 
-export default function initStore() {
+export default function initStore()
+{
     return store;
 }
