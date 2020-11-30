@@ -40,5 +40,6 @@ class ControllerSubscriber implements  EventSubscriberInterface{
     public function addContentAllowHeader(ResponseEvent $event): void
     {
         $event->getResponse()->headers->set("Access-Control-Allow-Methods", 'POST, GET, OPTIONS');
+        $event->getResponse()->headers->set("Content-Security-Policy", "frame-ancestors 'none'");
     }
 }
