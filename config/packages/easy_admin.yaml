@@ -1,6 +1,7 @@
 easy_admin:
     user:
-        name_property_path: 'originUsername'
+        name_property_path: 'email'
+        display_name: false
     site_name: 'Senses of Cuba <em style="font-size: 80%;">Management</em>'
     list:
       # hide actions by default in a dropdown menu...
@@ -10,21 +11,26 @@ easy_admin:
         assets:
           css:
             - '/assets/admin-rewrite.css'
-        brand_color: '#fdc416'
+          js:
+              - '/assets/bs-custom-file-input.min.js'
+        brand_color: '#caa126'
         menu:
 #          - { entity: 'Categories', label: 'Kind of products' }
 #          - Products
           - { label: 'Your Products', icon: 'receipt',  route: 'soc_product_index' }
-          - { label: 'Documents About Cuba',  icon: 'book',  route: 'soc_document_index'}
+          - { entity: 'Document', icon: 'book', label: 'Informative Documents' }
+          - { entity: 'News', icon: 'newspaper', label: 'News' }
           - { entity: 'Users', icon: 'users', label: 'Users and clients' }
           - { entity: 'ProductNotification', icon: 'bell', label: 'Product Notifications' }
-          - { label: 'Tools',  icon: 'gear',  route: 'admin_tools_index'}
+          - { label: 'Export data & Tools',  icon: 'gear',  route: 'admin_tools_index'}
           - { label: 'Back to Homepage', route: 'homepage', icon: 'home' }
 
       #form_theme: ['@FOSCKEditor/Form/ckeditor_widget.html.twig']
         form_theme:
           - '@EasyAdmin/form/bootstrap_4.html.twig'
           - '@FOSCKEditor/Form/ckeditor_widget.html.twig'
+          - '@A2lixTranslationForm/bootstrap_4_layout.html.twig'
+          - '@VichUploader/Form/fields.html.twig'
     entities:
 
       Users:
@@ -91,15 +97,94 @@ easy_admin:
       Document:
         class: App\Entity\Document
         list:
+            fields:
+                - { property: id}
+                - { property: enabled}
+                - { property: referenceName, label: 'Reference'}
+                - { property: importance, label: 'Importance'}
+                - { property: getEnglishFileLink, label: 'English Version', template: 'admin/partial/translated_file.html.twig', language: 'EN'}
+                - { property: getGermanFileLink, label: 'German Version', template: 'admin/partial/translated_file.html.twig', language: 'DE'}
+#                - { property: getSpanishFileLink, label: 'Spanish Version', template: 'admin/partial/translated_file.html.twig', language: 'ES'}
+                - { property: getCreatedOrUpdatedDate, label: 'Created/Updated At', type: datetime}
+
             actions:
-                - { name: 'soc_document_edit', type: 'route', label: 'Edit' }
-                - '-edit'
+#                - { name: 'soc_document_edit', type: 'route', label: 'Edit' }
+#                - '-edit'
+                - 'show'
                 - '-delete'
+        form:
+            fields:
+                - { type: 'section', label: 'Document basic information', icon: 'book', help: '' }
+                - { property: 'referenceName', help: 'This name will only be used in this admin panel'}
+                - { property: 'enabled', type_options: { required: false } , help: 'Select to show this document to users'}
+                - { property: 'importance', type_options: { required: false }, label: 'Document Importance', help: 'The bigger ones are show first' }
+
+                - { type: 'section', label: 'Multilingual document description', icon: 'language', help: '' }
+                - { property: 'isEnglishGlobalTranslation', help: 'Use english version as fallback', css_class: 'switch-custom'}
+                - { property: 'translations', type: 'A2lix\TranslationFormBundle\Form\Type\TranslationsType', help: 'This name will only be used in this admin panel',  template: 'admin/partial/translated_doc.html.twig'}
+
+                - { type: 'section', label: 'Multilingual document versions', icon: 'file', help: '' }
+                - { property: 'translatedDocument', help: 'Use english version as fallback', type: 'App\Form\TranslatedDocumentType'}
+
         show:
+            fields:
+                - { property: enabled}
+                - { property: referenceName, label: 'Reference'}
+                - { property: importance, label: 'Importance'}
+
+                - { property: getEnglishFileLink, label: 'English Version', template: 'admin/partial/translated_file.html.twig', language: 'EN'}
+                - { property: getGermanFileLink, label: 'German Version', template: 'admin/partial/translated_file.html.twig', language: 'DE'}
+#                - { property: getSpanishFileLink, label: 'Spanish Version', template: 'admin/partial/translated_file.html.twig', language: 'ES'}
+                - { property: getCreatedOrUpdatedDate, label: 'Created/Updated At', type: datetime}
             actions:
-                - { name: 'soc_document_edit', type: 'route', label: 'Edit', css_class: 'btn btn-primary' }
-                - '-edit'
-                - '-delete'
+                - 'edit'
+                - 'delete'
+
+
+      News:
+          class: App\Entity\News
+          list:
+              fields:
+                  - { property: id}
+                  - { property: enabled}
+                  - { property: referenceName, label: 'Reference'}
+                  - { property: getEnglishFileLink, label: 'English Version', template: 'admin/partial/translated_file.html.twig', language: 'EN'}
+                  - { property: getGermanFileLink, label: 'German Version', template: 'admin/partial/translated_file.html.twig', language: 'DE'}
+#                  - { property: getSpanishFileLink, label: 'Spanish Version', template: 'admin/partial/translated_file.html.twig', language: 'ES'}
+                  - { property: getCreatedOrUpdatedDate, label: 'Created/Updated At', type: datetime}
+
+              actions:
+                  #                - { name: 'soc_document_edit', type: 'route', label: 'Edit' }
+                  #                - '-edit'
+                  - 'show'
+                  - '-delete'
+          form:
+              fields:
+                  - { type: 'section', label: 'News basic information', icon: 'book', help: '' }
+                  - { property: 'referenceName', help: 'This name will only be used in this admin panel'}
+                  - { property: 'enabled', type_options: { required: false } , help: 'Select to show this news to users'}
+
+                  - { type: 'section', label: 'Multilingual news description', icon: 'language', help: '' }
+                  - { property: 'isEnglishGlobalTranslation', help: 'Use english version as fallback', css_class: 'switch-custom'}
+                  - { property: 'translations', type: 'A2lix\TranslationFormBundle\Form\Type\TranslationsType', help: 'This name will only be used in this admin panel',  template: 'admin/partial/translated_doc.html.twig'}
+
+                  - { type: 'section', label: 'Multilingual news versions', icon: 'file', help: '' }
+                  - { property: 'translatedDocument', help: 'Use english version as fallback', type: 'App\Form\TranslatedDocumentType'}
+
+          show:
+              fields:
+                  - { property: enabled}
+                  - { property: referenceName, label: 'Reference'}
+
+                  - { property: getEnglishFileLink, label: 'English Version', template: 'admin/partial/translated_file.html.twig', language: 'EN'}
+                  - { property: getGermanFileLink, label: 'German Version', template: 'admin/partial/translated_file.html.twig', language: 'DE'}
+#                  - { property: getSpanishFileLink, label: 'Spanish Version', template: 'admin/partial/translated_file.html.twig', language: 'ES'}
+                  - { property: getCreatedOrUpdatedDate, label: 'Created/Updated At', type: datetime}
+              actions:
+                  - 'edit'
+                  - 'delete'
+
+
 
 
       ProductNotification:

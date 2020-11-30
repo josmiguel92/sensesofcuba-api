@@ -10,7 +10,7 @@
         <section class="content-header ">
             <div class="d-flex flex-row justify-content-between align-content-center w-100">
                 <div class="content-header-title">
-                    <h1 class="title">   Email Tools</h1>
+                    <h1 class="title">   Export data & Tools</h1>
                 </div>
 
 
@@ -27,7 +27,10 @@
                 <ul class="list-unstyled list-inline flex-column" style="display: flex">
                     {% for tool in tools %}
                         <li class="list-group-horizontal mt-4">
-                            <a class="btn" role="button" href="{{ tool.link }}">{{ tool.name }}</a>
+                            <a class="btn {% if tool.color is defined %}btn-{{ tool.color }}{% endif %}" role="button" href="{{ tool.link }}">
+                                {% if tool.icon is defined %}<i class="{{ tool.icon }}"></i>{% endif %}
+                                {{ tool.name }}
+                            </a>
                         </li>
                     {% endfor %}
                 </ul>

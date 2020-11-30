@@ -40,4 +40,5 @@ export default {
 #grid {
     position: relative;
 }
+
 </style>

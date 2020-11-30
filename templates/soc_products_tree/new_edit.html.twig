@@ -192,9 +192,13 @@
     </div>
 
 
-            <button type="submit" class="btn btn-primary action-save">
-                        <span class="btn-label">Save changes</span>
-            </button>
+            <div class="flex justify-content-around" style="display: flex;">
+                <button type="submit" class="btn btn-primary action-save">
+                    <span class="btn-label">Save changes</span>
+                </button>
+                {{ form_widget(form.saveAndAddNotification) }}
+            </div>
+
             {{ form(form) }}
 
         </section>

@@ -43,13 +43,28 @@ class AdminToolsController extends AbstractController
         return $this->render('admin/tools/index.html.twig', [
             'tools' => [
                 [
-                    'name' => 'Send test emails to admin',
-                    'link' => $this->generateUrl('admin_tools_send_test_email')
+                    'name' => 'Export Users data as Excel',
+                    'link' => $this->generateUrl('admin_tools_export_users_as_xls'),
+                    'color' => 'primary',
+                    'icon' => 'fa fa-users'
                 ],
+//                [
+//                    'name' => 'Send test emails to admin',
+//                    'link' => $this->generateUrl('admin_tools_send_test_email'),
+//                    'color' => 'secondary',
+//                    'icon' => 'fa fa-send-o'
+//                ],
                 [
-                    'name' => 'Register fake user',
-                    'link' => $this->generateUrl('admin_tools_register_fake_user')
+                    'name' => 'Remake image thumbnails for products images',
+                    'link' => $this->generateUrl('admin_tools_remake_thumbs'),
+                    'color' => 'secondary',
+                    'icon' => 'fa fa-image'
                 ],
+
+//                [
+//                    'name' => 'Register fake user',
+//                    'link' => $this->generateUrl('admin_tools_register_fake_user')
+//                ],
 
             ]
         ]);
@@ -58,45 +73,38 @@ class AdminToolsController extends AbstractController
     /**
      * @Route("/send_test_email", name="send_test_email")
      */
-    public function send_test_email(MessageBusInterface $bus, SocProductRepository $productRepository, UserRepository $userRepository)
+    public function sendTestEmail(MessageBusInterface $bus, SocProductRepository $productRepository, UserRepository $userRepository)
     {
         $currentUser = $this->getUser();
         $email = $currentUser->getUsername();
 
         try {
-
             $product = $productRepository->findAll()[0];
             $bus->dispatch(
-            (new Envelope(new ProductUpdated($product->getId())))->with(new SerializerStamp([
-        // groups are applied to the whole message, so make sure
-        // to define the group for every embedded object
-        'groups' => ['my_serialization_groups'],
-            ]))
-        );
+                (new Envelope(new ProductUpdated($product->getId())))->with(new SerializerStamp([
+                // groups are applied to the whole message, so make sure
+                // to define the group for every embedded object
+                'groups' => ['my_serialization_groups'],
+                ]))
+            );
 
             $user = $userRepository->findByUsername($email);
             if ($user instanceof MsgPhpUserBundle\User) {
                 $bus->dispatch(new NotifyUserAboutProductUpdate($user->getId(), $product->getId()));
             }
-
-        }
-        catch (\MsgPhp\Domain\Exception\EntityNotFound $e)
-        {
+        } catch (\MsgPhp\Domain\Exception\EntityNotFound $e) {
             $this->addFlash('warning', $e->getMessage());
         }
 
         return $this->redirectToRoute('admin_tools_index');
-
-
-
     }
 
     /**
      * @Route("/register_fake_user", name="register_fake_user")
      */
-    public function register_fake_user(MessageBusInterface $bus)
+    public function registerFakeUser(MessageBusInterface $bus)
     {
-        $email = uniqid('fakeuser-', false).'@'.'sensesofcuba.com';
+        $email = uniqid('fakeuser-', false) . '@' . 'sensesofcuba.com';
         $userRaw = [
             'email' => $email,
             'password' => $email,
@@ -117,13 +125,14 @@ class AdminToolsController extends AbstractController
 
     /**
      * @Route("/thumbs", name="remake_thumbs")
+     * @param SocImageRepository $repository
+     * @return RedirectResponse
      */
-    public function remake_thumbs(SocImageRepository $repository)
+    public function remakeThumbs(SocImageRepository $repository)
     {
         $images = $repository->findAll();
 
-        foreach ($images as $image)
-        {
+        foreach ($images as $image) {
             $image->createCustomThumbnail();
         }
 
@@ -133,6 +142,62 @@ class AdminToolsController extends AbstractController
     }
 
 
+    /**
+     * @Route("/export_users_as_xls", name="export_users_as_xls")
+     * @param \App\Repository\UserRepository $repository
+     * @return Response
+     */
+    public function exportUsersAsXls(\App\Repository\UserRepository $repository)
+    {
+        $users = $repository->findAll();
 
+        $userPropertyMap = [
+            'name',
+            'enterprise',
+            'travelAgency',
+            'country',
+            'web',
+            'email',
+            'enabled',
+            'createdAt',
+            'lastLogin',
+            'subscribedProducts',
+            'hiddenProducts'
+        ];
 
+        $dataStr = implode("\t", $userPropertyMap) . "\n";
+
+        foreach ($users as $user) {
+            /**
+             * @var User $user
+             */
+            $createdAt = $user->getCreatedAt() ? $user->getCreatedAt()->format('Y-m-d') : null;
+            $lastLogin = $user->getLastLogin() ? $user->getLastLogin()->format('Y-m-d H:i') : null;
+            $enabled = $user->isEnabled() ? 'Yes' : 'No';
+            $row = [
+                $user->getName(),
+                $user->getEnterprise(),
+                $user->getTravelAgency(),
+                $user->getCountry(),
+                $user->getWeb(),
+                $user->getEmail(),
+                $enabled,
+                $createdAt,
+                $lastLogin,
+                $user->getSubscribedProductsListAsString(),
+                $user->getHiddenProductsListAsString()
+            ];
+            $dataStr .= implode("\t", $row) . "\n";
+        }
+
+        $timeStamp = date("d.m.Y-H.i");
+        $filename = "SoC_infonet_users_export_" . $timeStamp . '.csv';
+
+        return new Response($dataStr, Response::HTTP_OK, [
+            'Content-Type' => "application/vnd.ms-excel",
+            "Content-Disposition" => "attachment; filename=\"$filename\"",
+            "Content-Encoding" => 'UTF-8'
+
+        ]);
+    }
 }

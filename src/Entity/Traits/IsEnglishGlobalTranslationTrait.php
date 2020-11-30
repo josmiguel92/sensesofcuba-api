@@ -28,7 +28,7 @@ trait IsEnglishGlobalTranslationTrait
      * @param bool $isEnglishGlobalTranslation
      * @return IsEnglishGlobalTranslationTrait
      */
-    public function setIsEnglishGlobalTranslation(bool $isEnglishGlobalTranslation): self
+    public function setIsEnglishGlobalTranslation(bool $isEnglishGlobalTranslation)
     {
         $this->isEnglishGlobalTranslation = $isEnglishGlobalTranslation;
         return $this;

@@ -4,13 +4,17 @@
             <span class="title">{{ item.title }}</span>
         </div>
         <div class="panel p-4" v-active="active">
-            <div class="d-flex align-items-center mb-4">
+            <div class="d-flex align-items-center mb-4 justify-content-between">
                 <h3 class="panel-title text-dark mr-2">{{ item.title }}</h3>
-                <SubscribeButton :item="item"></SubscribeButton>
-                <OpenDocumentButton v-if="item.file" :item="item"></OpenDocumentButton>
-                <a v-if="item.file" role="button" :href="`${item.file}`" class="ml-2 btn btn-primary btn-sm btn-icon" :download="item.title"><i class="fa fa-download"></i>
-                    <span class="d-none d-md-inline">Download</span>
-                </a>
+                <aside class="float-right">
+                    <small v-if="item.modified_on" class="d-none d-md-inline ml-2 mr-2 text-muted">{{ $t('general.updated') }}: {{ item.modified_on | date }}</small>
+                    <SubscribeButton :item="item"></SubscribeButton>
+                    <OpenDocumentButton v-if="item.file" :item="item"></OpenDocumentButton>
+                    <a v-if="item.file" role="button" :href="`${item.file}`" class="ml-2 btn btn-primary btn-sm btn-icon" :download="item.title"><i class="fa fa-download"></i>
+                        <span class="d-none d-md-inline">Download</span>
+                    </a>
+                </aside>
+                
             </div>
             <TreeItem v-for="(child, i) in item.children" :key="i" :item="child"></TreeItem>
         </div>
@@ -128,5 +132,8 @@ export default {
         padding: 3%;
         background-color: rgba(0,0,0,0.6);
         text-decoration: underline;
+}
+#products.bg-light .container-fluid .item.selected > .panel{
+    background-color: #f9ce1c;
 }
 </style>

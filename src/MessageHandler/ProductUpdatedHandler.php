@@ -67,6 +67,8 @@ class ProductUpdatedHandler implements MessageHandlerInterface
             return;
         }
 
+        $product->updateTimestamps();
+        $this->manager->persist($product);
 
         if ($product->getParent() != null) {
             $this->bus->dispatch(

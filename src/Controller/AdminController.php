@@ -51,4 +51,5 @@ class AdminController extends EasyAdminController
         // don't return anything or redirect to any URL because it will be ignored
         // when a batch action finishes, user is redirected to the original page
     }
+
 }

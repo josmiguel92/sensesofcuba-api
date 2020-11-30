@@ -47,6 +47,8 @@ class SocProductType extends EasyAdminFormType
                 ])
             ->add('translatedDocument', TranslatedDocumentType::class)
             ->add('alternativeTranslatedDocument', TranslatedDocumentType::class)
+            ->add('saveAndAddNotification', SubmitType::class, ['label' => 'Save and Add Notification'])
+
         ;
     }
 

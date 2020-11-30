@@ -289,6 +289,24 @@ class User extends BaseUser implements DomainEventHandler
         return $this->subscribedProducts;
     }
 
+
+    /**
+     * @return string
+     */
+    public function getSubscribedProductsListAsString(): string
+    {
+        $str = '';
+        foreach ($this->subscribedProducts as $item) {
+            /**
+             * @var SocProduct $item
+             */
+            $str .= $item->__toString() . ' __ ';
+        }
+        $str = rtrim($str, " _");
+        return $str;
+    }
+
+
     public function addSubscribedProduct(SocProduct $subscribedProduct): self
     {
         if (!$this->subscribedProducts->contains($subscribedProduct)) {
@@ -321,6 +339,21 @@ class User extends BaseUser implements DomainEventHandler
         return $this->hiddenProducts;
     }
 
+    /**
+     * @return string
+     */
+    public function getHiddenProductsListAsString(): string
+    {
+        $str = '';
+        foreach ($this->hiddenProducts as $item) {
+            /**
+             * @var SocProduct $item
+             */
+            $str .= $item->__toString() . ' __ ';
+        }
+        $str = rtrim($str, " _");
+        return $str;
+    }
     public function addHiddenProduct(SocProduct $hiddenProduct): self
     {
         if (!$this->hiddenProducts->contains($hiddenProduct)) {
