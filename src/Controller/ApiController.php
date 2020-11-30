@@ -268,6 +268,8 @@ class ApiController extends AbstractController
 
             $file = null;
             if (
+                $item->getTranslatedDocument()
+                &&
                 $item->getTranslatedDocument()->translate($lang, $fallbackEnglish)
                 &&
                 $filename = $item->getTranslatedDocument()->translate($lang, $fallbackEnglish)->getFileName()
