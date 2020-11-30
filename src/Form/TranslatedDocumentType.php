@@ -14,7 +14,7 @@ class TranslatedDocumentType extends AbstractType
     {
         $builder
             ->add('enFile', SocFileType::class, ['label'=>'English Version file', 'required'=>false])
-            ->add('esFile', SocFileType::class, ['label'=>'Spanish Version file', 'required'=>false])
+//            ->add('esFile', SocFileType::class, ['label'=>'Spanish Version file', 'required'=>false])
             ->add('deFile', SocFileType::class, ['label'=>'German Version file', 'required'=>false])
         ;
     }

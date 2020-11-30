@@ -104,7 +104,7 @@ easy_admin:
                 - { property: importance, label: 'Importance'}
                 - { property: getEnglishFileLink, label: 'English Version', template: 'admin/partial/translated_file.html.twig', language: 'EN'}
                 - { property: getGermanFileLink, label: 'German Version', template: 'admin/partial/translated_file.html.twig', language: 'DE'}
-                - { property: getSpanishFileLink, label: 'Spanish Version', template: 'admin/partial/translated_file.html.twig', language: 'ES'}
+#                - { property: getSpanishFileLink, label: 'Spanish Version', template: 'admin/partial/translated_file.html.twig', language: 'ES'}
                 - { property: getCreatedOrUpdatedDate, label: 'Created/Updated At', type: datetime}
 
             actions:
@@ -134,7 +134,7 @@ easy_admin:
 
                 - { property: getEnglishFileLink, label: 'English Version', template: 'admin/partial/translated_file.html.twig', language: 'EN'}
                 - { property: getGermanFileLink, label: 'German Version', template: 'admin/partial/translated_file.html.twig', language: 'DE'}
-                - { property: getSpanishFileLink, label: 'Spanish Version', template: 'admin/partial/translated_file.html.twig', language: 'ES'}
+#                - { property: getSpanishFileLink, label: 'Spanish Version', template: 'admin/partial/translated_file.html.twig', language: 'ES'}
                 - { property: getCreatedOrUpdatedDate, label: 'Created/Updated At', type: datetime}
             actions:
                 - 'edit'
@@ -150,7 +150,7 @@ easy_admin:
                   - { property: referenceName, label: 'Reference'}
                   - { property: getEnglishFileLink, label: 'English Version', template: 'admin/partial/translated_file.html.twig', language: 'EN'}
                   - { property: getGermanFileLink, label: 'German Version', template: 'admin/partial/translated_file.html.twig', language: 'DE'}
-                  - { property: getSpanishFileLink, label: 'Spanish Version', template: 'admin/partial/translated_file.html.twig', language: 'ES'}
+#                  - { property: getSpanishFileLink, label: 'Spanish Version', template: 'admin/partial/translated_file.html.twig', language: 'ES'}
                   - { property: getCreatedOrUpdatedDate, label: 'Created/Updated At', type: datetime}
 
               actions:
@@ -178,7 +178,7 @@ easy_admin:
 
                   - { property: getEnglishFileLink, label: 'English Version', template: 'admin/partial/translated_file.html.twig', language: 'EN'}
                   - { property: getGermanFileLink, label: 'German Version', template: 'admin/partial/translated_file.html.twig', language: 'DE'}
-                  - { property: getSpanishFileLink, label: 'Spanish Version', template: 'admin/partial/translated_file.html.twig', language: 'ES'}
+#                  - { property: getSpanishFileLink, label: 'Spanish Version', template: 'admin/partial/translated_file.html.twig', language: 'ES'}
                   - { property: getCreatedOrUpdatedDate, label: 'Created/Updated At', type: datetime}
               actions:
                   - 'edit'
