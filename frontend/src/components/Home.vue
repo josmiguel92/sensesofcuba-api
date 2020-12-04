@@ -13,7 +13,7 @@
 
 <!--        news section-->
         <section id="news" class="d-flex flex-column align-items-center w-100 bg-primary" v-show="!inProgress" v-if="news.length > 0">
-            <h3 class="title p-4">{{ $t('home.news.title.text1') }} <br> <em class="text-primary">{{ $t('home.news.title.text2') }}</em></h3>
+            <h3 class="title p-4">{{ $t('home.news.title.text1') }} <br> <em class="text-light">{{ $t('home.news.title.text2') }}</em></h3>
             <PulseLoader :loading="inProgress" color="#212121"></PulseLoader>
             <News :items="news" v-show="!inProgress"></News>
         </section>
@@ -44,7 +44,7 @@
 <!--        end section products-->
 <!--        section documents-->
         <section id="documents" class="d-flex flex-column align-items-center w-100"  v-if="documents.length > 0" v-bind:class="[news.length !== 0 ? 'bg-primary' : 'bg-light']">
-            <h3 class="title p-4">{{ $t('home.documents.title.text1') }} <br> <em class="text-primary">{{ $t('home.documents.title.text2') }}</em></h3>
+            <h3 class="title p-4">{{ $t('home.documents.title.text1') }} <br> <em v-bind:class="[news.length === 0 ? 'text-primary' : 'text-light']">{{ $t('home.documents.title.text2') }}</em></h3>
             <PulseLoader :loading="inProgress" color="#212121"></PulseLoader>
             <Documents :items="documents" v-show="!inProgress"></Documents>
         </section>

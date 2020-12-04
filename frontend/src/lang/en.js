@@ -2,7 +2,7 @@ export default {
     home: {
         navbar: {
             links: {
-                news: 'News',
+                news: 'Cuba and Covid-19',
                 products: 'Our Products',
                 documents: 'About Cuba',
                 contact: 'Contact Us'
@@ -38,8 +38,8 @@ export default {
         },
         news: {
             title: {
-                text1: 'News',
-                text2: ''
+                text1: 'Cuba and',
+                text2: 'Covid-19'
             }
         },
         contact: {

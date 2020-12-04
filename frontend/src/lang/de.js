@@ -2,6 +2,7 @@ export default {
     home: {
         navbar: {
             links: {
+                news: 'Nachrichten',
                 products: 'Unsere Produkte',
                 documents: 'Über Kuba',
                 contact: 'Kontaktiere Sie uns'
@@ -33,6 +34,12 @@ export default {
             title: {
                 text1: 'Über',
                 text2: 'Kuba'
+            }
+        },
+        news: {
+            title: {
+                text1: 'Kuba und',
+                text2: 'Covid-19'
             }
         },
         contact: {
