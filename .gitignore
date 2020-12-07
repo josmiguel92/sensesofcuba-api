@@ -24,3 +24,5 @@
 
 .idea
 public/
+/.env.*
+/dist/.env.*
