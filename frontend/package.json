@@ -2,7 +2,7 @@
   "name": "client-intranet",
   "version": "1.0.0",
   "description": "Client Infonet for sensesofcuba.com",
-  "author": "lexz <lexz.zaldivar@gmail.com>",
+  "author": "lexz <lexz.zaldivar@gmail.com>; josue <josmiguel92@gmail.com",
   "license": "ISC",
   "private": true,
   "browserslist": [

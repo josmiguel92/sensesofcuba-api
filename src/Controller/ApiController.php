@@ -277,7 +277,7 @@ class ApiController extends AbstractController
                 $file = "uploads/files/" . $filename;
             }
 
-            $updatedAt = $item->getUpdatedAt() == null ? $item->getUpdatedAt()->format(self::DATE_FORMAT) : $item->getCreatedAt()->format(self::DATE_FORMAT);
+            $updatedAt = $item->getCreatedOrUpdatedDate()->format(self::DATE_FORMAT);
             $items[] = [
                 'id' => $item->getId(),
                 'title' => $item->translate($lang)->getTitle() ?: $item->getReferenceName(),

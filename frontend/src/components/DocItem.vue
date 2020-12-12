@@ -1,5 +1,5 @@
 <template>
-    <div class="doc-item p-2 bg-secondary d-flex flex-column">
+    <div class="doc-item p-2 bg-secondary d-flex flex-column col-md-5 col-sm-12 col-xl-5">
         <div class="d-flex ml-2 mr-2 flex-column flex-grow-1">
             <h3 class="mt-2">{{ item.title }}</h3>
             <span v-if="item.description">

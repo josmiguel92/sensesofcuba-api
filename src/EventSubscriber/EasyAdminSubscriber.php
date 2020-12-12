@@ -1,11 +1,13 @@
 <?php
 
-
 namespace App\EventSubscriber;
 
+use App\Entity\Document;
+use App\Entity\News;
 use App\Entity\User;
 use App\Message\Events\UserAccountEnabled;
 use Doctrine\ORM\EntityManager;
+use EasyCorp\Bundle\EasyAdminBundle\Event\EasyAdminEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -32,23 +34,29 @@ class EasyAdminSubscriber implements EventSubscriberInterface
      */
     public static function getSubscribedEvents(): array
     {
-        return ['easy_admin.pre_update' => 'sendEnabledAccountNotificationToUser'];
+        return [
+            'easy_admin.pre_update' => 'sendEnabledAccountNotificationToUser',
+            ];
     }
 
     public function sendEnabledAccountNotificationToUser(GenericEvent $event): void
     {
-        $user = $event->getArgument('entity');
-        if(!($user instanceof  User)) {
-            return;
+        $object = $event->getArgument('entity');
+
+        if (($object instanceof  User)) {
+            $user = $object;
+            if ($user->isEnabled() && !$user->getWasEnabled()) {
+                $user->setWasEnabled(true);
+                $this->bus->dispatch(new UserAccountEnabled($user->getEmail(), $user->getName()));
+            }
+
+            $event->setArgument('entity', $user);
         }
 
-        if($user->isEnabled() && !$user->getWasEnabled())
-        {
-            $user->setWasEnabled(true);
-            $this->bus->dispatch(new UserAccountEnabled($user->getEmail(), $user->getName()));
-        }
+        if (($object instanceof  News) || ($object instanceof  Document)) {
+            $object->updateTimestamps();
 
-        $event->setArgument('entity', $user);
+            $event->setArgument('entity', $object);
+        }
     }
-
 }
