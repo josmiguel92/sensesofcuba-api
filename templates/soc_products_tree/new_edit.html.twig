@@ -126,7 +126,9 @@
                     <div class="form-group">
 {#                        {{ form_row(form.file.title) }}#}
 {#                        {{ form_row(form.file.file) }}#}
-                        {{ form_row(form.translatedDocument.enFile) }}
+                        {% if form.translatedDocument.enFile is defined %}
+                            {{ form_row(form.translatedDocument.enFile) }}
+                        {% endif %}
 
 
                     </div>
@@ -136,7 +138,9 @@
                     <div class="form-group">
 {#                        {{ form_row(form.file.title) }}#}
 {#                        {{ form_row(form.file.file) }}#}
-                        {{ form_row(form.translatedDocument.deFile) }}
+                        {% if form.translatedDocument.deFile is defined %}
+                            {{ form_row(form.translatedDocument.deFile) }}
+                        {% endif %}
 
 
                     </div>
@@ -144,9 +148,11 @@
 
                 <div class="col-md-4 card-body">
                     <div class="form-group">
-{#                        {{ form_row(form.file.title) }}#}
-{#                        {{ form_row(form.file.file) }}#}
-                        {{ form_row(form.translatedDocument.esFile) }}
+                        {# { form_row(form.file.title) } #}
+{#                        {{ form_row(form.file.file) }} #}
+                        {% if form.translatedDocument.esFile is defined %}
+                            {{ form_row(form.translatedDocument.esFile) }}
+                        {% endif  %}
 
 
                     </div>
@@ -164,7 +170,9 @@
             <div class="form-group">
                 {#                        {{ form_row(form.file.title) }}#}
                 {#                        {{ form_row(form.file.file) }}#}
-                {{ form_row(form.alternativeTranslatedDocument.enFile) }}
+                {% if form.alternativeTranslatedDocument.enFile is defined %}
+                    {{ form_row(form.alternativeTranslatedDocument.enFile) }}
+                {% endif  %}
 
 
             </div>
@@ -174,7 +182,10 @@
             <div class="form-group">
                 {#                        {{ form_row(form.file.title) }}#}
                 {#                        {{ form_row(form.file.file) }}#}
-                {{ form_row(form.alternativeTranslatedDocument.deFile) }}
+{#                {{ form_row(form.alternativeTranslatedDocument.deFile) }}#}
+                {% if form.alternativeTranslatedDocument.deFile is defined %}
+                    {{ form_row(form.alternativeTranslatedDocument.deFile) }}
+                {% endif  %}
 
 
             </div>
@@ -184,7 +195,10 @@
             <div class="form-group">
                 {#                        {{ form_row(form.file.title) }}#}
                 {#                        {{ form_row(form.file.file) }}#}
-                {{ form_row(form.alternativeTranslatedDocument.esFile) }}
+{#                {{ form_row(form.alternativeTranslatedDocument.esFile) }}#}
+                {% if form.alternativeTranslatedDocument.esFile is defined %}
+                    {{ form_row(form.alternativeTranslatedDocument.esFile) }}
+                {% endif  %}
 
 
             </div>
