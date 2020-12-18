@@ -4,6 +4,7 @@ namespace App\EventSubscriber;
 
 use App\Entity\Document;
 use App\Entity\News;
+use App\Entity\SocProduct;
 use App\Entity\User;
 use App\Message\Events\UserAccountEnabled;
 use Doctrine\ORM\EntityManager;
@@ -35,7 +36,11 @@ class EasyAdminSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            'easy_admin.pre_update' => 'sendEnabledAccountNotificationToUser',
+            'easy_admin.pre_update' => [
+                    ['sendEnabledAccountNotificationToUser', 0],
+                    ['updateTimeStamp', 0]
+                ]
+
             ];
     }
 
@@ -53,7 +58,12 @@ class EasyAdminSubscriber implements EventSubscriberInterface
             $event->setArgument('entity', $user);
         }
 
-        if (($object instanceof  News) || ($object instanceof  Document)) {
+    }
+
+    public function updateTimeStamp(GenericEvent $event)
+    {
+        $object = $event->getArgument('entity');
+        if (($object instanceof  News) || ($object instanceof  Document) || ($object instanceof  SocProduct)) {
             $object->updateTimestamps();
 
             $event->setArgument('entity', $object);

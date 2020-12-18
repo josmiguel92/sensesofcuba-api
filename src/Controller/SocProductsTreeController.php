@@ -102,7 +102,9 @@ class SocProductsTreeController extends AbstractController
                     $this->addFlash('success', 'A new notification was added for send to users.');
                 }
 
-                    $this->addFlash('success', 'Product "' . $product->getReferenceName() . '" updated!');
+                $this->addFlash('success', 'Product "' . $product->getReferenceName() . '" updated!');
+
+                $product->updateTimestamps();
 
                 $this->getDoctrine()->getManager()->persist($product);
                 $this->getDoctrine()->getManager()->flush();
