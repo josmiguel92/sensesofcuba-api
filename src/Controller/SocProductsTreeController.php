@@ -94,12 +94,20 @@ class SocProductsTreeController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $sendNotification = false;
             if ($product && $product->getParent() && $product->getId() === $product->getParent()->getId()) {
                 $this->addFlash('warning', 'The product cant be its own parent');
             } else {
                 if ($form->get('saveAndAddNotification')->isClicked()) {
-                    $bus->dispatch(new ProductUpdated($product->getId(), ''));
+                    $sendNotification = true;
+                }
+
+                $bus->dispatch(new ProductUpdated($product->getId(), '', $sendNotification));
+                
+                if ($sendNotification)
+                {
                     $this->addFlash('success', 'A new notification was added for send to users.');
+
                 }
 
                 $this->addFlash('success', 'Product "' . $product->getReferenceName() . '" updated!');
