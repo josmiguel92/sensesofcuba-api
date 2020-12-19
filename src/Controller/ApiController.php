@@ -11,6 +11,7 @@ use App\Repository\NewsRepository;
 use App\Repository\SocProductRepository;
 use App\Repository\UserRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\CssSelector\Exception\InternalErrorException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -69,7 +70,7 @@ class ApiController extends AbstractController
      * @param UserRepository $userRepository
      * @return JsonResponse
      */
-    public function api_products(
+    public function apiProducts(
         Request $request,
         SocProductRepository $productRepository,
         UserRepository $userRepository
@@ -145,7 +146,7 @@ class ApiController extends AbstractController
      * @return JsonResponse
      * @throws NotFoundHttpException
      */
-    public function subscribe_to_product(
+    public function subscribeToProduct(
         SocProduct $product,
         $action,
         Request $request,
@@ -191,7 +192,7 @@ class ApiController extends AbstractController
      * @param Request $request
      * @return JsonResponse
      */
-    public function apiDocument(DocumentRepository $documentRepository, Request $request): JsonResponse
+    public function apiDocuments(DocumentRepository $documentRepository, Request $request): JsonResponse
     {
 
         $lang = $this->getLangFromHeaders($request);
@@ -238,10 +239,9 @@ class ApiController extends AbstractController
     }
 
 
-
     /**
      * @Route("/api/news", name="api_news")
-     * @param NewsRepository $newRepository
+     * @param NewsRepository $newsRepository
      * @param Request $request
      * @return JsonResponse
      */
@@ -255,7 +255,6 @@ class ApiController extends AbstractController
         $items = [];
 
         foreach ($news as $item) {
-
             $fallbackEnglish = $item->isEnglishGlobalTranslation();
             if (
                 $lang !== 'en'
@@ -296,5 +295,4 @@ class ApiController extends AbstractController
         $lang = in_array($lang, ['en', 'es', 'de', 'fr']) ? $lang : 'en';
         return $lang;
     }
-
 }

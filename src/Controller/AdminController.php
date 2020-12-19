@@ -11,6 +11,14 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\EasyAdminController;
 
 class AdminController extends EasyAdminController
 {
+    /**
+     * Send notifications to users from products updates
+     * 
+     * @param array $ids
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Throwable
+     */
     public function sendBatchAction(array $ids)
     {
         $class = $this->entity['class'];

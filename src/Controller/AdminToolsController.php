@@ -24,7 +24,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\Envelope;
-use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Messenger\MessageBusInterface as Messenger;
 use Symfony\Component\Messenger\Stamp\SerializerStamp;
 use Symfony\Component\Mime\MimeTypeGuesserInterface;
 use Symfony\Component\Mime\MimeTypes;
@@ -72,14 +72,18 @@ class AdminToolsController extends AbstractController
 
     /**
      * @Route("/send_test_email", name="send_test_email")
+     * @param Messenger $bus
+     * @param SocProductRepository $repository
+     * @param UserRepository $usersRepo
+     * @return RedirectResponse
      */
-    public function sendTestEmail(MessageBusInterface $bus, SocProductRepository $productRepository, UserRepository $userRepository)
+    public function sendTestEmail(Messenger $bus, SocProductRepository $repository, UserRepository $usersRepo)
     {
         $currentUser = $this->getUser();
         $email = $currentUser->getUsername();
 
         try {
-            $product = $productRepository->findAll()[0];
+            $product = $repository->findAll()[0];
             $bus->dispatch(
                 (new Envelope(new ProductUpdated($product->getId())))->with(new SerializerStamp([
                 // groups are applied to the whole message, so make sure
@@ -88,7 +92,7 @@ class AdminToolsController extends AbstractController
                 ]))
             );
 
-            $user = $userRepository->findByUsername($email);
+            $user = $usersRepo->findByUsername($email);
             if ($user instanceof MsgPhpUserBundle\User) {
                 $bus->dispatch(new NotifyUserAboutProductUpdate($user->getId(), $product->getId()));
             }
@@ -101,8 +105,10 @@ class AdminToolsController extends AbstractController
 
     /**
      * @Route("/register_fake_user", name="register_fake_user")
+     * @param Messenger $messenger
+     * @return RedirectResponse
      */
-    public function registerFakeUser(MessageBusInterface $bus)
+    public function registerFakeUser(Messenger $messenger)
     {
         $email = uniqid('fakeuser-', false) . '@' . 'sensesofcuba.com';
         $userRaw = [
@@ -115,7 +121,7 @@ class AdminToolsController extends AbstractController
             'travelAgency' => 'Touroperator'
         ];
 
-        $bus->dispatch(new CreateUser($userRaw));
+        $messenger->dispatch(new CreateUser($userRaw));
 
         $this->addFlash('notice', "The user $email was created");
 

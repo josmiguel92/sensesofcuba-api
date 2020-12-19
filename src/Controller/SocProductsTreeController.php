@@ -103,7 +103,7 @@ class SocProductsTreeController extends AbstractController
                 }
 
                 $bus->dispatch(new ProductUpdated($product->getId(), '', $sendNotification));
-                
+
                 if ($sendNotification)
                 {
                     $this->addFlash('success', 'A new notification was added for send to users.');

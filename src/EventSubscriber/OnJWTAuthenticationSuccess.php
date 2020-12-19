@@ -66,18 +66,22 @@ final class OnJWTAuthenticationSuccess implements EventSubscriberInterface
 
         $token = null;
 
-        if (($authorization = $event->getRequest()->headers->get('Authorization')) && str_contains($authorization, 'Bearer ')) {
+        if (
+            ($authorization = $event->getRequest()->headers->get('Authorization'))
+            && str_contains($authorization, 'Bearer ')
+        ) {
             return;
         }
 
-        if ($event->getRequest()->cookies->get(self::$cookieName)) {
+        if ($cookie = $event->getRequest()->cookies->get(self::$cookieName)) {
             try {
-                $cookie = json_decode($_COOKIE[self::$cookieName], true, 512, JSON_THROW_ON_ERROR);
+                $cookie = json_decode($cookie, true, 512, JSON_THROW_ON_ERROR);
             } catch (\JsonException $e) {
                 $cookie = ['token' => null];
             }
-            $token = $cookie['token'];
+               $token = $cookie['token'];
         }
+
 
         $event->getRequest()->headers->add(
             ['Authorization' => 'Bearer ' . $token ]
