@@ -32,6 +32,9 @@
     "doctrine/dbal": {
         "version": "v2.9.2"
     },
+    "doctrine/deprecations": {
+        "version": "v0.5.3"
+    },
     "doctrine/doctrine-bundle": {
         "version": "1.6",
         "recipe": {
@@ -105,6 +108,9 @@
     },
     "erusev/parsedown": {
         "version": "1.7.3"
+    },
+    "friendsofphp/proxy-manager-lts": {
+        "version": "v1.0.3"
     },
     "friendsofsymfony/ckeditor-bundle": {
         "version": "2.0",
