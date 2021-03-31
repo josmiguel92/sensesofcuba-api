@@ -10,22 +10,26 @@ use App\Entity\Traits\CreatedOrUpdatedDatePropertyTrait;
 use Doctrine\ORM\Mapping as ORM;
 use MsgPhp\Domain\Model\CanBeEnabled;
 use Symfony\Component\Validator\Constraints as Assert;
-use Knp\DoctrineBehaviors\Model as ORMBehaviors;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Knp\DoctrineBehaviors\Contract\Entity\TranslatableInterface;
+use Knp\DoctrineBehaviors\Model\Translatable\TranslatableTrait;
+use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
+use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 
 /**
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks
  */
 // The class name will be used to name exposed resources
-class Document
+class Document implements TranslatableInterface, TimestampableInterface
 {
-    use ORMBehaviors\Translatable\Translatable;
-    use ORMBehaviors\Timestampable\Timestampable;
+    use TimestampableTrait;
+    use TranslatableTrait;
     use CreatedOrUpdatedDatePropertyTrait;
     use CanBeEnabled;
     use IsEnglishGlobalTranslationTrait;
     use TranslatedDocumentFilesTrait;
+
 
     /**
      * @ORM\Id()

@@ -5,15 +5,16 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
-use Knp\DoctrineBehaviors\Model as ORMBehaviors;
+use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
+use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\SocFileRepository")
  * @Vich\Uploadable()
  */
-class SocFile
+class SocFile implements TimestampableInterface
 {
-    use ORMBehaviors\Timestampable\Timestampable;
+    use TimestampableTrait;
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -31,7 +32,7 @@ class SocFile
      */
     private $fileName;
 
-    
+
     public function getId(): ?int
     {
         return $this->id;

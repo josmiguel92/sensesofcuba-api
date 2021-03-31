@@ -11,7 +11,7 @@
         "easycorp/easyadmin-bundle": "^2.3",
         "erusev/parsedown": "^1.7",
         "friendsofsymfony/ckeditor-bundle": "^2.1",
-        "knplabs/doctrine-behaviors": "^1.6",
+        "knplabs/doctrine-behaviors": "^2.2",
         "lexik/jwt-authentication-bundle": "^2.8.0",
         "msgphp/user-bundle": "0.13.0.*",
         "sensio/framework-extra-bundle": "^5.5",
@@ -49,7 +49,7 @@
         },
         "sort-packages": true,
         "platform": {
-            "php": "7.3.21"
+            "php": "7.4"
         }
     },
     "autoload": {

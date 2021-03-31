@@ -76,46 +76,46 @@ class TranslatedDocument
         return $this;
     }
 
-    private function createSocFile($file):SocFile
+    private function createSocFile($file): SocFile
     {
-        if($file instanceof UploadedFile){
+        if ($file instanceof UploadedFile) {
             $newSocFile = new SocFile();
             $newSocFile->setFile($file);
-             return $newSocFile;
+            return $newSocFile;
         }
-       return $file;
+        return $file;
     }
 
     public function getDocuments()
     {
         $docs = [];
-        if($this->esFile && $this->esFile->getFileName()) {
+        if ($this->esFile && $this->esFile->getFileName()) {
             $docs[] = ['lang' => 'Spanish', 'file' => $this->esFile];
         }
-        if($this->enFile && $this->enFile->getFileName()) {
+        if ($this->enFile && $this->enFile->getFileName()) {
             $docs[] = ['lang' => 'English', 'file' => $this->enFile];
         }
-        if($this->deFile && $this->deFile->getFileName()) {
+        if ($this->deFile && $this->deFile->getFileName()) {
             $docs[] = ['lang' => 'German', 'file' => $this->deFile];
         }
 
         return $docs;
-
-
     }
 
 
     public function getTranslation($lang): ?SocFile
     {
-        if(!in_array($lang, ['en', 'es', 'de'])) {
+        if (!in_array($lang, ['en', 'es', 'de'])) {
             return null;
         }
 
-        switch ($lang)
-        {
-            case 'es' : return $this->getEsFile();
-            case 'de' : return $this->getDeFile();
-            case 'en' : return $this->getEnFile();
+        switch ($lang) {
+            case 'es':
+                return $this->getEsFile();
+            case 'de':
+                return $this->getDeFile();
+            case 'en':
+                return $this->getEnFile();
         }
     }
 
@@ -124,20 +124,21 @@ class TranslatedDocument
      */
     public function translate($lang, $fallbackEnglish = false): ?SocFile
     {
-        if(in_array($lang, ['en', 'es', 'de'])) {
+        if (in_array($lang, ['en', 'es', 'de'])) {
             $this->lang = $lang;
         }
 
         $translation = $this->getTranslation($lang);
 
-        if($fallbackEnglish && $translation === null) {
+        if ($fallbackEnglish && $translation === null) {
             return $this->getEnFile();
         }
 
         return $translation;
     }
 
-    public function __toString() {
-        return "{". $this->id ."}";
+    public function __toString()
+    {
+        return "{" . $this->id . "}";
     }
 }

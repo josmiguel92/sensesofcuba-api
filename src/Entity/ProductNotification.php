@@ -5,13 +5,15 @@ namespace App\Entity;
 use App\Repository\ProductNotificationRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Model as ORMBehaviors;
+use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
+use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 
 /**
  * @ORM\Entity(repositoryClass=ProductNotificationRepository::class)
  */
-class ProductNotification
+class ProductNotification implements TimestampableInterface
 {
-    use ORMBehaviors\Timestampable\Timestampable;
+    use TimestampableTrait;
 
     /**
      * @ORM\Id

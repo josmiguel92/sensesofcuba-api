@@ -11,8 +11,8 @@
   ],
   "scripts": {
     "watch": "parcel watch ./src/index.html --out-dir ./dist/ --public-url /dist/",
-    "build:prod": "parcel build ./src/index.html --public-url . --detailed-report --no-source-maps --no-cache --out-dir ../public",
-    "build:dev": "set NODE_ENV=development && set VUE_API=https://localhost:8000/api && parcel build ./src/index.html --public-url . --detailed-report --out-dir ./dist/dev",
+    "build": "parcel build ./src/index.html --public-url . --detailed-report --no-source-maps --no-cache --out-dir ../public",
+    "build:dev": "set NODE_ENV=development && set VUE_API=https://localhost:8000/api && parcel build ./src/index.html --public-url . --detailed-report --out-dir ./dist/dev"
   },
   "devDependencies": {
     "@vue/component-compiler-utils": "^3.1.2",

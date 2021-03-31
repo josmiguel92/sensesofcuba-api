@@ -5,7 +5,8 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Knp\DoctrineBehaviors\Model as ORMBehaviors;
+use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
+use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
@@ -13,9 +14,10 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  * @Vich\Uploadable()
  * @ORM\HasLifecycleCallbacks()
  */
-class SocImage
+class SocImage implements TimestampableInterface
 {
-    use ORMBehaviors\Timestampable\Timestampable;
+    use TimestampableTrait;
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -66,7 +68,7 @@ class SocImage
     public function setImageFile(?File $file = null): self
     {
         $this->imageFile = $file;
-        if(null !== $file) {
+        if (null !== $file) {
             $this->updatedAt = new \DateTimeImmutable();
         }
         return $this;
@@ -77,20 +79,23 @@ class SocImage
         return $this->imageName ?? '';
     }
 
-    public function getThumbnailPath() :string
+    public function getThumbnailPath(): string
     {
-        return 'thumbs/'.$this->imageName;
+        return 'thumbs/' . $this->imageName;
     }
 
     /**
      * @ORM\PrePersist()
      * @ORM\PostUpdate()
      */
-    public function createCustomThumbnail() {
+    public function createCustomThumbnail()
+    {
         $uploadDir = __DIR__ . '/../../public/uploads/images/';
-        return $this->createThumbnail($uploadDir . $this->imageName,
-                            $uploadDir . 'thumbs/'.$this->imageName,
-                            400);
+        return $this->createThumbnail(
+            $uploadDir . $this->imageName,
+            $uploadDir . 'thumbs/' . $this->imageName,
+            400
+        );
     }
 
 // Link image type to correct image loader and saver
@@ -119,10 +124,12 @@ class SocImage
      * @param $targetWidth - desired output width
      * @param $targetHeight - desired output height or null
      */
-    function createThumbnail($src, $dest, $targetWidth, $targetHeight = null) {
+    function createThumbnail($src, $dest, $targetWidth, $targetHeight = null)
+    {
 
-        if(file_exists($src) === false || is_file($src) === false)
+        if (file_exists($src) === false || is_file($src) === false) {
             return;
+        }
 
         // 1. Load the image from the given $src
         // - see if the file actually exists
@@ -160,7 +167,6 @@ class SocImage
 
         // maintain aspect ratio when no height set
         if ($targetHeight == null) {
-
             // get width to height ratio
             $ratio = $width / $height;
 
@@ -182,7 +188,6 @@ class SocImage
 
         // set transparency options for GIFs and PNGs
         if ($type == IMAGETYPE_GIF || $type == IMAGETYPE_PNG) {
-
             // make image transparent
             imagecolortransparent(
                 $thumbnail,
@@ -200,9 +205,14 @@ class SocImage
         imagecopyresampled(
             $thumbnail,
             $image,
-            0, 0, 0, 0,
-            $targetWidth, $targetHeight,
-            $width, $height
+            0,
+            0,
+            0,
+            0,
+            $targetWidth,
+            $targetHeight,
+            $width,
+            $height
         );
 
 

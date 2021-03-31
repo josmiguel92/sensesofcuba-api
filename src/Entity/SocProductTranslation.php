@@ -4,18 +4,27 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Knp\DoctrineBehaviors\Model as ORMBehaviors;
+use Knp\DoctrineBehaviors\Contract\Entity\TranslationInterface;
+use Knp\DoctrineBehaviors\Model\Translatable\TranslationTrait;
 
 /**
  * @ORM\Entity()
  */
-class SocProductTranslation
+class SocProductTranslation implements TranslationInterface
 {
-     use ORMBehaviors\Translatable\Translation;
+    use TranslationTrait;
 
-     /**
-     * @ORM\Column(type="string", length=180)
+
+    /**
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
+    private $id;
+
+    /**
+    * @ORM\Column(type="string", length=180)
+    */
     private $name;
 
     /**
@@ -62,6 +71,11 @@ class SocProductTranslation
     public function __toString()
     {
         return "[". $this->locale . "] ". $this->name;
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
     }
 
 }

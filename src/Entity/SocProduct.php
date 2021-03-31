@@ -6,16 +6,19 @@ use App\Entity\Traits\IsEnglishGlobalTranslationTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Knp\DoctrineBehaviors\Model as ORMBehaviors;
+use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
+use Knp\DoctrineBehaviors\Contract\Entity\TranslatableInterface;
+use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
+use Knp\DoctrineBehaviors\Model\Translatable\TranslatableTrait;
 use MsgPhp\Domain\Model\CanBeEnabled;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\SocProductRepository")
  */
-class SocProduct
+class SocProduct implements TimestampableInterface, TranslatableInterface
 {
-    use ORMBehaviors\Translatable\Translatable;
-    use ORMBehaviors\Timestampable\Timestampable;
+    use TimestampableTrait;
+    use TranslatableTrait;
     use CanBeEnabled;
     use HasImageTrait;
     use IsEnglishGlobalTranslationTrait;

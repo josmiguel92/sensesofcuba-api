@@ -4,16 +4,30 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Knp\DoctrineBehaviors\Model as ORMBehaviors;
+use Knp\DoctrineBehaviors\Contract\Entity\TranslationInterface;
+use Knp\DoctrineBehaviors\Model\Translatable\TranslationTrait;
 
 /**
  * @ORM\Entity()
  */
-class DocumentTranslation
+class DocumentTranslation  implements TranslationInterface
 {
-     use ORMBehaviors\Translatable\Translation;
+    use TranslationTrait;
 
-     /**
+    /**
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+
+    /**
      * @ORM\Column(type="string", length=180)
      */
     private $name;
