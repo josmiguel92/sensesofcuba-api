@@ -34,7 +34,9 @@
         "twig/cssinliner-extra": "^3.0",
         "twig/inky-extra": "^3.0",
         "twig/markdown-extra": "^3.0",
-        "vich/uploader-bundle": "^1.15"
+        "vich/uploader-bundle": "^1.15",
+        "ext-pdo": "*",
+        "ext-zip": "*"
     },
     "require-dev": {
         "doctrine/doctrine-migrations-bundle": "^3.0",
