@@ -14,6 +14,7 @@ use Knp\DoctrineBehaviors\Model as ORMBehaviors;
 class SocFile
 {
     use ORMBehaviors\Timestampable\Timestampable;
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -31,7 +32,7 @@ class SocFile
      */
     private $fileName;
 
-    
+
     public function getId(): ?int
     {
         return $this->id;
@@ -58,22 +59,20 @@ class SocFile
     }
 
     /**
-     * @param File|\Symfony\Component\HttpFoundation\File\UploadedFile $file
+     * @param File|null $file
      * @return SocFile
-     * @throws \Exception
      */
     public function setFile(?File $file = null): self
     {
         $this->file = $file;
-        if(null !== $file)
+        if (null !== $file) {
             $this->updatedAt = new \DateTimeImmutable();
+        }
         return $this;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
-        return $this->fileName;
+        return $this->fileName ?? sprintf("Document with %s ID", $this->getId());
     }
-
-
 }

@@ -163,7 +163,7 @@ class SocProduct
         return $this;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         if ($this->parent && $this->getReferenceName()) {
             return  $this->parent->getReferenceName() . ' / ' . $this->getReferenceName();

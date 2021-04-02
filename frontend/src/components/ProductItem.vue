@@ -5,7 +5,10 @@
         </div>
         <div class="panel p-4" v-active="active">
             <div class="d-flex align-items-center mb-4 justify-content-between">
-                <h3 class="panel-title text-dark mr-2">{{ item.title }}</h3>
+                <h3 class="panel-title text-dark mr-2">
+                    {{ item.title }}
+                    <span class="badge badge-pill badge-secondary text-sm"  v-if="item.children.length > 1">{{ item.children.length }}</span>
+                </h3>
                 <aside class="float-right">
                     <small v-if="item.modified_on" class="d-none d-md-inline ml-2 mr-2 text-muted">{{ $t('general.updated') }}: {{ item.modified_on | date }}</small>
                     <SubscribeButton :item="item"></SubscribeButton>

@@ -17,13 +17,21 @@ easy_admin:
         menu:
 #          - { entity: 'Categories', label: 'Kind of products' }
 #          - Products
+          - { label: 'Content' }
           - { label: 'Your Products', icon: 'receipt',  route: 'soc_product_index' }
           - { entity: 'Document', icon: 'book', label: 'Informative Documents' }
           - { entity: 'News', icon: 'newspaper', label: 'News' }
+          - { label: 'Management' }
           - { entity: 'Users', icon: 'users', label: 'Users and clients' }
           - { entity: 'ProductNotification', icon: 'bell', label: 'Product Notifications' }
+          - { label: 'Administration' }
           - { label: 'Export data & Tools',  icon: 'gear',  route: 'admin_tools_index'}
-          - { label: 'Back to Homepage', route: 'homepage', icon: 'home' }
+          - { label: 'Support' }
+          - { label: 'Ask for a feature', url: 'mailto:infonet-support-feature@meatmemi.33mail.com', icon: 'envelope' }
+          - { label: 'Report an issue', url: "mailto:infonet-support-bug@meatmemi.33mail.com", icon: 'bug'}
+          - { label: 'Links' }
+          - { label: 'Back to Infonet', route: 'homepage', icon: 'home' }
+          - { label: 'SensesOfCuba.com', url: 'https://sensesofcuba.com', icon: 'home' }
 
       #form_theme: ['@FOSCKEditor/Form/ckeditor_widget.html.twig']
         form_theme:

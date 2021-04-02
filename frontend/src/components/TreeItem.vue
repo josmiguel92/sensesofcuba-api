@@ -5,6 +5,8 @@
                 <div class="d-flex flex-grow-1 align-items-center justify-content-between">
                     <span class="label d-flex align-items-center ml-2 mr-2">
                         <i class="mr-2" :class="iconClass"></i> {{ item.title }}
+                        
+                        <span class="badge badge-pill badge-primary text-sm ml-2"  v-if="isParent">{{ item.children.length }}</span>
                     </span>
                     <small v-if="item.modified_on" class="d-none d-md-inline pr-2 pl-1 text-muted">{{ $t('general.updated') }}: {{ item.modified_on | date }}</small>
                 </div>
