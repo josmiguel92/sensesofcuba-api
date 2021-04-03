@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\SocFile;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Vich\UploaderBundle\Form\Type\VichFileType;
@@ -23,9 +24,15 @@ class SocFileType extends AbstractType
 //            ->add('fileSize')
 //            ->add('createdAt')
 //            ->add('updatedAt')
-            ->add('file', VichFileType::class,  [
+            ->add('title', TextType::class, [
+                'required' => false,
+                'label' => 'Title',
+                'help' => 'It\'s optional. It may be shown to users on Downloads button'
+            ])
+            ->add('file', VichFileType::class, [
                 'required' => false
             ])
+
 
         ;
     }

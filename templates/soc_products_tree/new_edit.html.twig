@@ -7,7 +7,7 @@
 
 {% block content %}
 <link rel="stylesheet" href="{{ asset('assets/bootstrap-select.min.css') }}">
-<script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.min.js"></script>
+<script src="{{ asset('assets/bs-custom-file-input.min.js') }}"></script>
 <script src="{{ asset('assets/bootstrap-select.min.js') }}"></script>
 
 {#{% form_theme form '@EasyAdminBundle:form:bootstrap_4.html.twig' %}#}
@@ -159,6 +159,89 @@
                 </div>
     </div>
 
+<div class="row">
+        <div class="col-md-12">
+            <h5>Product Collection</h5>
+        </div>
+    </div>
+    <div class="row">
+
+
+{#        {{ dump(product.documentCollection) }}#}
+        <ul class="documentCollection "  data-prototype="{{ form_widget(form.documentCollection.vars.prototype)|e('html_attr') }}">
+            {% for document in form.documentCollection %}
+                {{ dump(document) }}
+                <li class="row form-group" style="display: flex">{{ form_row(document) }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="row">
+
+        <button type="button" class="btn btn-primary btn-sm add_item_link documentCollection_btn" data-collection-holder-class="documentCollection">Add a new Document</button>
+
+
+        <style>
+            ul.documentCollection li > div{
+                display: flex;
+                gap: 2em;
+                border-bottom: #c9d2d9 solid 2px;
+            }
+        </style>
+        <script>
+            function addFormToCollection($collectionHolderClass) {
+
+
+                // Get the ul that holds the collection of tags
+                var $collectionHolder = document.querySelector($collectionHolderClass)
+
+                // Get the data-prototype explained earlier
+                var prototype = $collectionHolder.dataset.prototype;
+
+                console.log(prototype)
+                // get the new index
+                var index = Number($collectionHolder.dataset.index);
+
+                var newForm = prototype;
+                // You need this only if you didn't set 'label' => false in your tags field in TaskType
+                // Replace '__name__label__' in the prototype's HTML to
+                // instead be a number based on how many items we have
+                // newForm = newForm.replace(/__name__label__/g, index);
+
+                // Replace '__name__' in the prototype's HTML to
+                // instead be a number based on how many items we have
+                newForm = newForm.replace(/__name__/g, index);
+                console.log(newForm)
+
+                // increase the index with one for the next item
+                $collectionHolder.dataset.index = index + 1;
+
+                // Display the form in the page in an li, before the "Add a tag" link li
+                var $newFormLi = $('<li class="row form-group" style="display: flex">').append(newForm);
+                // Add the new form at the end of the list
+                console.log($collectionHolder);
+
+                $collectionHolder.append($newFormLi[0])
+            }
+
+            jQuery(document).ready(function() {
+                // Get the ul that holds the collection of formTypes
+                var elementSelector = 'ul.documentCollection';
+                var itemsCollection = document.querySelector(elementSelector);
+
+                // count the current form inputs we have (e.g. 2), use that as the new
+                // index when inserting a new item (e.g. 2)
+                itemsCollection.dataset.index = itemsCollection.querySelectorAll('input').length
+
+                document.querySelector('.documentCollection_btn.add_item_link').addEventListener('click', function (e){
+                    addFormToCollection(elementSelector)
+                })
+            });
+        </script>
+
+
+
+    </div>
+
     <div class="row">
         <div class="col-md-12">
             <h5>Alternative Product PDF File (Only for users with alternative prices)</h5>
@@ -213,6 +296,7 @@
                 {{ form_widget(form.saveAndAddNotification) }}
             </div>
 
+            {% dump(product.id) %}
             {{ form(form) }}
 
         </section>

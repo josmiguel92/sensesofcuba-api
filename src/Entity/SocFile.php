@@ -32,6 +32,11 @@ class SocFile
      */
     private $fileName;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $title;
+
 
     public function getId(): ?int
     {
@@ -74,5 +79,17 @@ class SocFile
     public function __toString(): string
     {
         return $this->fileName ?? sprintf("Document with %s ID", $this->getId());
+    }
+
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+
+    public function setTitle(?string $title): self
+    {
+        $this->title = $title;
+
+        return $this;
     }
 }

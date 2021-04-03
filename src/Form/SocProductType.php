@@ -5,12 +5,14 @@ namespace App\Form;
 use A2lix\TranslationFormBundle\Form\Type\TranslationsType;
 use App\Entity\SocFile;
 use App\Entity\SocProduct;
+use App\Entity\TranslatedDocument;
 use EasyCorp\Bundle\EasyAdminBundle\Form\Type\Configurator\EntityTypeConfigurator;
 use EasyCorp\Bundle\EasyAdminBundle\Form\Type\EasyAdminAutocompleteType;
 use EasyCorp\Bundle\EasyAdminBundle\Form\Type\EasyAdminFormType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -45,6 +47,11 @@ class SocProductType extends EasyAdminFormType
                     'label' => "Use english version as fallback",
                     'required' => false
                 ])
+            ->add('documentCollection', CollectionType::class, [
+                'entry_type' => TranslatedDocumentType::class,
+                'allow_add' => true,
+                'entry_options' => ['label' => false],
+            ])
             ->add('translatedDocument', TranslatedDocumentType::class)
             ->add('alternativeTranslatedDocument', TranslatedDocumentType::class)
             ->add('saveAndAddNotification', SubmitType::class, ['label' => 'Save and Add Notification'])
