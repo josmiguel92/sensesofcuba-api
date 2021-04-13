@@ -8,16 +8,16 @@ use App\Entity\Traits\TranslatedDocumentFilesTrait;
 use App\Repository\NewsRepository;
 use Doctrine\ORM\Mapping as ORM;
 use MsgPhp\Domain\Model\CanBeEnabled;
-use Knp\DoctrineBehaviors\Model as ORMBehaviors;
+use Knp\DoctrineBehaviors\Contract\Entity\TranslatableInterface;
+use Knp\DoctrineBehaviors\Model\Translatable\TranslatableTrait;
 
 /**
  * @ORM\Entity(repositoryClass=NewsRepository::class)
  * @ORM\HasLifecycleCallbacks
  */
-class News
+class News implements TranslatableInterface
 {
-    use ORMBehaviors\Translatable\Translatable;
-    use ORMBehaviors\Timestampable\Timestampable;
+    use TranslatableTrait;
     use CreatedOrUpdatedDatePropertyTrait;
     use TranslatedDocumentFilesTrait;
     use CanBeEnabled;

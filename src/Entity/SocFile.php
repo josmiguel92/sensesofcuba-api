@@ -5,16 +5,16 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
-use Knp\DoctrineBehaviors\Model as ORMBehaviors;
+use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
+use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\SocFileRepository")
  * @Vich\Uploadable()
  */
-class SocFile
+class SocFile implements TimestampableInterface
 {
-    use ORMBehaviors\Timestampable\Timestampable;
-
+    use TimestampableTrait;
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -31,11 +31,6 @@ class SocFile
      * @ORM\Column(type="string", length=180, nullable=true)
      */
     private $fileName;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $title;
 
 
     public function getId(): ?int
@@ -64,32 +59,22 @@ class SocFile
     }
 
     /**
-     * @param File|null $file
+     * @param File|\Symfony\Component\HttpFoundation\File\UploadedFile $file
      * @return SocFile
+     * @throws \Exception
      */
     public function setFile(?File $file = null): self
     {
         $this->file = $file;
-        if (null !== $file) {
+        if(null !== $file)
             $this->updatedAt = new \DateTimeImmutable();
-        }
         return $this;
     }
 
-    public function __toString(): string
+    public function __toString()
     {
-        return $this->fileName ?? sprintf("Document with %s ID", $this->getId());
+        return $this->fileName;
     }
 
-    public function getTitle(): ?string
-    {
-        return $this->title;
-    }
 
-    public function setTitle(?string $title): self
-    {
-        $this->title = $title;
-
-        return $this;
-    }
 }

@@ -35,11 +35,6 @@ class TranslatedDocument
      */
     private $deFile;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=SocProduct::class, inversedBy="documentCollection")
-     */
-    private $socProduct;
-
     public function getId(): ?int
     {
         return $this->id;
@@ -81,7 +76,7 @@ class TranslatedDocument
         return $this;
     }
 
-    private function createSocFile($file):SocFile
+    private function createSocFile($file): SocFile
     {
         if ($file instanceof UploadedFile) {
             $newSocFile = new SocFile();
@@ -115,9 +110,12 @@ class TranslatedDocument
         }
 
         switch ($lang) {
-            case 'es': return $this->getEsFile();
-            case 'de': return $this->getDeFile();
-            case 'en': return $this->getEnFile();
+            case 'es':
+                return $this->getEsFile();
+            case 'de':
+                return $this->getDeFile();
+            case 'en':
+                return $this->getEnFile();
         }
     }
 
@@ -141,18 +139,6 @@ class TranslatedDocument
 
     public function __toString()
     {
-        return "{". $this->id ."}";
-    }
-
-    public function getSocProduct(): ?SocProduct
-    {
-        return $this->socProduct;
-    }
-
-    public function setSocProduct(?SocProduct $socProduct): self
-    {
-        $this->socProduct = $socProduct;
-
-        return $this;
+        return "{" . $this->id . "}";
     }
 }

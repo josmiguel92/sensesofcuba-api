@@ -250,7 +250,7 @@ class ApiController extends AbstractController
 
         $lang = $this->getLangFromHeaders($request);
 
-        $news = $newsRepository->findBy(['enabled' => true], ['updatedAt' => 'DESC']);
+        $news = $newsRepository->findBy(['enabled' => true], ['createdAt' => 'DESC']);
 
         $items = [];
 
