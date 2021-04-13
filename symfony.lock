@@ -157,25 +157,6 @@
     "monolog/monolog": {
         "version": "1.25.5"
     },
-    "msgphp/domain": {
-        "version": "v0.13.0"
-    },
-    "msgphp/user": {
-        "version": "v0.13.0"
-    },
-    "msgphp/user-bundle": {
-        "version": "0.10",
-        "recipe": {
-            "repo": "github.com/symfony/recipes-contrib",
-            "branch": "master",
-            "version": "0.10",
-            "ref": "4067ee796789a8828ec72f82c76508a76875bcf8"
-        },
-        "files": [
-            "./config/packages/msgphp_user.php",
-            "./src/Entity/User.php"
-        ]
-    },
     "namshi/jose": {
         "version": "7.2.3"
     },
@@ -203,6 +184,9 @@
     "psr/container": {
         "version": "1.0.0"
     },
+    "psr/event-dispatcher": {
+        "version": "1.0.0"
+    },
     "psr/log": {
         "version": "1.1.0"
     },
@@ -223,6 +207,9 @@
         "files": [
             "./config/packages/sensio_framework_extra.yaml"
         ]
+    },
+    "symfony/amqp-messenger": {
+        "version": "v5.2.4"
     },
     "symfony/asset": {
         "version": "v4.3.4"
@@ -255,9 +242,6 @@
     "symfony/css-selector": {
         "version": "v4.4.0"
     },
-    "symfony/debug": {
-        "version": "v4.3.4"
-    },
     "symfony/dependency-injection": {
         "version": "v4.3.4"
     },
@@ -266,6 +250,9 @@
     },
     "symfony/doctrine-bridge": {
         "version": "v4.3.4"
+    },
+    "symfony/doctrine-messenger": {
+        "version": "v5.2.5"
     },
     "symfony/dom-crawler": {
         "version": "v4.4.18"
@@ -341,9 +328,6 @@
         "version": "v4.3.4"
     },
     "symfony/http-kernel": {
-        "version": "v4.3.4"
-    },
-    "symfony/inflector": {
         "version": "v4.3.4"
     },
     "symfony/intl": {
@@ -450,6 +434,12 @@
     },
     "symfony/property-access": {
         "version": "v4.3.4"
+    },
+    "symfony/property-info": {
+        "version": "v5.2.4"
+    },
+    "symfony/redis-messenger": {
+        "version": "v5.2.4"
     },
     "symfony/routing": {
         "version": "4.2",
