@@ -165,14 +165,14 @@ class SocProduct
 
     public function __toString()
     {
-        if ($this->parent && $this->getReferenceName()) {
-            return  $this->parent->getReferenceName() . ' / ' . $this->getReferenceName();
-        }
+        if($this->parent && $this->getReferenceName() )
+
+            return  $this->parent->getReferenceName(). ' / ' . $this->getReferenceName();
 
         return $this->getReferenceName() ?? 'empty';
     }
 
-    public function setEnabled(bool $enabled): void
+    public function setEnabled(bool $enabled):void
     {
         $this->enabled = $enabled;
     }
@@ -231,14 +231,12 @@ class SocProduct
 
     public function isAvailableForLang(string $lang): bool
     {
-        if ($this->translate($lang, $this->isEnglishGlobalTranslation())->getId() != null) {
+        if($this->translate($lang, $this->isEnglishGlobalTranslation())->getId() != null) {
             return true;
         }
 
-        if (
-            $this->getTranslatedDocument()
-            && $this->getTranslatedDocument()->translate($lang, $this->isEnglishGlobalTranslation())
-        ) {
+        if($this->getTranslatedDocument()
+            && $this->getTranslatedDocument()->translate($lang, $this->isEnglishGlobalTranslation())) {
             return true;
         }
 
@@ -247,17 +245,10 @@ class SocProduct
 
     public function getTranslatedDocumentFilePathByLang($lang): ?string
     {
-        if (
-            $this->getTranslatedDocument()
-            && $this->getTranslatedDocument()->translate(
-                $lang,
-                $this->isEnglishGlobalTranslation
-            )
-            && $filename = $this->getTranslatedDocument()->translate(
-                $lang,
-                $this->isEnglishGlobalTranslation
-            )->getFileName()
-        ) {
+        if($this->getTranslatedDocument()
+        && $this->getTranslatedDocument()->translate($lang, $this->isEnglishGlobalTranslation)
+        && $filename = $this->getTranslatedDocument()->translate($lang, $this->isEnglishGlobalTranslation)->getFileName())
+        {
             return 'uploads/files/' . $filename;
         }
         return null;
@@ -266,13 +257,12 @@ class SocProduct
 
     public function getAlternativeTranslatedDocumentFilePathByLang($lang): ?string
     {
-        if (
-            $this->getAlternativeTranslatedDocument()
+        if($this->getAlternativeTranslatedDocument()
             && $this->getAlternativeTranslatedDocument()->translate($lang, $this->isEnglishGlobalTranslation)
             && $filename = $this->getAlternativeTranslatedDocument()
                 ->translate($lang, $this->isEnglishGlobalTranslation)
-                ->getFileName()
-        ) {
+                ->getFileName())
+        {
             return 'uploads/files/' . $filename;
         }
         return null;
@@ -280,20 +270,19 @@ class SocProduct
 
     public function getTranslatedNameOrReference($lang): string
     {
-        if ($this->translate($lang) !== null && $this->translate($lang)->getName()) {
+        if($this->translate($lang) !== null && $this->translate($lang)->getName()) {
             return $this->translate($lang)->getName();
-        } else {
+        }
+        else {
             return $this->getReferenceName();
         }
     }
 
     public function getTranslatedDescOrNull($lang): ?string
     {
-        if ($this->translate($lang) !== null && $this->translate($lang)->getDescription()) {
+        if($this->translate($lang) !== null && $this->translate($lang)->getDescription())
             return $this->translate($lang)->getDescription();
-        } else {
-            return null;
-        }
+        else return null;
     }
 
     /**
@@ -308,9 +297,11 @@ class SocProduct
      * @param mixed $alternativeTranslatedDocument
      * @return SocProduct
      */
-    public function setAlternativeTranslatedDocument($alternativeTranslatedDocument): SocProduct
+    public function setAlternativeTranslatedDocument($alternativeTranslatedDocument)
     {
         $this->alternativeTranslatedDocument = $alternativeTranslatedDocument;
         return $this;
     }
+
+
 }

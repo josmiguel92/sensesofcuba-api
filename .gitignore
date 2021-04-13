@@ -26,8 +26,6 @@
 public/
 /.env.*
 /dist/.env.*
-/backups/*
-composer.phar
 ###> symfony/phpunit-bridge ###
 .phpunit
 .phpunit.result.cache
