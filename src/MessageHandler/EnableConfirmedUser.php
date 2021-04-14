@@ -5,14 +5,13 @@ declare(strict_types=1);
 namespace App\EventSubscriber;
 
 use App\Entity\User;
-use MsgPhp\User\Command\EnableUser;
-use MsgPhp\User\Event\UserConfirmed;
+use App\Message\Events\UserConfirmed;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 
 final class EnableConfirmedUser implements MessageHandlerInterface
 {
-    private $bus;
+    private MessageBusInterface $bus;
 
     public function __construct(MessageBusInterface $bus)
     {
