@@ -18,7 +18,7 @@ class NewsTranslation implements TranslationInterface
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    private ?int $id;
 
     public function getId(): ?int
     {
@@ -48,7 +48,7 @@ class NewsTranslation implements TranslationInterface
      * @param $title
      * @return NewsTranslation
      */
-    public function setTitle($title)
+    public function setTitle($title): NewsTranslation
     {
         $this->title = $title;
         return $this;
@@ -72,7 +72,7 @@ class NewsTranslation implements TranslationInterface
         return $this;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return "[" . $this->locale . "] " . $this->title;
     }

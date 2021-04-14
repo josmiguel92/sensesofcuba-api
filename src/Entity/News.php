@@ -2,12 +2,13 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\CreatedAtField;
 use App\Entity\Traits\CreatedOrUpdatedDatePropertyTrait;
 use App\Entity\Traits\IsEnglishGlobalTranslationTrait;
 use App\Entity\Traits\TranslatedDocumentFilesTrait;
 use App\Repository\NewsRepository;
 use Doctrine\ORM\Mapping as ORM;
-use MsgPhp\Domain\Model\CanBeEnabled;
+use App\Entity\Traits\CanBeEnabled;
 use Knp\DoctrineBehaviors\Contract\Entity\TranslatableInterface;
 use Knp\DoctrineBehaviors\Model\Translatable\TranslatableTrait;
 
@@ -22,6 +23,7 @@ class News implements TranslatableInterface
     use TranslatedDocumentFilesTrait;
     use CanBeEnabled;
     use IsEnglishGlobalTranslationTrait;
+    use CreatedAtField;
 
     /**
      * @ORM\Id()
@@ -33,20 +35,20 @@ class News implements TranslatableInterface
     /**
      * @ORM\Column(type="string", length=180)
      */
-    private $referenceName;
+    private string $referenceName;
 
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\TranslatedDocument", cascade={"persist", "remove"})
      */
-    private $translatedDocument;
+    private ?TranslatedDocument $translatedDocument;
 
     public function getReferenceName(): string
     {
         return $this->referenceName ?: '';
     }
 
-    public function setReferenceName(string $referenceName)
+    public function setReferenceName(string $referenceName): News
     {
         $this->referenceName = $referenceName;
 
@@ -76,12 +78,10 @@ class News implements TranslatableInterface
         return $this->translatedDocument;
     }
 
-    public function setTranslatedDocument(?TranslatedDocument $translatedDocument)
+    public function setTranslatedDocument(?TranslatedDocument $translatedDocument): News
     {
         $this->translatedDocument = $translatedDocument;
 
         return $this;
     }
-
-
 }

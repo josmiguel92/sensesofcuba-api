@@ -8,12 +8,14 @@ use App\Entity\User;
 use App\Http\Responder;
 use App\Http\RespondRouteRedirect;
 use App\Message\ConfirmUserAccount;
-use MsgPhp\User\Command\ConfirmUser;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Twig\Environment;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 /**
  * @Route("/register/confirm/{token}", name="confirm_registration", host="%app.main_domain%")
@@ -27,9 +29,9 @@ final class ConfirmRegistrationController
      * @param MessageBusInterface $bus
      * @param Environment $templating
      * @return Response
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function __invoke(
         User $user,
@@ -39,7 +41,7 @@ final class ConfirmRegistrationController
     ): Response {
         $bus->dispatch(new ConfirmUserAccount($user->getId()));
 
-        return new Response($templating->render('user/activated_account.html.twig', ['user'=>$user]));
+        return new Response($templating->render('user/activated_account.html.twig', ['user' => $user]));
 //        return $responder->respond((new RespondRouteRedirect('homepage')));
     }
 }

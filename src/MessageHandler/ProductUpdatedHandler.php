@@ -10,6 +10,8 @@ use App\Repository\SocProductRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
@@ -20,11 +22,11 @@ class ProductUpdatedHandler implements MessageHandlerInterface
     /**
      * @var SocProductRepository
      */
-    private $productRepository;
+    private SocProductRepository $productRepository;
     /**
      * @var MessageBusInterface
      */
-    private $bus;
+    private MessageBusInterface $bus;
     /**
      * @var EntityManager
      */
@@ -32,11 +34,11 @@ class ProductUpdatedHandler implements MessageHandlerInterface
     /**
      * @var UserRepository
      */
-    private $userRepository;
+    private UserRepository $userRepository;
     /**
      * @var MailerInterface
      */
-    private $mailer;
+    private MailerInterface $mailer;
 
     /**
      * PasswordRequestHandler constructor.
@@ -68,7 +70,10 @@ class ProductUpdatedHandler implements MessageHandlerInterface
         }
 
         $product->updateTimestamps();
-        $this->manager->persist($product);
+        try {
+            $this->manager->persist($product);
+        } catch (ORMException $e) {
+        }
 
         if ($product->getParent() != null) {
             $this->bus->dispatch(
@@ -80,14 +85,19 @@ class ProductUpdatedHandler implements MessageHandlerInterface
             );
         }
 
-        if($message->getSendNotification())
-        {
+        if ($message->getSendNotification()) {
             $subscribedUsers = $product->getSubscribedUsers();
 
             $notification = new ProductNotification($product, $message->getChangesStr(), $subscribedUsers->getValues());
-            $this->manager->persist($notification);
+            try {
+                $this->manager->persist($notification);
+            } catch (ORMException $e) {
+            }
         }
 
-        $this->manager->flush();
+        try {
+            $this->manager->flush();
+        } catch (OptimisticLockException | ORMException $e) {
+        }
     }
 }

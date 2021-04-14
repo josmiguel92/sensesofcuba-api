@@ -2,9 +2,9 @@
 
 namespace App\Entity;
 
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
@@ -23,17 +23,17 @@ class SocImage implements TimestampableInterface
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id;
 
     /**
     * @Vich\UploadableField(mapping="images", fileNameProperty="imageName")
     */
-    private $imageFile;
+    private ?File $imageFile;
 
     /**
      * @ORM\Column(type="string", length=180, nullable=true)
      */
-    private $imageName;
+    private ?string $imageName;
 
     public function getId(): ?int
     {
@@ -61,20 +61,19 @@ class SocImage implements TimestampableInterface
     }
 
     /**
-     * @param File|UploadedFile $file
+     * @param File|null $file
      * @return SocImage
-     * @throws \Exception
      */
     public function setImageFile(?File $file = null): self
     {
         $this->imageFile = $file;
         if (null !== $file) {
-            $this->updatedAt = new \DateTimeImmutable();
+            $this->updatedAt = new DateTimeImmutable();
         }
         return $this;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->imageName ?? '';
     }
@@ -88,7 +87,7 @@ class SocImage implements TimestampableInterface
      * @ORM\PrePersist()
      * @ORM\PostUpdate()
      */
-    public function createCustomThumbnail()
+    public function createCustomThumbnail(): ?bool
     {
         $uploadDir = __DIR__ . '/../../public/uploads/images/';
         return $this->createThumbnail(
@@ -98,10 +97,10 @@ class SocImage implements TimestampableInterface
         );
     }
 
-// Link image type to correct image loader and saver
-// - makes it easier to add additional types later on
-// - makes the function easier to read
-    const IMAGE_HANDLERS = [
+    // Link image type to correct image loader and saver
+    // - makes it easier to add additional types later on
+    // - makes the function easier to read
+    private const IMAGE_HANDLERS = [
         IMAGETYPE_JPEG => [
             'load' => 'imagecreatefromjpeg',
             'save' => 'imagejpeg',
@@ -123,12 +122,13 @@ class SocImage implements TimestampableInterface
      * @param $dest - a valid file target
      * @param $targetWidth - desired output width
      * @param $targetHeight - desired output height or null
+     * @return false|mixed|null
+     * @return false|mixed|null
      */
-    function createThumbnail($src, $dest, $targetWidth, $targetHeight = null)
+    public function createThumbnail($src, $dest, $targetWidth, $targetHeight = null): ?bool
     {
-
         if (file_exists($src) === false || is_file($src) === false) {
-            return;
+            return false;
         }
 
         // 1. Load the image from the given $src
@@ -138,7 +138,8 @@ class SocImage implements TimestampableInterface
 
         // get the type of the image
         // we need the type to determine the correct loader
-        $type = exif_imagetype($src);
+        $type = function_exists('exif_imagetype') ? exif_imagetype($src) : null;
+
 
         // if no valid type or no handler found -> exit
         if (!$type || !self::IMAGE_HANDLERS[$type]) {
@@ -174,10 +175,10 @@ class SocImage implements TimestampableInterface
             // use ratio to scale height to fit in square
             if ($width > $height) {
                 $targetHeight = floor($targetWidth / $ratio);
-            }
-            // if is landscape
-            // use ratio to scale width to fit in square
-            else {
+            } else {
+                // if is landscape
+                // use ratio to scale width to fit in square
+
                 $targetHeight = $targetWidth;
                 $targetWidth = floor($targetWidth * $ratio);
             }

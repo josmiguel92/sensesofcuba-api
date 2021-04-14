@@ -8,9 +8,7 @@ use App\Entity\Traits\IsEnglishGlobalTranslationTrait;
 use App\Entity\Traits\TranslatedDocumentFilesTrait;
 use App\Entity\Traits\CreatedOrUpdatedDatePropertyTrait;
 use Doctrine\ORM\Mapping as ORM;
-use MsgPhp\Domain\Model\CanBeEnabled;
-use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+use App\Entity\Traits\CanBeEnabled;
 use Knp\DoctrineBehaviors\Contract\Entity\TranslatableInterface;
 use Knp\DoctrineBehaviors\Model\Translatable\TranslatableTrait;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
@@ -38,18 +36,18 @@ class Document implements TranslatableInterface, TimestampableInterface
      */
     private $id;
 
-     /**
-     * @ORM\Column(type="string", length=180)
-     */
-    private $referenceName;
+    /**
+    * @ORM\Column(type="string", length=180)
+    */
+    private string $referenceName;
 
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\TranslatedDocument", cascade={"persist", "remove"})
      */
-    private $translatedDocument;
+    private ?TranslatedDocument $translatedDocument;
 
-       /**
+    /**
      * @ORM\Column(type="integer", nullable=true)
      */
     private $importance;
@@ -59,7 +57,7 @@ class Document implements TranslatableInterface, TimestampableInterface
         return $this->referenceName ?: '';
     }
 
-    public function setReferenceName(string $referenceName)
+    public function setReferenceName(string $referenceName): Document
     {
         $this->referenceName = $referenceName;
 
@@ -89,7 +87,7 @@ class Document implements TranslatableInterface, TimestampableInterface
         return $this->translatedDocument;
     }
 
-    public function setTranslatedDocument(?TranslatedDocument $translatedDocument)
+    public function setTranslatedDocument(?TranslatedDocument $translatedDocument): Document
     {
         $this->translatedDocument = $translatedDocument;
 
@@ -108,7 +106,7 @@ class Document implements TranslatableInterface, TimestampableInterface
      * @param mixed $importance
      * @return Document
      */
-    public function setImportance($importance)
+    public function setImportance($importance): Document
     {
         $this->importance = $importance;
         return $this;

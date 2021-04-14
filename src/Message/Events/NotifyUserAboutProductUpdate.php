@@ -3,12 +3,12 @@
 
 namespace App\Message\Events;
 
-
 use App\Entity\User;
 
 class NotifyUserAboutProductUpdate
 {
     private $productId;
+    private $userId;
 
 
     public function __construct($userId, $productId)
@@ -33,8 +33,4 @@ class NotifyUserAboutProductUpdate
     {
         return $this->productId;
     }
-
-
-
-
 }

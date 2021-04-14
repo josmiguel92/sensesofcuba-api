@@ -3,12 +3,11 @@
 
 namespace App\Message\Events;
 
-
 use App\Entity\User;
 
 class UserAccountConfirmed
 {
-    private $userId;
+    private int $userId;
 
     /**
      * UserAccountConfirmed constructor.
@@ -19,11 +18,8 @@ class UserAccountConfirmed
         $this->userId = $userId;
     }
 
-    public function getUserId()
+    public function getUserId(): int
     {
         return $this->userId;
     }
-
-
-
 }

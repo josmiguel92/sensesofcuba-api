@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -20,7 +19,7 @@ class SocProductTranslation implements TranslationInterface
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    private ?int $id;
 
     /**
     * @ORM\Column(type="string", length=180)
@@ -44,7 +43,7 @@ class SocProductTranslation implements TranslationInterface
      * @param mixed $name
      * @return SocProductTranslation
      */
-    public function setName($name)
+    public function setName($name): SocProductTranslation
     {
         $this->name = $name;
         return $this;
@@ -62,20 +61,19 @@ class SocProductTranslation implements TranslationInterface
      * @param mixed $description
      * @return SocProductTranslation
      */
-    public function setDescription($description)
+    public function setDescription($description): SocProductTranslation
     {
         $this->description = $description;
         return $this;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
-        return "[". $this->locale . "] ". $this->name;
+        return "[" . $this->locale . "] " . $this->name;
     }
 
     public function getId(): ?int
     {
         return $this->id;
     }
-
 }

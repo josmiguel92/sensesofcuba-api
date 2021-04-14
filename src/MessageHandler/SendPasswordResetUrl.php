@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\EventSubscriber;
+namespace App\MessageHandler;
 
 use App\Entity\User;
-use MsgPhp\User\Event\UserPasswordRequested;
+use App\Message\PasswordRequest;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Messenger\Exception\HandlerFailedException;
@@ -18,8 +18,8 @@ use Symfony\Component\Routing\RouterInterface;
 
 final class SendPasswordResetUrl implements MessageHandlerInterface
 {
-    private $mailer;
-    private $router;
+    private MailerInterface $mailer;
+    private RouterInterface $router;
 
     public function __construct(MailerInterface $mailer, RouterInterface $router)
     {
@@ -27,9 +27,9 @@ final class SendPasswordResetUrl implements MessageHandlerInterface
         $this->router = $router;
     }
 
-    public function __invoke(UserPasswordRequested $event): void
+    public function __invoke(PasswordRequest $event): void
     {
-        $this->notify($event->user);
+        $this->notify($event->getUserId());
     }
 
     public function notify(User $user): void

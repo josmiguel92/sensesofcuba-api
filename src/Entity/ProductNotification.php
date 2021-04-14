@@ -4,7 +4,6 @@ namespace App\Entity;
 
 use App\Repository\ProductNotificationRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Knp\DoctrineBehaviors\Model as ORMBehaviors;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 
@@ -20,28 +19,28 @@ class ProductNotification implements TimestampableInterface
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id;
 
     /**
      * @ORM\ManyToOne(targetEntity=SocProduct::class)
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
-    private $product;
+    private ?SocProduct $product;
 
     /**
      * @ORM\Column(type="boolean")
      */
-    private $isCompleted;
+    private bool $isCompleted;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      */
-    private $description;
+    private ?string $description;
 
     /**
      * @ORM\Column(type="array", nullable=true)
      */
-    private $targetUsers = [];
+    private array $targetUsers;
 
     /**
      * ProductNotification constructor.
@@ -103,16 +102,15 @@ class ProductNotification implements TimestampableInterface
         return $this->targetUsers;
     }
 
-    public function setTargetUsers(?array $targetUsers): self
+    public function setTargetUsers(array $targetUsers = []): self
     {
         $this->targetUsers = $targetUsers;
 
         return $this;
     }
 
-    public function getTargetUsersCount()
+    public function getTargetUsersCount(): int
     {
         return count($this->targetUsers);
     }
-
 }

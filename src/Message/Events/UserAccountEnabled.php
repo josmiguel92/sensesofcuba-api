@@ -3,7 +3,6 @@
 
 namespace App\Message\Events;
 
-
 class UserAccountEnabled
 {
     private $email;
@@ -35,7 +34,4 @@ class UserAccountEnabled
     {
         return $this->name;
     }
-
-
-
 }

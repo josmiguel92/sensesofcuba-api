@@ -4,7 +4,7 @@ namespace App\Message\Events;
 
 use App\Entity\User;
 
-class UserPasswordRequested
+class UserPasswordRequestFinished
 {
     public User $user;
 

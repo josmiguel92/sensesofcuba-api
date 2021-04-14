@@ -3,7 +3,7 @@
 
 namespace App\Message;
 
-class PasswordRequest
+class FinishPasswordRequest
 {
     private $userId;
     public ?string $token;

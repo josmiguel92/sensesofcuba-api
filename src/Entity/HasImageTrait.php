@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Entity;
 
 trait HasImageTrait

@@ -13,7 +13,7 @@ trait IsEnglishGlobalTranslationTrait
     /**
      * @ORM\Column(type="boolean")
      */
-    private $isEnglishGlobalTranslation = false;
+    private bool $isEnglishGlobalTranslation = false;
 
     /**
      * @return bool
@@ -27,7 +27,7 @@ trait IsEnglishGlobalTranslationTrait
      * @param bool $isEnglishGlobalTranslation
      * @return IsEnglishGlobalTranslationTrait
      */
-    public function setIsEnglishGlobalTranslation(bool $isEnglishGlobalTranslation)
+    public function setIsEnglishGlobalTranslation(bool $isEnglishGlobalTranslation): IsEnglishGlobalTranslationTrait
     {
         $this->isEnglishGlobalTranslation = $isEnglishGlobalTranslation;
         return $this;

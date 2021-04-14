@@ -2,111 +2,140 @@
 
 namespace App\Entity;
 
-use App\Message\Events\UserAccountConfirmed;
-use App\Message\Events\UserAccountEnabled;
+use App\Entity\Traits\CanBeConfirmed;
+use App\Entity\Traits\CanBeEnabled;
+use App\Entity\Traits\CreatedAtField;
+use App\Entity\Traits\ResettablePassword;
+use DateTimeImmutable;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use MsgPhp\Domain\DomainMessageBus;
-use MsgPhp\User\User as BaseUser;
-use MsgPhp\User\UserId;
-use MsgPhp\Domain\Event\DomainEventHandler;
-use MsgPhp\Domain\Event\DomainEventHandlerTrait;
-use MsgPhp\Domain\Model\CreatedAtField;
-use MsgPhp\Domain\Model\CanBeConfirmed;
-use MsgPhp\Domain\Model\CanBeEnabled;
-use MsgPhp\User\Credential\EmailPassword;
-use MsgPhp\User\Model\EmailPasswordCredential;
-use MsgPhp\User\Model\ResettablePassword;
-use MsgPhp\User\Model\RolesField;
-use phpDocumentor\Reflection\Types\Boolean;
-use Symfony\Component\Messenger\MessageBus;
-use Symfony\Component\Messenger\MessageBusInterface;
+use Exception;
+use Serializable;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity()
+ * @ORM\Table()
  */
-class User extends BaseUser implements DomainEventHandler
+class User implements UserInterface, Serializable
 {
-    use DomainEventHandlerTrait;
-    use EmailPasswordCredential;
-    use ResettablePassword;
     use CreatedAtField;
     use CanBeEnabled;
     use CanBeConfirmed;
+    use ResettablePassword;
 
-    /** @ORM\Id() @ORM\GeneratedValue() @ORM\Column(type="msgphp_user_id", length=180) */
-    private $id;
+    public const ADMIN_ROLES = [ 'ROLE_ADMIN',
+        'ROLE_EDITOR'];
 
-    /**
-     * @ORM\Column(type="string", length=180)
-     */
-    private $name;
-
-    /**
-     * @ORM\Column(type="string", length=180)
-     */
-    private $enterprise;
-
-    /**
-     * @ORM\Column(type="string", length=180)
-     */
-    private $travelAgency;
+    public const ALLOWED_ROLES = [
+        'ROLE_ADMIN',
+        'ROLE_EDITOR',
+        'ROLE_PREMIUM_CLIENT',
+        'ROLE_CLIENT',
+        'ROLE_ALTERNATIVE_PRICES_CLIENT'
+    ];
 
     /**
-     * @ORM\Column(type="string", length=180)
+     * @var int|null
+     *
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
      */
-    private $country;
+    private ?int $id;
 
     /**
-     * @ORM\Column(type="string", length=180, nullable=true)
+     * @ORM\Column(type="string", length=191)
      */
-    private $web;
+    private string $name;
 
     /**
-     * @ORM\Column(type="string", length=180)
+     * @ORM\Column(type="string", length=191)
      */
-    private $email;
+    private string $enterprise;
 
     /**
-     * @ORM\Column(type="string", length=180)
+     * @ORM\Column(type="string", length=191)
      */
-    private $role;
+    private string $travelAgency;
+
+    /**
+     * @ORM\Column(type="string", length=191)
+     */
+    private string $country;
+
+    /**
+     * @ORM\Column(type="string", length=191, nullable=true)
+     */
+    private ?string $web;
+
+    /**
+     * @ORM\Column(type="string", length=191, unique=true)
+     */
+    private string $email;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", length=191)
+     */
+    private string $password;
+
+    /**
+     * @var array
+     *
+     * @ORM\Column(type="json")
+     */
+    private array $roles = [];
 
     /**
      * @ORM\Column(type="boolean")
      */
-    private $receiveEmails;
+    private bool $receiveEmails;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\SocProduct", inversedBy="subscribedUsers")
      */
-    private $subscribedProducts;
+    private ArrayCollection $subscribedProducts;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\SocProduct")
      * @ORM\JoinTable(name="user_hidden_products")
      */
-    private $hiddenProducts;
+    private ArrayCollection $hiddenProducts;
 
     /**
      * @ORM\Column(type="boolean")
      */
-    private $wasEnabled;
+    private bool $wasEnabled;
 
     /**
      * @ORM\Column(type="string", length=2, nullable=true)
      */
-    private $preferedLang;
+    private string $preferedLang;
 
     /**
      * @ORM\Column(type="datetime_immutable", nullable=true)
      */
-    private $lastLogin;
+    private ?DateTimeImmutable $lastLogin;
+
+    /** @var null|string */
+    /**
+     * @ORM\Column(type="string", length=191, nullable=true)
+     */
+    private ?string $passwordResetToken;
+
+    /** @var null|DateTimeInterface */
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private ?DateTimeInterface $passwordRequestedAt;
 
 
     public function __construct(
-        UserId $id,
+        ?int $id,
         string $email,
         string $password,
         string $name,
@@ -116,25 +145,29 @@ class User extends BaseUser implements DomainEventHandler
         ?string $web
     ) {
         $this->id = $id;
-        $this->credential = new EmailPassword($email, $password);
         $this->email = $email;
-        $this->createdAt = new \DateTimeImmutable();
-        $this->confirmationToken = bin2hex(random_bytes(32));
+
+        $this->createdAt = new DateTimeImmutable();
+        try {
+            $this->confirmationToken = bin2hex(random_bytes(32));
+        } catch (Exception $e) {
+            $this->confirmationToken = md5(rand_string());
+        }
 
         $this->name = $name;
-
+        $this->password = $password;
         $this->enterprise = $enterprise;
         $this->travelAgency = $travelAgency;
         $this->country = $country;
         $this->web = $web;
-        $this->role = "ROLE_CLIENT";
+
         $this->subscribedProducts = new ArrayCollection();
         $this->hiddenProducts = new ArrayCollection();
         $this->receiveEmails = false;
         $this->wasEnabled = false;
     }
 
-    public function getId(): UserId
+    public function getId(): int
     {
         return $this->id;
     }
@@ -142,7 +175,7 @@ class User extends BaseUser implements DomainEventHandler
     /**
      * @return mixed
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -160,7 +193,7 @@ class User extends BaseUser implements DomainEventHandler
     /**
      * @return mixed
      */
-    public function getEnterprise()
+    public function getEnterprise(): string
     {
         return $this->enterprise;
     }
@@ -178,7 +211,7 @@ class User extends BaseUser implements DomainEventHandler
     /**
      * @return mixed
      */
-    public function getTravelAgency()
+    public function getTravelAgency(): string
     {
         return $this->travelAgency;
     }
@@ -196,7 +229,7 @@ class User extends BaseUser implements DomainEventHandler
     /**
      * @return mixed
      */
-    public function getCountry()
+    public function getCountry(): string
     {
         return $this->country;
     }
@@ -214,7 +247,7 @@ class User extends BaseUser implements DomainEventHandler
     /**
      * @return mixed
      */
-    public function getWeb()
+    public function getWeb(): ?string
     {
         return $this->web;
     }
@@ -241,32 +274,14 @@ class User extends BaseUser implements DomainEventHandler
     public function getRole(): ?string
     {
         if ($this->enabled) {
-            return $this->role;
+            foreach (self::ADMIN_ROLES as $adminRole) {
+                if (in_array($adminRole, $this->getRoles())) {
+                    return 'ROLE_EDITOR';
+                }
+            }
+            return 'ROLE_USER';
         }
         return null;
-    }
-
-    public function getRoles(): array
-    {
-        return [$this->getRole()];
-    }
-
-    public function setRole($role): self
-    {
-        $this->receiveEmails = ($role === 'ROLE_ADMIN' || $role === 'ROLE_EDITOR');
-
-        $role = in_array(
-            $role,
-            ['ROLE_ADMIN', 'ROLE_EDITOR', 'ROLE_PREMIUM_CLIENT', 'ROLE_CLIENT', 'ROLE_ALTERNATIVE_PRICES_CLIENT']
-        ) ? $role : 'ROLE_CLIENT';
-        $this->role = $role;
-
-        return $this;
-    }
-
-    public function isAdmin(): bool
-    {
-        return ('ROLE_ADMIN' === $this->getRole() || 'ROLE_EDITOR' === $this->getRole()) ;
     }
 
     public function getReceiveEmails(): ?bool
@@ -375,7 +390,7 @@ class User extends BaseUser implements DomainEventHandler
     /**
      * @return mixed
      */
-    public function getWasEnabled()
+    public function getWasEnabled(): bool
     {
         return $this->wasEnabled;
     }
@@ -384,13 +399,13 @@ class User extends BaseUser implements DomainEventHandler
      * @param mixed $wasEnabled
      * @return User
      */
-    public function setWasEnabled($wasEnabled)
+    public function setWasEnabled($wasEnabled): User
     {
         $this->wasEnabled = $wasEnabled;
         return $this;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->email;
     }
@@ -405,24 +420,114 @@ class User extends BaseUser implements DomainEventHandler
 
     public function getStaticUserHash(): string
     {
-        return hash('md5', $this->getName() . $this->getEmail() . $this->getCreatedAt()->format('thLzmhyytLzm'));
+        return hash(
+            'md5',
+            $this->getName() . $this->getEmail() . $this->getCreatedAt()->format('thLzmhyytLzm')
+        );
     }
 
 
-    public function getPreferedLang(): string
+    public function getPreferredLang(): string
     {
         return $this->preferedLang ? $this->preferedLang : 'en';
     }
 
-    public function getLastLogin(): ?\DateTimeImmutable
+    public function getLastLogin(): ?DateTimeImmutable
     {
         return $this->lastLogin;
     }
 
     public function setLastLogin(): self
     {
-        $this->lastLogin = new \DateTimeImmutable('now');
+        $this->lastLogin = new DateTimeImmutable('now');
 
         return $this;
+    }
+
+    public function getPassword(): ?string
+    {
+        return $this->password;
+    }
+
+    public function setPassword(string $password): void
+    {
+        $this->password = $password;
+    }
+
+    /**
+     * Returns the roles or permissions granted to the user for security.
+     */
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+
+        // guarantees that a user always has at least one role for security
+        if (empty($roles)) {
+            $roles[] = 'ROLE_USER';
+        }
+
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): void
+    {
+        $_roles = [];
+        foreach ($roles as $role) {
+            if (in_array($role, self::ALLOWED_ROLES)) {
+                $_roles[] = $role;
+            }
+        }
+        $this->roles = $_roles;
+    }
+
+    public function setRole($role): self
+    {
+        $this->receiveEmails = ($role === 'ROLE_ADMIN' || $role === 'ROLE_EDITOR');
+
+        $role = in_array(
+            $role,
+            ['ROLE_ADMIN', 'ROLE_EDITOR', 'ROLE_PREMIUM_CLIENT', 'ROLE_CLIENT', 'ROLE_ALTERNATIVE_PRICES_CLIENT']
+        ) ? $role : 'ROLE_CLIENT';
+        $this->setRole($role);
+
+        return $this;
+    }
+
+    public function isAdmin(): bool
+    {
+        return ('ROLE_ADMIN' === $this->getRole() || 'ROLE_EDITOR' === $this->getRole()) ;
+    }
+
+
+    public function serialize(): string
+    {
+        return serialize([$this->id, $this->email, $this->password]);
+    }
+
+    public function unserialize($serialized)
+    {
+        // add $this->salt too if you don't use Bcrypt or Argon2i
+        [$this->id, $this->email, $this->password] = unserialize($serialized, ['allowed_classes' => false]);
+    }
+
+
+    public function getSalt()
+    {
+        return null;
+    }
+
+    public function getUsername(): string
+    {
+        return $this->email;
+    }
+
+    public function eraseCredentials()
+    {
+        // TODO: Implement eraseCredentials() method.
+    }
+
+    public function getEmail(): string
+    {
+        return $this->email;
     }
 }

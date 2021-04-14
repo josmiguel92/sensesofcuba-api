@@ -9,8 +9,6 @@ use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 class PasswordRequestHandler implements MessageHandlerInterface
 {
 
-
-
     /**
      * PasswordRequestHandler constructor.
      */

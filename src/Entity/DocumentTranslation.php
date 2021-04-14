@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -10,7 +9,7 @@ use Knp\DoctrineBehaviors\Model\Translatable\TranslationTrait;
 /**
  * @ORM\Entity()
  */
-class DocumentTranslation  implements TranslationInterface
+class DocumentTranslation implements TranslationInterface
 {
     use TranslationTrait;
 
@@ -19,7 +18,7 @@ class DocumentTranslation  implements TranslationInterface
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    private ?int $id;
 
     public function getId(): ?int
     {
@@ -49,7 +48,7 @@ class DocumentTranslation  implements TranslationInterface
      * @param mixed $name
      * @return DocumentTranslation
      */
-    public function setName($name)
+    public function setName($name): DocumentTranslation
     {
         $this->name = $name;
         return $this;
@@ -73,9 +72,8 @@ class DocumentTranslation  implements TranslationInterface
         return $this;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
-        return "[". $this->locale . "] ". $this->name;
+        return "[" . $this->locale . "] " . $this->name;
     }
-
 }

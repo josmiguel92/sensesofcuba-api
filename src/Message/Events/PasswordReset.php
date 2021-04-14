@@ -3,7 +3,6 @@
 
 namespace App\Message\Events;
 
-
 class PasswordReset
 {
     private $email;
@@ -24,9 +23,4 @@ class PasswordReset
     {
         return $this->email;
     }
-
-
-
-
-
 }

@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\MessageHandler;
-
 
 use App\Message\Events\UserAccountEnabled;
 use App\Repository\UserRepository;
@@ -47,7 +45,6 @@ class UserAccountEnabledHandler implements MessageHandlerInterface
 
     public function __invoke(UserAccountEnabled $message)
     {
-
         $user = $this->userRepository->findOneBy(['email' => $message->getEmail()]);
         if (!$user) {
             return;
@@ -65,25 +62,17 @@ class UserAccountEnabledHandler implements MessageHandlerInterface
             ->priority(Email::PRIORITY_HIGH);
 
         //Add Bcc to admins
-        $notifyUser = $this->userRepository->findBy(['receiveEmails'=>true]);
-        if($notifyUser)
-        {
-            foreach ($notifyUser as $user)
-            {
+        $notifyUser = $this->userRepository->findBy(['receiveEmails' => true]);
+        if ($notifyUser) {
+            foreach ($notifyUser as $user) {
                 $email->addBcc((new Address($user->getEmail())));
             }
         }
 
         try {
             $this->mailer->send($email);
-        } catch (TransportExceptionInterface $e) {
+        } catch (TransportExceptionInterface | HandlerFailedException $e) {
             return;
         }
-        catch (HandlerFailedException  $e) {
-            return;
-        }
-
     }
-
-
 }

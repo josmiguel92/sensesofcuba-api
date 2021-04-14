@@ -2,11 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\EventSubscriber;
+namespace App\MessageHandler;
 
 use App\Entity\User;
 use App\Message\Events\UserRegistered;
+use App\Repository\UserRepository;
 use MsgPhp\User\Event\UserCreated;
+use Symfony\Bridge\Doctrine\ManagerRegistry;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
@@ -16,26 +18,39 @@ use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use MsgPhp\User\Infrastructure\Security\UserIdentity;
+
 final class SendRegistrationConfirmationUrl implements MessageHandlerInterface
 {
-    private $mailer;
-    private $router;
+    private MailerInterface $mailer;
+    private RouterInterface $router;
     /**
      * @var MessageBusInterface
      */
-    private $bus;
+    private MessageBusInterface $bus;
+    /**
+     * @var UserRepository
+     */
+    private UserRepository $repository;
 
-    public function __construct(MailerInterface $mailer, RouterInterface $router, MessageBusInterface $bus)
-    {
+
+    public function __construct(
+        MailerInterface $mailer,
+        RouterInterface $router,
+        MessageBusInterface $bus,
+        UserRepository $repository
+    ) {
         $this->mailer = $mailer;
         $this->router = $router;
         $this->bus = $bus;
+        $this->repository = $repository;
     }
 
-    public function __invoke(UserCreated $event): void
+    public function __invoke(UserRegistered $event): void
     {
-        $this->notify($event->user);
-        $this->bus->dispatch(new UserRegistered($event->user->getId()));
+        $user = $this->repository->find($event->getUserId());
+        if ($user instanceof User) {
+            $this->notify($user);
+        }
     }
 
     public function notify(User $user): void
@@ -54,17 +69,15 @@ final class SendRegistrationConfirmationUrl implements MessageHandlerInterface
                 'username' =>  $user->getName(),
                 'action_url' => $this->router->generate(
                     'confirm_registration',
-                    ['token'=> $user->getConfirmationToken()],
-                    0) ,
+                    ['token' => $user->getConfirmationToken()],
+                    0
+                ) ,
             ])
           ->priority(Email::PRIORITY_HIGH);
 
         try {
             $this->mailer->send($email);
-        } catch (TransportExceptionInterface $e) {
-            return;
-        }
-        catch (HandlerFailedException  $e) {
+        } catch (TransportExceptionInterface | HandlerFailedException $e) {
             return;
         }
     }

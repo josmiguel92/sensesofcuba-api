@@ -10,7 +10,7 @@ use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
 use Knp\DoctrineBehaviors\Contract\Entity\TranslatableInterface;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 use Knp\DoctrineBehaviors\Model\Translatable\TranslatableTrait;
-use MsgPhp\Domain\Model\CanBeEnabled;
+use App\Entity\Traits\CanBeEnabled;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\SocProductRepository")
@@ -28,37 +28,37 @@ class SocProduct implements TimestampableInterface, TranslatableInterface
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\SocProduct", inversedBy="socProducts")
      */
-    private $parent;
+    private ?SocProduct $parent;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\SocProduct", mappedBy="parent")
      */
-    private $socProducts;
+    private ArrayCollection $socProducts;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\SocFile", cascade={"persist","remove"})
      */
-    private $file;
+    private ?SocFile $file;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\SocImage", cascade={"persist", "remove"})
      */
-    private $image;
+    private ?SocImage $image;
 
     /**
      * @ORM\Column(type="string", length=180)
      */
-    private $referenceName;
+    private ?string $referenceName;
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\TranslatedDocument", cascade={"persist", "remove"})
      */
-    private $translatedDocument;
+    private ?TranslatedDocument $translatedDocument;
 
 
     /**
@@ -69,12 +69,12 @@ class SocProduct implements TimestampableInterface, TranslatableInterface
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\User", mappedBy="subscribedProducts")
      */
-    private $subscribedUsers;
+    private ArrayCollection $subscribedUsers;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
-    private $importance;
+    private ?int $importance;
 
     public function __construct()
     {
@@ -166,16 +166,16 @@ class SocProduct implements TimestampableInterface, TranslatableInterface
         return $this;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
-        if($this->parent && $this->getReferenceName() )
-
-            return  $this->parent->getReferenceName(). ' / ' . $this->getReferenceName();
+        if ($this->parent && $this->getReferenceName()) {
+            return  $this->parent->getReferenceName() . ' / ' . $this->getReferenceName();
+        }
 
         return $this->getReferenceName() ?? 'empty';
     }
 
-    public function setEnabled(bool $enabled):void
+    public function setEnabled(bool $enabled): void
     {
         $this->enabled = $enabled;
     }
@@ -234,12 +234,14 @@ class SocProduct implements TimestampableInterface, TranslatableInterface
 
     public function isAvailableForLang(string $lang): bool
     {
-        if($this->translate($lang, $this->isEnglishGlobalTranslation())->getId() != null) {
+        if ($this->translate($lang, $this->isEnglishGlobalTranslation())->getId() != null) {
             return true;
         }
 
-        if($this->getTranslatedDocument()
-            && $this->getTranslatedDocument()->translate($lang, $this->isEnglishGlobalTranslation())) {
+        if (
+            $this->getTranslatedDocument()
+            && $this->getTranslatedDocument()->translate($lang, $this->isEnglishGlobalTranslation())
+        ) {
             return true;
         }
 
@@ -248,10 +250,14 @@ class SocProduct implements TimestampableInterface, TranslatableInterface
 
     public function getTranslatedDocumentFilePathByLang($lang): ?string
     {
-        if($this->getTranslatedDocument()
-        && $this->getTranslatedDocument()->translate($lang, $this->isEnglishGlobalTranslation)
-        && $filename = $this->getTranslatedDocument()->translate($lang, $this->isEnglishGlobalTranslation)->getFileName())
-        {
+        if (
+            $this->getTranslatedDocument()
+            && $this->getTranslatedDocument()->translate($lang, $this->isEnglishGlobalTranslation)
+            && $filename = $this->getTranslatedDocument()->translate(
+                $lang,
+                $this->isEnglishGlobalTranslation
+            )->getFileName()
+        ) {
             return 'uploads/files/' . $filename;
         }
         return null;
@@ -260,12 +266,13 @@ class SocProduct implements TimestampableInterface, TranslatableInterface
 
     public function getAlternativeTranslatedDocumentFilePathByLang($lang): ?string
     {
-        if($this->getAlternativeTranslatedDocument()
+        if (
+            $this->getAlternativeTranslatedDocument()
             && $this->getAlternativeTranslatedDocument()->translate($lang, $this->isEnglishGlobalTranslation)
             && $filename = $this->getAlternativeTranslatedDocument()
                 ->translate($lang, $this->isEnglishGlobalTranslation)
-                ->getFileName())
-        {
+                ->getFileName()
+        ) {
             return 'uploads/files/' . $filename;
         }
         return null;
@@ -273,19 +280,20 @@ class SocProduct implements TimestampableInterface, TranslatableInterface
 
     public function getTranslatedNameOrReference($lang): string
     {
-        if($this->translate($lang) !== null && $this->translate($lang)->getName()) {
+        if ($this->translate($lang) !== null && $this->translate($lang)->getName()) {
             return $this->translate($lang)->getName();
-        }
-        else {
+        } else {
             return $this->getReferenceName();
         }
     }
 
     public function getTranslatedDescOrNull($lang): ?string
     {
-        if($this->translate($lang) !== null && $this->translate($lang)->getDescription())
+        if ($this->translate($lang) !== null && $this->translate($lang)->getDescription()) {
             return $this->translate($lang)->getDescription();
-        else return null;
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -300,11 +308,9 @@ class SocProduct implements TimestampableInterface, TranslatableInterface
      * @param mixed $alternativeTranslatedDocument
      * @return SocProduct
      */
-    public function setAlternativeTranslatedDocument($alternativeTranslatedDocument)
+    public function setAlternativeTranslatedDocument($alternativeTranslatedDocument): SocProduct
     {
         $this->alternativeTranslatedDocument = $alternativeTranslatedDocument;
         return $this;
     }
-
-
 }

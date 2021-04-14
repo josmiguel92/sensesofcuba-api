@@ -22,19 +22,19 @@ class NotifyUserAboutProductUpdateHandler implements MessageHandlerInterface
     /**
      * @var MailerInterface
      */
-    private $mailer;
+    private MailerInterface $mailer;
     /**
      * @var UserRepository
      */
-    private $userRepository;
+    private UserRepository $userRepository;
     /**
      * @var SocProductRepository
      */
-    private $productRepository;
+    private SocProductRepository $productRepository;
     /**
      * @var RouterInterface
      */
-    private $router;
+    private RouterInterface $router;
 
 
     public function __construct(
@@ -80,7 +80,7 @@ class NotifyUserAboutProductUpdateHandler implements MessageHandlerInterface
             $productParentName = $product->getParent()->getTranslatedNameOrReference('en') . ' / ';
         }
 
-         $email
+        $email
             ->subject('We updated one of your subscribed products at Senses of Cuba Infonet')
             ->htmlTemplate('email/abacus/cases/product-notify.html.twig')
             ->context([
@@ -100,9 +100,7 @@ class NotifyUserAboutProductUpdateHandler implements MessageHandlerInterface
 
         try {
             $this->mailer->send($email);
-        } catch (TransportExceptionInterface $e) {
-            return;
-        } catch (HandlerFailedException  $e) {
+        } catch (TransportExceptionInterface | HandlerFailedException $e) {
             return;
         }
     }

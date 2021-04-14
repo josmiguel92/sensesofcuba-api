@@ -20,18 +20,18 @@ class PasswordResetHandler implements MessageHandlerInterface
     /**
      * @var MailerInterface
      */
-    private $mailer;
+    private MailerInterface $mailer;
     /**
      * @var UserRepository
      */
-    private $userRepository;
+    private UserRepository $userRepository;
 
     /**
      * PasswordRequestHandler constructor.
      * @param MailerInterface $mailer
      * @param UserRepository $userRepository
      */
-       public function __construct(MailerInterface $mailer, UserRepository $userRepository)
+    public function __construct(MailerInterface $mailer, UserRepository $userRepository)
     {
         $this->mailer = $mailer;
         $this->userRepository = $userRepository;
@@ -41,8 +41,9 @@ class PasswordResetHandler implements MessageHandlerInterface
     public function __invoke(PasswordReset $message)
     {
         $user = $this->userRepository->findOneBy(['email' => $message->getEmail()]);
-        if (!$user)
+        if (!$user) {
             return;
+        }
 
         $email = (new TemplatedEmail())
             ->to($user->getEmail())
@@ -56,10 +57,7 @@ class PasswordResetHandler implements MessageHandlerInterface
 
         try {
             $this->mailer->send($email);
-        } catch (TransportExceptionInterface $e) {
-            return;
-        }
-        catch (HandlerFailedException  $e) {
+        } catch (TransportExceptionInterface | HandlerFailedException $e) {
             return;
         }
     }

@@ -3,8 +3,8 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Exception;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TranslatedDocumentRepository")
@@ -16,24 +16,22 @@ class TranslatedDocument
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    private $id;
-
-    private $lang = 'en';
+    private ?int $id;
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\SocFile", cascade={"persist", "remove"})
      */
-    private $enFile;
+    private ?SocFile $enFile;
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\SocFile", cascade={"persist", "remove"})
      */
-    private $esFile;
+    private ?SocFile $esFile;
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\SocFile", cascade={"persist", "remove"})
      */
-    private $deFile;
+    private ?SocFile $deFile;
 
     public function getId(): ?int
     {
@@ -80,13 +78,16 @@ class TranslatedDocument
     {
         if ($file instanceof UploadedFile) {
             $newSocFile = new SocFile();
-            $newSocFile->setFile($file);
+            try {
+                $newSocFile->setFile($file);
+            } catch (Exception $e) {
+            }
             return $newSocFile;
         }
         return $file;
     }
 
-    public function getDocuments()
+    public function getDocuments(): array
     {
         $docs = [];
         if ($this->esFile && $this->esFile->getFileName()) {
@@ -117,18 +118,18 @@ class TranslatedDocument
             case 'en':
                 return $this->getEnFile();
         }
+        return null;
     }
 
     /**
-     * @return string
+     * @param $lang
+     * @param bool $fallbackEnglish
+     * @return SocFile|null
      */
     public function translate($lang, $fallbackEnglish = false): ?SocFile
     {
-        if (in_array($lang, ['en', 'es', 'de'])) {
-            $this->lang = $lang;
-        }
 
-        $translation = $this->getTranslation($lang);
+        $translation = in_array($lang, ['en', 'es', 'de']) ? $this->getTranslation($lang) : null;
 
         if ($fallbackEnglish && $translation === null) {
             return $this->getEnFile();
@@ -137,7 +138,7 @@ class TranslatedDocument
         return $translation;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return "{" . $this->id . "}";
     }

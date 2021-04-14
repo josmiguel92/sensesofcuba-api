@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\MessageHandler;
-
 
 use App\Message\Events\PasswordReset;
 use App\Message\Events\UserRegistered;
@@ -40,7 +38,7 @@ class UserRegisteredHandler implements MessageHandlerInterface
      * @param UserRepository $userRepository
      * @param RouterInterface $router
      */
-       public function __construct(MailerInterface $mailer, UserRepository $userRepository, RouterInterface $router)
+    public function __construct(MailerInterface $mailer, UserRepository $userRepository, RouterInterface $router)
     {
         $this->mailer = $mailer;
         $this->userRepository = $userRepository;
@@ -50,12 +48,10 @@ class UserRegisteredHandler implements MessageHandlerInterface
 
     public function __invoke(UserRegistered $message)
     {
-        $notifyUser = $this->userRepository->findBy(['receiveEmails'=>true]);
+        $notifyUser = $this->userRepository->findBy(['receiveEmails' => true]);
         $receiversList = [];
-        if($notifyUser)
-        {
-            foreach ($notifyUser as $user)
-            {
+        if ($notifyUser) {
+            foreach ($notifyUser as $user) {
 //                $name = $user->getName();
                 $email = $user->getEmail();
                 $receiversList[] = $email;
@@ -65,36 +61,31 @@ class UserRegisteredHandler implements MessageHandlerInterface
         $newUser = $this->userRepository->find($message->getUserId());
 
         //if no Admin is subscribed to emails or isnt any admin or there in no newUser on DB
-        if(!$receiversList || !$newUser) {
+        if (!$receiversList || !$newUser) {
             return;
         }
 
         $email = new TemplatedEmail();
 
-        foreach ($receiversList as $address)
-        {
+        foreach ($receiversList as $address) {
             $email->addBcc((new Address($address)));
         }
 
 
-         $email
+        $email
             ->subject('There is a new user registered at Senses of Cuba')
             ->htmlTemplate('email/abacus/cases/new-user.html.twig')
             ->context([
                 'subject' => 'New account on Senses of Cuba',
                 'username' =>  $newUser->getName(),
-                'action_url' => $this->router->generate('easyadmin', [], 0 ) ,
+                'action_url' => $this->router->generate('easyadmin', [], 0) ,
             ])
           ->priority(Email::PRIORITY_HIGH);
 
         try {
             $this->mailer->send($email);
-        } catch (TransportExceptionInterface $e) {
+        } catch (TransportExceptionInterface | HandlerFailedException $e) {
             return;
         }
-        catch (HandlerFailedException  $e) {
-            return;
-        }
-
     }
 }

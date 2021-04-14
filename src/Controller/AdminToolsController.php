@@ -13,9 +13,7 @@ use App\Message\Events\ProductUpdated;
 use App\Repository\DocumentRepository;
 use App\Repository\SocImageRepository;
 use App\Repository\SocProductRepository;
-use MsgPhp\User\Command\CreateUser;
-use MsgPhp\User\Repository\UserRepository;
-use MsgPhp\UserBundle\MsgPhpUserBundle;
+use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormInterface;
@@ -77,7 +75,11 @@ class AdminToolsController extends AbstractController
      * @param UserRepository $usersRepo
      * @return RedirectResponse
      */
-    public function sendTestEmail(Messenger $bus, SocProductRepository $repository, UserRepository $usersRepo)
+    public function sendTestEmail(
+        Messenger $bus,
+        SocProductRepository $repository,
+        UserRepository $usersRepo
+    ): RedirectResponse
     {
         $currentUser = $this->getUser();
         $email = $currentUser->getUsername();

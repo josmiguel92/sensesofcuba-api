@@ -11,18 +11,19 @@ class ProductUpdated
     private $productId;
 
     /**
-     * @var string
+     * @var ?string
      */
-    private $changes;
+    private ?string $changes;
     /**
      * @var false
      */
-    private $sendNotification;
+    private bool $sendNotification;
 
     /**
      * UserAccountConfirmed constructor.
      * @param $productId
      * @param string|null $changes
+     * @param bool $sendNotification
      */
     public function __construct($productId, $changes = null, $sendNotification = false)
     {
@@ -58,7 +59,7 @@ class ProductUpdated
     /**
      * @return false
      */
-    public function getSendNotification()
+    public function getSendNotification(): bool
     {
         return $this->sendNotification;
     }

@@ -3,14 +3,11 @@
 
 namespace App\MessageHandler;
 
-
+use App\Entity\User;
 use App\Message\ConfirmUserAccount;
 use App\Message\Events\UserAccountConfirmed;
-use MsgPhp\Domain\DomainMessageBus;
-use MsgPhp\Domain\Event\Confirm;
-use MsgPhp\User\Command\ConfirmUser;
-use MsgPhp\User\Event\UserConfirmed;
-use MsgPhp\User\Repository\UserRepository;
+use App\Repository\UserRepository;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Symfony\Component\Messenger\MessageBus;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -19,30 +16,34 @@ class ConfirmUserAccountHandler implements MessageHandlerInterface
 {
 
     /**
-     * @var DomainMessageBus
+     * @var MessageBusInterface
      */
-    private $bus;
+    private MessageBusInterface $bus;
     /**
      * @var UserRepository
      */
-    private $repository;
+    private UserRepository $repository;
+    /**
+     * @var ManagerRegistry
+     */
+    private ManagerRegistry $registry;
 
-    public function __construct(MessageBusInterface $bus, UserRepository $repository)
+    public function __construct(MessageBusInterface $bus, UserRepository $repository, ManagerRegistry $registry)
     {
         $this->bus = $bus;
         $this->repository = $repository;
+        $this->registry = $registry;
     }
 
-    public function __invoke(ConfirmUserAccount $command): void
+    public function __invoke(ConfirmUserAccount $event): void
     {
-        $user = $this->repository->find($command->userId);
+        $user = $this->repository->find($event->userId);
 
-        /** @var \App\Entity\User $user */
-        if($user)
-        {
-           $user->confirm();
+        if ($user instanceof User) {
+            $user->confirm();
+
+            $this->registry->getManager()->persist($user);
+            $this->registry->getManager()->flush();
         }
-        $this->repository->save($user);
-
     }
 }

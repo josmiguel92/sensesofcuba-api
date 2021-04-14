@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
@@ -15,22 +16,23 @@ use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 class SocFile implements TimestampableInterface
 {
     use TimestampableTrait;
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id;
 
     /**
     * @Vich\UploadableField(mapping="files", fileNameProperty="fileName")
     */
-    private $file;
+    private ?File $file;
 
     /**
      * @ORM\Column(type="string", length=180, nullable=true)
      */
-    private $fileName;
+    private ?string $fileName;
 
 
     public function getId(): ?int
@@ -59,22 +61,20 @@ class SocFile implements TimestampableInterface
     }
 
     /**
-     * @param File|\Symfony\Component\HttpFoundation\File\UploadedFile $file
+     * @param File|null $file
      * @return SocFile
-     * @throws \Exception
      */
     public function setFile(?File $file = null): self
     {
         $this->file = $file;
-        if(null !== $file)
-            $this->updatedAt = new \DateTimeImmutable();
+        if (null !== $file) {
+            $this->updatedAt = new DateTimeImmutable();
+        }
         return $this;
     }
 
-    public function __toString()
+    public function __toString(): ?string
     {
         return $this->fileName;
     }
-
-
 }
