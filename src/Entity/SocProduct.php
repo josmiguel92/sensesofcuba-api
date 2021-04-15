@@ -38,7 +38,7 @@ class SocProduct implements TimestampableInterface, TranslatableInterface
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\SocProduct", mappedBy="parent")
      */
-    private ArrayCollection $socProducts;
+    private $socProducts;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\SocFile", cascade={"persist","remove"})
@@ -69,7 +69,7 @@ class SocProduct implements TimestampableInterface, TranslatableInterface
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\User", mappedBy="subscribedProducts")
      */
-    private ArrayCollection $subscribedUsers;
+    private $subscribedUsers;
 
     /**
      * @ORM\Column(type="integer", nullable=true)

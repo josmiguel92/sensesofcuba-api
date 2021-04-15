@@ -16,19 +16,18 @@ use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManager;
-use MsgPhp\User\Infrastructure\Security\UserIdentity;
 
 final class OnJWTAuthenticationSuccess implements EventSubscriberInterface
 {
     /**
      * @var string
      */
-    public static $cookieName = '_socAuth';
+    public static string $cookieName = '_socAuth';
 
     /**
      * @var UserRepository
      */
-    private $userRepository;
+    private UserRepository $userRepository;
 
     /**
      * @var EntityManager
@@ -63,7 +62,6 @@ final class OnJWTAuthenticationSuccess implements EventSubscriberInterface
 
     public function addRequestAuthorizationIfCookieExist(RequestEvent $event): void
     {
-
         $token = null;
 
         if (
@@ -79,7 +77,7 @@ final class OnJWTAuthenticationSuccess implements EventSubscriberInterface
             } catch (\JsonException $e) {
                 $cookie = ['token' => null];
             }
-               $token = $cookie['token'];
+            $token = $cookie['token'];
         }
 
 
@@ -122,30 +120,22 @@ final class OnJWTAuthenticationSuccess implements EventSubscriberInterface
 
 
     /**
-     * @param UserInterface $user
+     * @param User $user
      * @return array
      */
-    private function getUserDetails(UserInterface $user): array
+    private function getUserDetails(User $user): array
     {
-        if ($user instanceof UserIdentity) {
-            $username = $user->getOriginUsername();
-
-            $_user = $this->userRepository->find($user->getUserId());
-            if ($_user) {
-                if (!$_user->isEnabled()) {
-                    //TODO: change exception using a simple message to user
-                    throw new AccessDeniedHttpException('Account disabled');
-                }
-
-                $roleAdmin = ('ROLE_ADMIN' === $_user->getRole() or 'ROLE_EDITOR' === $_user->getRole()) ? 0 : -1;
-                return [
-                'username' => $username,
-                'roles' => $roleAdmin,
-                'active' => $_user->isEnabled()
-                ];
-            }
+        if (!$user->isEnabled()) {
+            //TODO: change exception using a simple message to user
+            throw new AccessDeniedHttpException('Account disabled');
         }
-        return [];
+
+        $roleAdmin = ($user->hasRoleAdmin() or $user->hasRole('ROLE_EDITOR')) ? 0 : -1;
+        return [
+        'username' => $user->getEmail(),
+        'roles' => $roleAdmin,
+        'active' => $user->isEnabled()
+        ];
     }
 
     public static function unsetCookie(): void
@@ -165,8 +155,7 @@ final class OnJWTAuthenticationSuccess implements EventSubscriberInterface
 
     public function addLastLoginUserDateTime(AuthenticationSuccessEvent $event)
     {
-
-        $username = $event->getUser()->getOriginUsername();
+        $username = $event->getUser()->getUsername();
         $user = $this->userRepository->findOneBy(['email' => $username]);
         if ($user instanceof User) {
             $user->setLastLogin();

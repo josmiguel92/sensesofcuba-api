@@ -27,7 +27,7 @@ trait IsEnglishGlobalTranslationTrait
      * @param bool $isEnglishGlobalTranslation
      * @return IsEnglishGlobalTranslationTrait
      */
-    public function setIsEnglishGlobalTranslation(bool $isEnglishGlobalTranslation): IsEnglishGlobalTranslationTrait
+    public function setIsEnglishGlobalTranslation(bool $isEnglishGlobalTranslation): ORM\Entity
     {
         $this->isEnglishGlobalTranslation = $isEnglishGlobalTranslation;
         return $this;

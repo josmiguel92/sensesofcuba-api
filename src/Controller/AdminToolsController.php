@@ -2,30 +2,20 @@
 
 namespace App\Controller;
 
-use App\Entity\Document;
-use App\Entity\SocProduct;
 use App\Entity\User;
-use App\Form\DocumentType;
-use App\Form\SocProductType;
-use App\Form\User\RegisterType;
+use App\Message\CreateUser;
 use App\Message\Events\NotifyUserAboutProductUpdate;
 use App\Message\Events\ProductUpdated;
-use App\Repository\DocumentRepository;
 use App\Repository\SocImageRepository;
 use App\Repository\SocProductRepository;
 use App\Repository\UserRepository;
+use Doctrine\ORM\EntityNotFoundException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\MessageBusInterface as Messenger;
 use Symfony\Component\Messenger\Stamp\SerializerStamp;
-use Symfony\Component\Mime\MimeTypeGuesserInterface;
-use Symfony\Component\Mime\MimeTypes;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -59,10 +49,10 @@ class AdminToolsController extends AbstractController
                     'icon' => 'fa fa-image'
                 ],
 
-//                [
-//                    'name' => 'Register fake user',
-//                    'link' => $this->generateUrl('admin_tools_register_fake_user')
-//                ],
+                [
+                    'name' => 'Register fake user',
+                    'link' => $this->generateUrl('admin_tools_register_fake_user')
+                ],
 
             ]
         ]);
@@ -94,11 +84,11 @@ class AdminToolsController extends AbstractController
                 ]))
             );
 
-            $user = $usersRepo->findByUsername($email);
-            if ($user instanceof MsgPhpUserBundle\User) {
+            $user = $usersRepo->findOneBy(['email' => $email]);
+            if ($user instanceof User) {
                 $bus->dispatch(new NotifyUserAboutProductUpdate($user->getId(), $product->getId()));
             }
-        } catch (\MsgPhp\Domain\Exception\EntityNotFound $e) {
+        } catch (EntityNotFoundException $e) {
             $this->addFlash('warning', $e->getMessage());
         }
 
@@ -113,17 +103,9 @@ class AdminToolsController extends AbstractController
     public function registerFakeUser(Messenger $messenger)
     {
         $email = uniqid('fakeuser-', false) . '@' . 'sensesofcuba.com';
-        $userRaw = [
-            'email' => $email,
-            'password' => $email,
-            'name' => $email,
-            'enterprise' => 'SensesOfCuba',
-            'country' => 'Cuba',
-            'web' => '',
-            'travelAgency' => 'Touroperator'
-        ];
 
-        $messenger->dispatch(new CreateUser($userRaw));
+        $user = new User($email, $email, $email, 'SensesOfCuba', 'Touroperator', 'Cuba', '');
+        $messenger->dispatch(new CreateUser($user));
 
         $this->addFlash('notice', "The user $email was created");
 

@@ -6,6 +6,7 @@ namespace App\MessageHandler;
 
 use App\Entity\User;
 use App\Message\PasswordRequest;
+use App\Repository\UserRepository;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Messenger\Exception\HandlerFailedException;
@@ -20,16 +21,22 @@ final class SendPasswordResetUrl implements MessageHandlerInterface
 {
     private MailerInterface $mailer;
     private RouterInterface $router;
+    /**
+     * @var UserRepository
+     */
+    private UserRepository $repository;
 
-    public function __construct(MailerInterface $mailer, RouterInterface $router)
+    public function __construct(MailerInterface $mailer, RouterInterface $router, UserRepository $repository)
     {
         $this->mailer = $mailer;
         $this->router = $router;
+        $this->repository = $repository;
     }
 
     public function __invoke(PasswordRequest $event): void
     {
-        $this->notify($event->getUserId());
+        $user = $this->repository->find($event->getUserId());
+        $this->notify($user);
     }
 
     public function notify(User $user): void

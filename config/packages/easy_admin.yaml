@@ -1,7 +1,8 @@
 easy_admin:
     user:
         name_property_path: 'email'
-        display_name: false
+        display_name: true
+        avatar_property_path: 'robotavatar'
     site_name: 'Senses of Cuba <em style="font-size: 80%;">Management</em>'
     list:
       # hide actions by default in a dropdown menu...
@@ -44,8 +45,8 @@ easy_admin:
       Users:
         class: App\Entity\User
         disabled_actions: ['new']
-        edit:
-            item_permission: ['ROLE_ADMIN']
+#        edit:
+#            item_permission: ['ROLE_ADMIN']
         show:
           fields:
             - { property: 'id' }
@@ -70,8 +71,11 @@ easy_admin:
             - { property: 'country' }
             - { property: 'web' }
             - { property: 'receiveEmails' , help: 'Select if this user will receive the new users subscriptions notifications'}
-#            - { property: 'userRoles', type: 'entity', type_options:{ class: 'App\Entity\Role'}}
-            - { property: 'role', label: 'User Role',  help: 'Select one role', type: 'choice',  type_options: { choices: { Client: 'ROLE_CLIENT' , 'Premium Client': 'ROLE_PREMIUM_CLIENT', 'Alternative prices Client': 'ROLE_ALTERNATIVE_PRICES_CLIENT', '____________': '____________', Editor: 'ROLE_EDITOR', Administrator: 'ROLE_ADMIN'} } }
+#            - { property: 'role', label: 'User Role',  help: 'Select one role', type: 'choice',  type_options: { choices: { Client: 'ROLE_CLIENT' , 'Premium Client': 'ROLE_PREMIUM_CLIENT', 'Alternative prices Client': 'ROLE_ALTERNATIVE_PRICES_CLIENT', '____________': '____________', Editor: 'ROLE_EDITOR', Administrator: 'ROLE_ADMIN'} } }
+#            - { property: 'roles', label: 'User Role',  help: 'Select one role', type: 'choice',  type_options: { expanded: true, choices: { Client: 'ROLE_CLIENT' , 'Premium Client': 'ROLE_PREMIUM_CLIENT', 'Alternative prices Client': 'ROLE_ALTERNATIVE_PRICES_CLIENT', '____________': '____________', Editor: 'ROLE_EDITOR', Administrator: 'ROLE_ADMIN'} } }
+#            - { property: 'roles', type: 'choice', type_options: { expanded: true, choices: ['ROLE_USER', 'ROLE_ADMIN' ] } }
+            - {property: 'hasRoleAdmin', label: 'Role', type: 'choice', type_options: {choices: {'ROLE_USER': 'ROLE_USER', 'ROLE_ADMIN': 'ROLE_ADMIN'}}}
+
             - { property: 'subscribedProducts', help: 'Products about the user will receive notifications' }
             - { property: 'hiddenProducts', help: 'Select the products hidden for this user' }
         list:

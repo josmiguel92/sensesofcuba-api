@@ -34,6 +34,7 @@
         "twig/inky-extra": "^3.0",
         "twig/markdown-extra": "^3.0",
         "vich/uploader-bundle": "^1.15",
+        "symfonycasts/reset-password-bundle": "^1.7",
         "ext-exif": "*"
     },
     "require-dev": {

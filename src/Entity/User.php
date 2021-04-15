@@ -84,11 +84,11 @@ class User implements UserInterface, Serializable
     private string $password;
 
     /**
-     * @var array
+     * @var ?array
      *
-     * @ORM\Column(type="json")
+     * @ORM\Column(type="json", nullable=true)
      */
-    private array $roles = [];
+    private ?array $roles = [];
 
     /**
      * @ORM\Column(type="boolean")
@@ -98,13 +98,13 @@ class User implements UserInterface, Serializable
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\SocProduct", inversedBy="subscribedUsers")
      */
-    private ArrayCollection $subscribedProducts;
+    private $subscribedProducts;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\SocProduct")
      * @ORM\JoinTable(name="user_hidden_products")
      */
-    private ArrayCollection $hiddenProducts;
+    private $hiddenProducts;
 
     /**
      * @ORM\Column(type="boolean")
@@ -135,7 +135,6 @@ class User implements UserInterface, Serializable
 
 
     public function __construct(
-        ?int $id,
         string $email,
         string $password,
         string $name,
@@ -144,7 +143,6 @@ class User implements UserInterface, Serializable
         string $country,
         ?string $web
     ) {
-        $this->id = $id;
         $this->email = $email;
 
         $this->createdAt = new DateTimeImmutable();
@@ -165,6 +163,12 @@ class User implements UserInterface, Serializable
         $this->hiddenProducts = new ArrayCollection();
         $this->receiveEmails = false;
         $this->wasEnabled = false;
+
+        if ($this->roles === null) {
+            $this->setRoles(['ROLE_USER']);
+        }
+
+        $this->updateTimestamps();
     }
 
     public function getId(): int
@@ -415,7 +419,7 @@ class User implements UserInterface, Serializable
      */
     public function getRobotavatar(): string
     {
-        return 'https://robohash.org/bgset_bg2/' . $this->getName();
+        return 'https://robohash.org/bgset_bg2/' . $this->getStaticUserHash();
     }
 
     public function getStaticUserHash(): string
@@ -471,26 +475,28 @@ class User implements UserInterface, Serializable
 
     public function setRoles(array $roles): void
     {
-        $_roles = [];
-        foreach ($roles as $role) {
-            if (in_array($role, self::ALLOWED_ROLES)) {
-                $_roles[] = $role;
-            }
-        }
-        $this->roles = $_roles;
+        $this->roles = $roles;
     }
 
-    public function setRole($role): self
+    public function hasRoleAdmin(): bool
     {
-        $this->receiveEmails = ($role === 'ROLE_ADMIN' || $role === 'ROLE_EDITOR');
+        return $this->hasRole('ROLE_ADMIN');
+    }
 
-        $role = in_array(
-            $role,
-            ['ROLE_ADMIN', 'ROLE_EDITOR', 'ROLE_PREMIUM_CLIENT', 'ROLE_CLIENT', 'ROLE_ALTERNATIVE_PRICES_CLIENT']
-        ) ? $role : 'ROLE_CLIENT';
-        $this->setRole($role);
 
-        return $this;
+    public function hasRole(string $string): bool
+    {
+        return in_array($string, $this->getRoles());
+    }
+
+    public function setHasRoleAdmin($isAdmin)
+    {
+        if (true == $isAdmin && false == $this->hasRole('ROLE_ADMIN')) {
+            $this->roles[] = 'ROLE_ADMIN';
+        }
+        if (false == $isAdmin && true == $this->hasRole('ROLE_ADMIN')) {
+            unset($this->roles['ROLE_ADMIN']);
+        }
     }
 
     public function isAdmin(): bool

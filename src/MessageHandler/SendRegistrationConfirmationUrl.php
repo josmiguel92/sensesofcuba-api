@@ -7,7 +7,6 @@ namespace App\MessageHandler;
 use App\Entity\User;
 use App\Message\Events\UserRegistered;
 use App\Repository\UserRepository;
-use MsgPhp\User\Event\UserCreated;
 use Symfony\Bridge\Doctrine\ManagerRegistry;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Messenger\Exception\HandlerFailedException;
@@ -17,7 +16,6 @@ use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Mailer\MailerInterface;
-use MsgPhp\User\Infrastructure\Security\UserIdentity;
 
 final class SendRegistrationConfirmationUrl implements MessageHandlerInterface
 {

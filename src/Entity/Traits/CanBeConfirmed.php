@@ -19,7 +19,7 @@ trait CanBeConfirmed
     /**
      * @ORM\Column(type="datetime", length=180, nullable=true)
      */
-    private ?DateTimeInterface $confirmedAt;
+    private ?DateTimeInterface $confirmedAt = null;
 
     public function getConfirmationToken(): ?string
     {

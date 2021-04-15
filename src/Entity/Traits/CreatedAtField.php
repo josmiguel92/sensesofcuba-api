@@ -33,5 +33,21 @@ trait CreatedAtField
         return $this->updatedAt;
     }
 
+    /**
+     * Updates createdAt and updatedAt timestamps.
+     */
+    public function updateTimestamps(): void
+    {
+        // Create a datetime with microseconds
+        $dateTime = \DateTime::createFromFormat('U.u', sprintf('%.6F', microtime(true)));
+        $dateTime->setTimezone(new \DateTimeZone(date_default_timezone_get()));
+
+        if (null === $this->createdAt) {
+            $this->createdAt = $dateTime;
+        }
+
+        $this->updatedAt = $dateTime;
+    }
+
 
 }

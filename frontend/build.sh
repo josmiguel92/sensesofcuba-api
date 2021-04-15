@@ -1,1 +1,1 @@
-npm run build:tourcom && cp dist/tourcom/* ../public/
+npm run build:prod
