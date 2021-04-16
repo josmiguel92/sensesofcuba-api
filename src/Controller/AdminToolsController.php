@@ -10,13 +10,19 @@ use App\Repository\SocImageRepository;
 use App\Repository\SocProductRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityNotFoundException;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\Filesystem\Exception\IOException;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\MessageBusInterface as Messenger;
 use Symfony\Component\Messenger\Stamp\SerializerStamp;
 use Symfony\Component\Routing\Annotation\Route;
+use App\DataBase\Backup\BackupMySQL;
 
 /**
 * @Route("/admin/tools", name="admin_tools_", host="%app.main_domain%")
@@ -52,6 +58,12 @@ class AdminToolsController extends AbstractController
                 [
                     'name' => 'Register fake user',
                     'link' => $this->generateUrl('admin_tools_register_fake_user')
+                ],
+                [
+                    'name' => 'Export Mysql DataBase as ZIP file (Advanced)',
+                    'link' => $this->generateUrl('admin_tools_export_db_download'),
+                    'color' => 'secondary',
+                    'icon' => 'fa fa-database'
                 ],
 
             ]
@@ -189,5 +201,56 @@ class AdminToolsController extends AbstractController
             "Content-Encoding" => 'UTF-8'
 
         ]);
+    }
+
+
+    /**
+     * @Route("/export_db_donwload", name="export_db_download")
+     * @param ParameterBagInterface $parameterBag
+     * @param Filesystem $filesystem
+     * @return Response
+     * @throws Exception
+     */
+    public function exportDBDownload(ParameterBagInterface $parameterBag, Filesystem $filesystem): Response
+    {
+        if (!isset($_ENV) || !isset($_ENV['DATABASE_URL'])) {
+            throw new ParameterNotFoundException('DATABASE_URL');
+        }
+
+        $databaseStr = $_ENV['DATABASE_URL'];
+        $dbConfig = parse_url($databaseStr);
+
+        $dbConfig['database'] = isset($dbConfig['path']) ? ltrim($dbConfig['path'], '/') : null;
+        $dbConfig['password'] = isset($dbConfig['pass']) ? ltrim($dbConfig['pass'], '/') : null;
+
+        $tables = ["*"];
+        $show = [
+            'TABLES',
+            'DATA'
+        ];
+
+        $backup = new BackupMySQL($dbConfig, $tables, $show);
+
+        $relativePath = str_replace('//', DIRECTORY_SEPARATOR, '..//backups//');
+        $backupFolder = $_SERVER['DOCUMENT_ROOT'] . $relativePath;
+
+        if (!is_dir($backupFolder)) {
+            $filesystem->mkdir($backupFolder);
+        }
+
+        if (!is_writable($backupFolder)) {
+            throw new IOException(
+                sprintf('Unable to write to the "%s" directory.', $backupFolder),
+                0,
+                null,
+                $backupFolder
+            );
+        }
+        $backup->setFolder($backupFolder);
+
+        $backup->zip();
+        $backup->download(false);
+
+        return new Response();
     }
 }
