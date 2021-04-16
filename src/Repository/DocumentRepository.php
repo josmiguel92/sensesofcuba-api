@@ -4,7 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Document;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
 use Knp\DoctrineBehaviors\ORM\Tree\TreeTrait;
 
 /**
@@ -17,7 +17,7 @@ class DocumentRepository extends ServiceEntityRepository
 {
     use TreeTrait;
 
-    public function __construct(EntityManagerInterface $registry)
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Document::class);
     }

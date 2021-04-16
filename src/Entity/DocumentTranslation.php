@@ -22,7 +22,8 @@ class DocumentTranslation implements TranslationInterface
 
     public function getId(): ?int
     {
-        return $this->id;
+        //It only should return null for translations un-persisted
+        return isset($this->id) ? $this->id : null;
     }
 
 

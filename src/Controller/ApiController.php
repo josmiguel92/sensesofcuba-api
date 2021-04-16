@@ -197,7 +197,7 @@ class ApiController extends AbstractController
 
         $lang = $this->getLangFromHeaders($request);
 
-        $docs = $documentRepository->findBy(['enabled' => true], ['importance' => 'DESC']);
+        $docs = $documentRepository->findBy(['enabled' => true], ['importance' => 'DESC', 'updatedAt' => 'DESC' ]);
 
         $items = [];
 
