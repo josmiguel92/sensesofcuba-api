@@ -14,6 +14,7 @@ parameters:
     app.path.uploaded_images: /uploads/images
     app.main_domain: '%env(SENSESOFCUBA_PUBLIC_DOMAIN)%'
     app.helper_domain: '%env(SENSESOFCUBA_HELPER_DOMAIN)%'
+    container.dumper.inline_factories: true
 
 services:
     # default configuration for services in *this* file

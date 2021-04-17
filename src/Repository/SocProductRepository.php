@@ -24,7 +24,6 @@ class SocProductRepository extends ServiceEntityRepository
 
     public function findByEnabledOrdered()
     {
-
         $query = new Query($this->_em);
         $query->setDQL('SELECT product, parent, image, transDoc, deFile, enFile, esFile, ProductTranslation
 
@@ -42,8 +41,10 @@ class SocProductRepository extends ServiceEntityRepository
             WHERE product.enabled = true
             ORDER BY product.importance DESC');
 
-         return $query->getResult();
-
+        return $query
+             ->useQueryCache(true)    // here
+             ->enableResultCache(300)  // and here
+            ->getResult();
     }
 
 
