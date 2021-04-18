@@ -6,7 +6,6 @@ namespace App\Controller\User;
 
 use App\Form\User\RegisterType;
 use App\Message\CreateUser;
-use App\Message\Events\UserRegistered;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,7 +29,6 @@ final class RegisterController extends AbstractController
         Environment $twig,
         MessageBusInterface $bus
     ): Response {
-
         $form = $this->createForm(RegisterType::class);
         $form->handleRequest($request);
 
@@ -55,7 +53,7 @@ final class RegisterController extends AbstractController
         return $this->json(['_token' => $token]);
 
 
-
+        //TODO: inform user about form errors
         $errors = [];
         foreach ($form->getErrors(true) as $error) {
             if (is_array($error->getMessageParameters()) && count($error->getMessageParameters()) > 0) {

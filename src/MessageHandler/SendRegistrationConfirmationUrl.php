@@ -22,10 +22,6 @@ final class SendRegistrationConfirmationUrl implements MessageHandlerInterface
     private MailerInterface $mailer;
     private RouterInterface $router;
     /**
-     * @var MessageBusInterface
-     */
-    private MessageBusInterface $bus;
-    /**
      * @var UserRepository
      */
     private UserRepository $repository;
@@ -34,12 +30,10 @@ final class SendRegistrationConfirmationUrl implements MessageHandlerInterface
     public function __construct(
         MailerInterface $mailer,
         RouterInterface $router,
-        MessageBusInterface $bus,
         UserRepository $repository
     ) {
         $this->mailer = $mailer;
         $this->router = $router;
-        $this->bus = $bus;
         $this->repository = $repository;
     }
 

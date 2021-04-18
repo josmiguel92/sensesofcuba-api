@@ -5,13 +5,11 @@ namespace App\Controller;
 use App\Entity\SocProduct;
 use App\Entity\SocProductTranslation;
 use App\EventSubscriber\OnJWTAuthenticationSuccess;
-use App\Form\User\RegisterType;
 use App\Repository\DocumentRepository;
 use App\Repository\NewsRepository;
 use App\Repository\SocProductRepository;
 use App\Repository\UserRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\CssSelector\Exception\InternalErrorException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -19,8 +17,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Csrf\CsrfToken;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * @Route(host="%app.main_domain%")
@@ -35,13 +31,13 @@ class ApiController extends AbstractController
      */
     public function homepage(): \Symfony\Component\HttpFoundation\Response
     {
-     //   return new RedirectResponse('index.html');
-         $file = __DIR__ . '/../../public/index.html';
+        //   return new RedirectResponse('index.html');
+        $file = __DIR__ . '/../../public/index.html';
 
         if (file_exists($file)) {
             return new Response(file_get_contents($file));
         }
-        throw new NotFoundHttpException('file index.html Not Found.');
+        throw new \Exception('file index.html Not Found.', 500);
     }
 
 
@@ -194,7 +190,6 @@ class ApiController extends AbstractController
      */
     public function apiDocuments(DocumentRepository $documentRepository, Request $request): JsonResponse
     {
-
         $lang = $this->getLangFromHeaders($request);
 
         $docs = $documentRepository->findBy(['enabled' => true], ['importance' => 'DESC', 'updatedAt' => 'DESC' ]);
@@ -247,7 +242,6 @@ class ApiController extends AbstractController
      */
     public function apiNews(NewsRepository $newsRepository, Request $request): JsonResponse
     {
-
         $lang = $this->getLangFromHeaders($request);
 
         $news = $newsRepository->findBy(['enabled' => true], ['updatedAt' => 'DESC']);

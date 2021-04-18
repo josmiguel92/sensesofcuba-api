@@ -10,6 +10,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Messenger\Stamp\DispatchAfterCurrentBusStamp;
 
 class CreateUserHandler implements MessageHandlerInterface
 {
@@ -37,8 +38,7 @@ class CreateUserHandler implements MessageHandlerInterface
         ManagerRegistry $registry,
         UserPasswordEncoderInterface $passwordEncoder,
         MessageBusInterface $bus
-    )
-    {
+    ) {
         $this->registry = $registry;
         $this->passwordEncoder = $passwordEncoder;
         $this->bus = $bus;
@@ -63,6 +63,6 @@ class CreateUserHandler implements MessageHandlerInterface
         $this->registry->getManager()->persist($user);
         $this->registry->getManager()->flush();
 
-        $this->bus->dispatch(new UserRegistered($user->getId()));
+        $this->bus->dispatch(new UserRegistered($user->getId()))->with(new DispatchAfterCurrentBusStamp());
     }
 }

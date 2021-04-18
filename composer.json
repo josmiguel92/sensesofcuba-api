@@ -7,6 +7,9 @@
         "ext-gd": "*",
         "ext-iconv": "*",
         "ext-json": "*",
+        "ext-exif": "*",
+        "ext-pdo": "*",
+        "ext-zip": "*",
         "a2lix/translation-form-bundle": "^3.0",
         "easycorp/easyadmin-bundle": "^2.3",
         "erusev/parsedown": "^1.7",
@@ -34,10 +37,7 @@
         "twig/inky-extra": "^3.0",
         "twig/markdown-extra": "^3.0",
         "vich/uploader-bundle": "^1.15",
-        "symfonycasts/reset-password-bundle": "^1.7",
-        "ext-exif": "*",
-      "ext-pdo": "*",
-        "ext-zip": "*"
+        "symfonycasts/reset-password-bundle": "^1.7"
     },
     "require-dev": {
         "doctrine/doctrine-migrations-bundle": "^3.0",

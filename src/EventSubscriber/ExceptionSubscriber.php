@@ -31,22 +31,32 @@ class ExceptionSubscriber implements EventSubscriberInterface
 
     public function onKernelException(ExceptionEvent $event): void
     {
-        if(!$event->isMasterRequest() || ($event->getThrowable() instanceof NotFoundHttpException))
-        {
+        if (!$event->isMasterRequest() || ($event->getThrowable() instanceof NotFoundHttpException)) {
             return;
         }
         $message = (new NotificationEmail())->addTo('josmiguel92@gmail.com')
             ->subject('An internal error occurred at Infonet backend.')
             ->importance(NotificationEmail::IMPORTANCE_HIGH)
-            ->content(get_class($event->getThrowable())."\n\n".$event->getThrowable()->getMessage())
-            ->attach($event->getThrowable()->getTraceAsString(), 'trace.txt');
+            ->content(get_class($event->getThrowable()) . "\n\n" . $event->getThrowable()->getMessage())
+            ->attach($event->getThrowable()->getTraceAsString(), 'trace.txt')
+            ->attach(
+                json_encode(
+                    [
+                        'attributes' => $event->getRequest()->attributes->getIterator(),
+                        'request' => $event->getRequest()->getContent(),
+                        'query' => $event->getRequest()->query->getIterator(),
+                    //  'server' => $event->getRequest()->server->getIterator(),
+                        'cookies' => $event->getRequest()->cookies->getIterator(),
+                        'headers' => $event->getRequest()->headers->getIterator(),
+                        ],
+                    JSON_PRETTY_PRINT | JSON_FORCE_OBJECT
+                ),
+                'request.json'
+            );
 
         try {
             $this->mailer->send($message);
-        } catch (TransportExceptionInterface $e) {
-            $this->logger->emergency('Cannot connect to email server or error sending the error notification to admin');
-        }
-        catch (HandlerFailedException $e){
+        } catch (TransportExceptionInterface | HandlerFailedException $e) {
             $this->logger->emergency('Cannot connect to email server or error sending the error notification to admin');
         }
     }

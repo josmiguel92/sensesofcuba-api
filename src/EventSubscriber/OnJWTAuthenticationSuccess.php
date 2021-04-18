@@ -100,22 +100,26 @@ final class OnJWTAuthenticationSuccess implements EventSubscriberInterface
             $data[$key] = $value;
         }
 
-        $cookieExpire = time() + (int)(60 * 60 * 1.5);
-        $cookie = Cookie::create(
-            self::$cookieName,
-            json_encode($data, JSON_THROW_ON_ERROR),
-            $cookieExpire,
-            null,
-            null,
-            null,
-            true,
-            false,
-            Cookie::SAMESITE_STRICT
-        );
+        if ($data['active'] === false) {
+            $event->getResponse()->setStatusCode(403, 'The user is not active');
+        } else {
+            $cookieExpire = time() + (int)(60 * 60 * 1.5);
+            $cookie = Cookie::create(
+                self::$cookieName,
+                json_encode($data, JSON_THROW_ON_ERROR),
+                $cookieExpire,
+                null,
+                null,
+                null,
+                true,
+                false,
+                Cookie::SAMESITE_STRICT
+            );
 
-        $event->getResponse()->headers->setCookie($cookie);
+            $event->getResponse()->headers->setCookie($cookie);
 
-        $event->setData($data);
+            $event->setData($data);
+        }
     }
 
 
@@ -123,13 +127,8 @@ final class OnJWTAuthenticationSuccess implements EventSubscriberInterface
      * @param User $user
      * @return array
      */
-    private function getUserDetails(User $user): array
+    private function getUserDetails(UserInterface $user): array
     {
-        if (!$user->isEnabled()) {
-            //TODO: change exception using a simple message to user
-            throw new AccessDeniedHttpException('Account disabled');
-        }
-
         $roleAdmin = ($user->hasRoleAdmin() or $user->hasRole('ROLE_EDITOR')) ? 0 : -1;
         return [
         'username' => $user->getEmail(),
