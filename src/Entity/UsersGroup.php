@@ -108,4 +108,8 @@ class UsersGroup
     }
 
 
+    public function __toString()
+    {
+        return $this->name;
+    }
 }

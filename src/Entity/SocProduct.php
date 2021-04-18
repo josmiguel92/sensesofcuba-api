@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Entity\Traits\IsEnglishGlobalTranslationTrait;
+use App\Entity\Traits\ShowAndHideForUserGroups;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -22,6 +23,7 @@ class SocProduct implements TimestampableInterface, TranslatableInterface
     use CanBeEnabled;
     use HasImageTrait;
     use IsEnglishGlobalTranslationTrait;
+    use ShowAndHideForUserGroups;
 
     /**
      * @ORM\Id()

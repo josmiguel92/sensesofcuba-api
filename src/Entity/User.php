@@ -417,7 +417,7 @@ class User implements UserInterface, Serializable
 
     public function __toString(): string
     {
-        return $this->email;
+        return sprintf("%s (%s)", $this->email, $this->enterprise);
     }
 
     /**
@@ -566,4 +566,6 @@ class User implements UserInterface, Serializable
 
         return $this;
     }
+
+
 }

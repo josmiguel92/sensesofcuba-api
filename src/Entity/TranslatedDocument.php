@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\ShowAndHideForUserGroups;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -11,6 +12,8 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  */
 class TranslatedDocument
 {
+    use ShowAndHideForUserGroups;
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -158,6 +161,6 @@ class TranslatedDocument
 
     public function __toString(): string
     {
-        return "{" . $this->id . "}";
+        return sprintf("{%s}", $this->id);
     }
 }
