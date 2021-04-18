@@ -19,6 +19,11 @@ class TranslatedDocument
     private ?int $id;
 
     /**
+     * @ORM\ManyToOne(targetEntity=SocProduct::class, inversedBy="documentCollection")
+     */
+    private $socProduct;
+
+    /**
      * @ORM\OneToOne(targetEntity="App\Entity\SocFile", cascade={"persist", "remove"})
      */
     private ?SocFile $enFile;
@@ -136,6 +141,19 @@ class TranslatedDocument
         }
 
         return $translation;
+    }
+
+
+    public function getSocProduct(): ?SocProduct
+    {
+        return $this->socProduct;
+    }
+
+    public function setSocProduct(?SocProduct $socProduct): self
+    {
+        $this->socProduct = $socProduct;
+
+        return $this;
     }
 
     public function __toString(): string

@@ -3,8 +3,6 @@
 namespace App\MessageHandler;
 
 use App\Entity\ProductNotification;
-use App\Message\Events\NotifyUserAboutProductUpdate;
-use App\Message\Events\PasswordReset;
 use App\Message\Events\ProductUpdated;
 use App\Repository\SocProductRepository;
 use App\Repository\UserRepository;
@@ -12,7 +10,6 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
-use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -31,32 +28,18 @@ class ProductUpdatedHandler implements MessageHandlerInterface
      * @var EntityManager
      */
     private $manager;
-    /**
-     * @var UserRepository
-     */
-    private UserRepository $userRepository;
-    /**
-     * @var MailerInterface
-     */
-    private MailerInterface $mailer;
 
     /**
      * PasswordRequestHandler constructor.
-     * @param MailerInterface $mailer
-     * @param UserRepository $userRepository
      * @param SocProductRepository $productRepository
      * @param MessageBusInterface $bus
      * @param EntityManagerInterface $manager
      */
     public function __construct(
-        MailerInterface $mailer,
-        UserRepository $userRepository,
         SocProductRepository $productRepository,
         MessageBusInterface $bus,
         EntityManagerInterface $manager
     ) {
-        $this->mailer = $mailer;
-        $this->userRepository = $userRepository;
         $this->productRepository = $productRepository;
         $this->bus = $bus;
         $this->manager = $manager;

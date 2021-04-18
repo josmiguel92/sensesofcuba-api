@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
+use ErrorException;
 use Symfony\Component\HttpFoundation\File\File;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
@@ -96,6 +97,8 @@ class SocImage implements TimestampableInterface
             400
         );
     }
+
+    //TODO: create a Thumbnail service
 
     // Link image type to correct image loader and saver
     // - makes it easier to add additional types later on
@@ -222,11 +225,24 @@ class SocImage implements TimestampableInterface
         // - set the correct quality level
 
         // save the duplicate version of the image to disk
-        return call_user_func(
-            self::IMAGE_HANDLERS[$type]['save'],
-            $thumbnail,
-            $dest,
-            self::IMAGE_HANDLERS[$type]['quality']
-        );
+        if(!file_exists(dirname($dest)))
+            try {
+                mkdir(dirname($dest));
+            } catch (\Exception $e) {
+            }
+
+
+
+        $code = null;
+        try {
+            $code = call_user_func(
+                self::IMAGE_HANDLERS[$type]['save'],
+                $thumbnail,
+                $dest,
+                self::IMAGE_HANDLERS[$type]['quality']
+            );
+        } catch (\Exception $e) {
+        }
+        return $code;
     }
 }

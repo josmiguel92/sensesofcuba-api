@@ -78,6 +78,7 @@ class UserRegisteredHandler implements MessageHandlerInterface
             ->context([
                 'subject' => 'New account on Senses of Cuba',
                 'username' =>  $newUser->getName(),
+                'company' => $newUser->getEnterprise(),
                 'action_url' => $this->router->generate('easyadmin', [], 0) ,
             ])
           ->priority(Email::PRIORITY_HIGH);

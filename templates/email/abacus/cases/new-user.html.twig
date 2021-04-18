@@ -7,7 +7,10 @@
     {{ include('email/abacus/modules/_transaction.html.twig', {
         'message_title': subject,
         'username': 'Hello there!',
-        'messages': ['There is a new user awaiting for confirm his account', username, 'You can see the details from your admin panel'],
+        'messages': [
+            'There is a new user awaiting for confirm his account',
+            username ~ ', from "'~ company ~'"',
+            'You can see the details from your admin panel'],
         'action_url': action_url,
         'action_text': 'Go to Admin Panel'
     }) }}

@@ -34,6 +34,12 @@ class SocFile implements TimestampableInterface
      */
     private ?string $fileName;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private ?string $title;
+
+
 
     public function getId(): ?int
     {
@@ -72,6 +78,27 @@ class SocFile implements TimestampableInterface
         }
         return $this;
     }
+
+    /**
+     * @return string
+     */
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+
+    /**
+     * @param mixed $title
+     * @return SocFile
+     */
+    public function setTitle(?string $title): self
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
+
 
     public function __toString(): ?string
     {

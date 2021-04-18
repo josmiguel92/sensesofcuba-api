@@ -67,6 +67,11 @@ class SocProduct implements TimestampableInterface, TranslatableInterface
     private $alternativeTranslatedDocument;
 
     /**
+     * @ORM\OneToMany(targetEntity=TranslatedDocument::class, mappedBy="socProduct", cascade={"persist"})
+     */
+    private $documentCollection;
+
+    /**
      * @ORM\ManyToMany(targetEntity="App\Entity\User", mappedBy="subscribedProducts")
      */
     private $subscribedUsers;
@@ -80,6 +85,7 @@ class SocProduct implements TimestampableInterface, TranslatableInterface
     {
         $this->socProducts = new ArrayCollection();
         $this->subscribedUsers = new ArrayCollection();
+        $this->documentCollection = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -311,6 +317,38 @@ class SocProduct implements TimestampableInterface, TranslatableInterface
     public function setAlternativeTranslatedDocument($alternativeTranslatedDocument): SocProduct
     {
         $this->alternativeTranslatedDocument = $alternativeTranslatedDocument;
+        return $this;
+    }
+
+
+    /**
+     * @return Collection|TranslatedDocument[]
+     */
+    public function getDocumentCollection(): Collection
+    {
+        return $this->documentCollection;
+    }
+
+    public function addDocumentCollection(TranslatedDocument $documentCollection): self
+    {
+        if (!$this->documentCollection->contains($documentCollection)) {
+            $this->documentCollection[] = $documentCollection;
+            $documentCollection->setSocProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDocumentCollection(TranslatedDocument $documentCollection): self
+    {
+        if ($this->documentCollection->contains($documentCollection)) {
+            $this->documentCollection->removeElement($documentCollection);
+            // set the owning side to null (unless already changed)
+            if ($documentCollection->getSocProduct() === $this) {
+                $documentCollection->setSocProduct(null);
+            }
+        }
+
         return $this;
     }
 }

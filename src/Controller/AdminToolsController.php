@@ -116,7 +116,14 @@ class AdminToolsController extends AbstractController
     {
         $email = uniqid('fakeuser-', false) . '@' . 'sensesofcuba.com';
 
-        $user = new User($email, $email, $email, 'SensesOfCuba', 'Touroperator', 'Cuba', '');
+        $user['email'] = $email;
+        $user['password'] = $email;
+        $user['name'] = $email;
+        $user['enterprise']  = 'SensesOfCuba';
+        $user['travelAgency'] = 'Touroperator';
+        $user['country'] = 'Cuba';
+        $user['web'] = '';
+
         $messenger->dispatch(new CreateUser($user));
 
         $this->addFlash('notice', "The user $email was created");

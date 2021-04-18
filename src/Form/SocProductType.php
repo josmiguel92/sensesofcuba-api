@@ -41,12 +41,15 @@ class SocProductType extends EasyAdminFormType
 //                    ]
 //                ]
             ])
-            ->add('isEnglishGlobalTranslation',
-                CheckboxType::class, [
+            ->add(
+                'isEnglishGlobalTranslation',
+                CheckboxType::class,
+                [
                     'label_attr' => ['class' => 'switch-custom'],
                     'label' => "Use english version as fallback",
                     'required' => false
-                ])
+                ]
+            )
             ->add('documentCollection', CollectionType::class, [
                 'entry_type' => TranslatedDocumentType::class,
                 'allow_add' => true,
