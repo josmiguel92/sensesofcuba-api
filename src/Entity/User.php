@@ -133,6 +133,11 @@ class User implements UserInterface, Serializable
      */
     private ?DateTimeInterface $passwordRequestedAt;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=UsersGroup::class, inversedBy="users")
+     */
+    private $userGroup;
+
 
     public function __construct(
         string $email,
@@ -169,6 +174,7 @@ class User implements UserInterface, Serializable
         }
 
         $this->updateTimestamps();
+        $this->userGroup = new ArrayCollection();
     }
 
     public function getId(): int
@@ -535,5 +541,29 @@ class User implements UserInterface, Serializable
     public function getEmail(): string
     {
         return $this->email;
+    }
+
+    /**
+     * @return Collection|UsersGroup[]
+     */
+    public function getUserGroup(): Collection
+    {
+        return $this->userGroup;
+    }
+
+    public function addUserGroup(UsersGroup $userGroup): self
+    {
+        if (!$this->userGroup->contains($userGroup)) {
+            $this->userGroup[] = $userGroup;
+        }
+
+        return $this;
+    }
+
+    public function removeUserGroup(UsersGroup $userGroup): self
+    {
+        $this->userGroup->removeElement($userGroup);
+
+        return $this;
     }
 }

@@ -3,9 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\UsersGroup;
 use App\Message\CreateUser;
 use App\Repository\SocImageRepository;
+use App\Repository\UsersGroupRepository;
 use Exception;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -55,6 +58,12 @@ class AdminToolsController extends AbstractController
                 [
                     'name' => 'Register fake user and send email to admins',
                     'link' => $this->generateUrl('admin_tools_register_fake_user'),
+                    'icon' => 'fa fa-user-alt'
+                ],
+
+                [
+                    'name' => 'Create default user group',
+                    'link' => $this->generateUrl('admin_tools_create_default_user_group'),
                     'icon' => 'fa fa-user-alt'
                 ],
 
@@ -174,8 +183,9 @@ class AdminToolsController extends AbstractController
      */
     public function exportDBDownload(ParameterBagInterface $parameterBag, Filesystem $filesystem): Response
     {
-        if(!$this->isGranted('ROLE_ADMIN'))
+        if (!$this->isGranted('ROLE_ADMIN')) {
             throw new AccessDeniedException();
+        }
 
         if (!isset($_ENV) || !isset($_ENV['DATABASE_URL'])) {
             throw new ParameterNotFoundException('DATABASE_URL');
@@ -216,5 +226,25 @@ class AdminToolsController extends AbstractController
         $backup->download(false);
 
         return new Response();
+    }
+
+    /**
+     * @Route("/create_default_user_group", name="create_default_user_group")
+     * @param Messenger $messenger
+     * @return RedirectResponse
+     */
+    public function createDefaultUserGroup(UsersGroupRepository $repository, ManagerRegistry $registry)
+    {
+        if (null == ($defaultGroup = $repository->findBy(['name' => 'default']))) {
+            $defaultGroup = new UsersGroup('default');
+            $registry->getManager()->persist($defaultGroup);
+            $registry->getManager()->flush();
+            $this->addFlash('notice', "The default users group was created");
+        } else {
+            $this->addFlash('notice', "The default users group exist already");
+        }
+
+
+        return $this->redirectToRoute('admin_tools_index');
     }
 }
