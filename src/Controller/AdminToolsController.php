@@ -4,12 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Message\CreateUser;
-use App\Message\Events\NotifyUserAboutProductUpdate;
-use App\Message\Events\ProductUpdated;
 use App\Repository\SocImageRepository;
-use App\Repository\SocProductRepository;
-use App\Repository\UserRepository;
-use Doctrine\ORM\EntityNotFoundException;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
@@ -18,11 +13,10 @@ use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\MessageBusInterface as Messenger;
-use Symfony\Component\Messenger\Stamp\SerializerStamp;
 use Symfony\Component\Routing\Annotation\Route;
 use App\DataBase\Backup\BackupMySQL;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
 * @Route("/admin/tools", name="admin_tools_", host="%app.main_domain%")
@@ -35,19 +29,22 @@ class AdminToolsController extends AbstractController
     public function index()
     {
         return $this->render('admin/tools/index.html.twig', [
-            'tools' => [
+            'export' => [
                 [
-                    'name' => 'Export Users data as Excel',
-                    'link' => $this->generateUrl('admin_tools_export_users_as_xls'),
-                    'color' => 'primary',
-                    'icon' => 'fa fa-users'
+                'name' => 'Export Users data as Excel',
+                'link' => $this->generateUrl('admin_tools_export_users_as_xls'),
+                'color' => 'primary',
+                'icon' => 'fa fa-users'
                 ],
-//                [
-//                    'name' => 'Send test emails to admin',
-//                    'link' => $this->generateUrl('admin_tools_send_test_email'),
-//                    'color' => 'secondary',
-//                    'icon' => 'fa fa-send-o'
-//                ],
+                [
+                    'name' => 'Export Mysql DataBase as ZIP file (Advanced)',
+                    'link' => $this->generateUrl('admin_tools_export_db_download'),
+                    'color' => 'secondary',
+                    'icon' => 'fa fa-database'
+                ],
+            ],
+            'tools' => [
+
                 [
                     'name' => 'Remake image thumbnails for products images',
                     'link' => $this->generateUrl('admin_tools_remake_thumbs'),
@@ -56,55 +53,13 @@ class AdminToolsController extends AbstractController
                 ],
 
                 [
-                    'name' => 'Register fake user',
-                    'link' => $this->generateUrl('admin_tools_register_fake_user')
-                ],
-                [
-                    'name' => 'Export Mysql DataBase as ZIP file (Advanced)',
-                    'link' => $this->generateUrl('admin_tools_export_db_download'),
-                    'color' => 'secondary',
-                    'icon' => 'fa fa-database'
+                    'name' => 'Register fake user and send email to admins',
+                    'link' => $this->generateUrl('admin_tools_register_fake_user'),
+                    'icon' => 'fa fa-user-alt'
                 ],
 
             ]
         ]);
-    }
-
-    /**
-     * @Route("/send_test_email", name="send_test_email")
-     * @param Messenger $bus
-     * @param SocProductRepository $repository
-     * @param UserRepository $usersRepo
-     * @return RedirectResponse
-     */
-    public function sendTestEmail(
-        Messenger $bus,
-        SocProductRepository $repository,
-        UserRepository $usersRepo
-    ): RedirectResponse
-    {
-        $currentUser = $this->getUser();
-        $email = $currentUser->getUsername();
-
-        try {
-            $product = $repository->findAll()[0];
-            $bus->dispatch(
-                (new Envelope(new ProductUpdated($product->getId())))->with(new SerializerStamp([
-                // groups are applied to the whole message, so make sure
-                // to define the group for every embedded object
-                'groups' => ['my_serialization_groups'],
-                ]))
-            );
-
-            $user = $usersRepo->findOneBy(['email' => $email]);
-            if ($user instanceof User) {
-                $bus->dispatch(new NotifyUserAboutProductUpdate($user->getId(), $product->getId()));
-            }
-        } catch (EntityNotFoundException $e) {
-            $this->addFlash('warning', $e->getMessage());
-        }
-
-        return $this->redirectToRoute('admin_tools_index');
     }
 
     /**
@@ -130,7 +85,6 @@ class AdminToolsController extends AbstractController
 
         return $this->redirectToRoute('admin_tools_index');
     }
-
 
     /**
      * @Route("/thumbs", name="remake_thumbs")
@@ -212,7 +166,7 @@ class AdminToolsController extends AbstractController
 
 
     /**
-     * @Route("/export_db_donwload", name="export_db_download")
+     * @Route("/export_db_download", name="export_db_download")
      * @param ParameterBagInterface $parameterBag
      * @param Filesystem $filesystem
      * @return Response
@@ -220,6 +174,9 @@ class AdminToolsController extends AbstractController
      */
     public function exportDBDownload(ParameterBagInterface $parameterBag, Filesystem $filesystem): Response
     {
+        if(!$this->isGranted('ROLE_ADMIN'))
+            throw new AccessDeniedException();
+
         if (!isset($_ENV) || !isset($_ENV['DATABASE_URL'])) {
             throw new ParameterNotFoundException('DATABASE_URL');
         }

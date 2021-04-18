@@ -13,8 +13,6 @@
                     <h1 class="title">   Export data & Tools</h1>
                 </div>
 
-
-
             </div>
 
 
@@ -23,17 +21,34 @@
 
         <section id="main" class="content-body">
 
-            <div class="container">
-                <ul class="list-unstyled list-inline flex-column" style="display: flex">
-                    {% for tool in tools %}
-                        <li class="list-group-horizontal mt-4">
-                            <a class="btn {% if tool.color is defined %}btn-{{ tool.color }}{% endif %}" role="button" href="{{ tool.link }}">
-                                {% if tool.icon is defined %}<i class="{{ tool.icon }}"></i>{% endif %}
-                                {{ tool.name }}
-                            </a>
-                        </li>
-                    {% endfor %}
-                </ul>
+            <div class="container" style="display: flex">
+                <div class="col-md-6">
+                    <ul class="list-unstyled list-inline flex-column" style="display: flex">
+                        {% for tool in export %}
+                            <li class="list-group-horizontal mt-4">
+                                <a class="btn {% if tool.color is defined %}btn-{{ tool.color }}{% endif %}" role="button" href="{{ tool.link }}">
+                                    {% if tool.icon is defined %}<i class="{{ tool.icon }}"></i>{% endif %}
+                                    {{ tool.name }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <div class="col-md-6">
+                    <ul class="list-unstyled list-inline flex-column" style="display: flex">
+                        {% for tool in tools %}
+                            <li class="list-group-horizontal mt-4">
+                                <a class="btn {% if tool.color is defined %}btn-{{ tool.color }}{% endif %}" role="button" href="{{ tool.link }}">
+                                    {% if tool.icon is defined %}<i class="{{ tool.icon }}"></i>{% endif %}
+                                    {{ tool.name }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+
 
             </div>
 

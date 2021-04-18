@@ -104,10 +104,8 @@ class SocProductsTreeController extends AbstractController
 
                 $bus->dispatch(new ProductUpdated($product->getId(), '', $sendNotification));
 
-                if ($sendNotification)
-                {
+                if ($sendNotification) {
                     $this->addFlash('success', 'A new notification was added for send to users.');
-
                 }
 
                 $this->addFlash('success', 'Product "' . $product->getReferenceName() . '" updated!');
@@ -130,7 +128,7 @@ class SocProductsTreeController extends AbstractController
         }
 
 
-          return $this->render('soc_products_tree/new_edit.html.twig', [
+        return $this->render('soc_products_tree/new_edit.html.twig', [
            'product' => $product,
            'form' => $form->createView(),
            'deleteForm' => $deleteForm->createView(),
