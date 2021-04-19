@@ -328,6 +328,11 @@ class SocProduct implements TimestampableInterface, TranslatableInterface
      */
     public function getDocumentCollection(): Collection
     {
+        if ($this->translatedDocument !== null) {
+            $elements = array_reverse($this->documentCollection->toArray(), true);
+            $elements[] = ($this->translatedDocument);
+            return new ArrayCollection(array_reverse($elements, true));
+        }
         return $this->documentCollection;
     }
 

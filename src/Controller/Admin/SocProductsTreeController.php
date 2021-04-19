@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Admin;
 
 use App\Entity\SocProduct;
 use App\Form\SocProductType;
@@ -86,6 +86,7 @@ class SocProductsTreeController extends AbstractController
      * @param Request $request
      * @param MessageBusInterface $bus
      * @return RedirectResponse|Response
+     * @throws \Knp\DoctrineBehaviors\Exception\ShouldNotHappenException
      */
     public function edit(SocProduct $product, Request $request, MessageBusInterface $bus)
     {
@@ -111,6 +112,13 @@ class SocProductsTreeController extends AbstractController
                 $this->addFlash('success', 'Product "' . $product->getReferenceName() . '" updated!');
 
                 $product->updateTimestamps();
+
+
+                //Migrating from isolated document to documentCollection structure
+                if ($product->getTranslatedDocument()) {
+                    $product->addDocumentCollection($product->getTranslatedDocument());
+                    $product->setTranslatedDocument(null);
+                }
 
                 foreach ($product->getDocumentCollection() as $item) {
                     $item->setSocProduct($product);

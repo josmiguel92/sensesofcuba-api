@@ -120,44 +120,44 @@
             <h5>Product PDF File</h5>
         </div>
     </div>
-    <div class="row">
+{#    <div class="row">#}
 
-                <div class="col-md-4 card-body">
-                    <div class="form-group">
+{#                <div class="col-md-4 card-body">#}
+{#                    <div class="form-group">#}
 {#                        {{ form_row(form.file.title) }}#}
 {#                        {{ form_row(form.file.file) }}#}
-                        {% if form.translatedDocument.enFile is defined %}
-                            {{ form_row(form.translatedDocument.enFile) }}
-                        {% endif %}
+{#                        {% if form.translatedDocument.enFile is defined %}#}
+{#                            {{ form_row(form.translatedDocument.enFile) }}#}
+{#                        {% endif %}#}
 
 
-                    </div>
-                </div>
+{#                    </div>#}
+{#                </div>#}
 
-                <div class="col-md-4 card-body">
-                    <div class="form-group">
+{#                <div class="col-md-4 card-body">#}
+{#                    <div class="form-group">#}
 {#                        {{ form_row(form.file.title) }}#}
 {#                        {{ form_row(form.file.file) }}#}
-                        {% if form.translatedDocument.deFile is defined %}
-                            {{ form_row(form.translatedDocument.deFile) }}
-                        {% endif %}
+{#                        {% if form.translatedDocument.deFile is defined %}#}
+{#                            {{ form_row(form.translatedDocument.deFile) }}#}
+{#                        {% endif %}#}
 
 
-                    </div>
-                </div>
+{#                    </div>#}
+{#                </div>#}
 
-                <div class="col-md-4 card-body">
-                    <div class="form-group">
-                        {# { form_row(form.file.title) } #}
+{#                <div class="col-md-4 card-body">#}
+{#                    <div class="form-group">#}
+{#                        #}{# { form_row(form.file.title) } #}
 {#                        {{ form_row(form.file.file) }} #}
-                        {% if form.translatedDocument.esFile is defined %}
-                            {{ form_row(form.translatedDocument.esFile) }}
-                        {% endif  %}
+{#                        {% if form.translatedDocument.esFile is defined %}#}
+{#                            {{ form_row(form.translatedDocument.esFile) }}#}
+{#                        {% endif  %}#}
 
 
-                    </div>
-                </div>
-    </div>
+{#                    </div>#}
+{#                </div>#}
+{#    </div>#}
 
 
     <div class="row accordion mb-4" id="accordion-{{ form.documentCollection.vars.id }}">
@@ -165,7 +165,13 @@
                 <h5 data-toggle="collapse" data-target="#content-{{ form.documentCollection.vars.id }}"><i class="fa fa-list"></i>
                         Product's docs Collection
 
+                    {% if product.documentCollection.count > 0 %}
+                        <span class="badge badge-primary">{{ product.documentCollection.count }}</span>
+                    {% endif %}
+
                     <i class="fa fa-chevron-down"></i>
+
+
                 </h5>
 
 

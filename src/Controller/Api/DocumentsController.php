@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Api;
 
 use App\Entity\SocProduct;
 use App\Entity\SocProductTranslation;
@@ -19,48 +19,13 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route(host="%app.main_domain%")
+ * @Route("/api/products", host="%app.main_domain%", name="api_products")
  */
-class ApiController extends AbstractController
+class ProductsController extends AbstractController
 {
-    public const DATE_FORMAT = 'Y/m/d H:i:s';
 
     /**
-     * @Route("/", name="homepage")
-     * @throws NotFoundHttpException
-     */
-    public function homepage(): \Symfony\Component\HttpFoundation\Response
-    {
-        //   return new RedirectResponse('index.html');
-        $file = __DIR__ . '/../../public/index.html';
-
-        if (file_exists($file)) {
-            return new Response(file_get_contents($file));
-        }
-        throw new \Exception('file index.html Not Found.', 500);
-    }
-
-
-    /**
-     * @Route("/logout", name="app_logout")
-     */
-    public function logout(): RedirectResponse
-    {
-        OnJWTAuthenticationSuccess::unsetCookie();
-
-        return new RedirectResponse('index.html');
-    }
-    /**
-     * @Route("/api/login", name="app_login")
-     */
-    public function login(): JsonResponse
-    {
-        return new JsonResponse([]);
-    }
-
-
-    /**
-     * @Route("/api/products", name="api_products")
+     * @Route("/api/products", name="products")
      * @param SocProductRepository $productRepository
      * @param Request $request
      * @param UserRepository $userRepository
