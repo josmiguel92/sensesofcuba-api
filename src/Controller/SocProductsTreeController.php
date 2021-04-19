@@ -112,6 +112,10 @@ class SocProductsTreeController extends AbstractController
 
                 $product->updateTimestamps();
 
+                foreach ($product->getDocumentCollection() as $item) {
+                    $item->setSocProduct($product);
+                }
+
                 $this->getDoctrine()->getManager()->persist($product);
                 $this->getDoctrine()->getManager()->flush();
 

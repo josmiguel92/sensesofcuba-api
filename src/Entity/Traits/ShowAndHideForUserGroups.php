@@ -31,7 +31,6 @@ trait ShowAndHideForUserGroups
             $str = (string) $item;
             $this->showForGroups[] = $str;
         }
-
         return $this;
     }
 
@@ -40,10 +39,12 @@ trait ShowAndHideForUserGroups
         return $this->hideForGroups;
     }
 
-    public function setHideForGroups(?array $hideForGroups): self
+    public function setHideForGroups($hideForGroups): self
     {
-        $this->hideForGroups = $hideForGroups;
-
+        foreach ($hideForGroups as $item) {
+            $str = (string) $item;
+            $this->hideForGroups[] = $str;
+        }
         return $this;
     }
 }

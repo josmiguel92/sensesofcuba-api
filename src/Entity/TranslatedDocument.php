@@ -41,6 +41,11 @@ class TranslatedDocument
      */
     private ?SocFile $deFile;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $title;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -162,5 +167,17 @@ class TranslatedDocument
     public function __toString(): string
     {
         return sprintf("{%s}", $this->id);
+    }
+
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+
+    public function setTitle(?string $title): self
+    {
+        $this->title = $title;
+
+        return $this;
     }
 }

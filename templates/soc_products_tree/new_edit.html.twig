@@ -175,10 +175,10 @@
 
 
         {#        {{ dump(product.documentCollection) }}#}
-                <ul class="documentCollection "  data-prototype="{{ form_widget(form.documentCollection.vars.prototype)|e('html_attr') }}">
+                <ul class="documentCollection "  data-prototype="{{ form_row(form.documentCollection.vars.prototype)|e('html_attr') }}">
                     {% for document in form.documentCollection %}
-                        {{ dump(document) }}
-                        <li class="row form-group" style="display: flex">{{ form_row(document, {'attr': {'class': 'col-md-4'}}) }}</li>
+{#                        {{ dump(document) }}#}
+                        <li class="row form-group" style="display: flex">{{ form_row(document) }}</li>
                     {% endfor %}
                 </ul>
 
@@ -186,11 +186,38 @@
 
 
                 <style>
-                    ul.documentCollection li > div{
-                        display: flex;
+                    ul.documentCollection li,
+                    .translated-doc{
+                        width: 100%;
+                    }
+                    .translated-doc{
+                        display: grid;
+                        grid-template-columns: repeat(3, 1fr);
+                        grid-template-rows: repeat(3, 1fr);
+                        grid-column-gap: 0px;
+                        grid-row-gap: 0px;
+
                         gap: 4em;
                         border-bottom: #c9d2d9 solid 2px;
+
                     }
+                    .translated-doc > .form-group:nth-child(1){
+                        grid-area: 1 / 1 / 2 / 3;
+                    }
+                    .translated-doc > .form-group:nth-child(2){
+                        grid-area: 2 / 1 / 4 / 2;
+                    }
+                    .translated-doc > .form-group:nth-child(3){
+                        grid-area: 2 / 2 / 4 / 3;
+                    }
+                    .translated-doc > .form-group:nth-child(4){
+                        grid-area: 2 / 3 / 3 / 4;
+                    }
+                    .translated-doc > .form-group:nth-child(5){
+                        grid-area: 3 / 3 / 4 / 4;
+                    }
+
+
                     ul.documentCollection li > div > .form-group
                     {max-width: 33.33333%;}
                 </style>
@@ -305,7 +332,7 @@
             </div>
 
             {{ form(form._token) }}
-            {{ form(form) }}
+            {{ form_end(form) }}
 
         </section>
 

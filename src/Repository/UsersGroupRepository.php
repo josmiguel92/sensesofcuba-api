@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\UsersGroup;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\AbstractQuery;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -17,6 +18,21 @@ class UsersGroupRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, UsersGroup::class);
+    }
+
+    public function getUserGroupNamesArray(): array
+    {
+        $data = $this->createQueryBuilder('u')
+            ->select('u.name')
+            ->distinct(true)
+            ->getQuery()
+            ->enableResultCache(3600)
+            ->setHydrationMode(AbstractQuery::HYDRATE_SCALAR)
+            ->getResult();
+
+        return array_map(function ($item) {
+            return $item['name'];
+        }, $data);
     }
 
     // /**

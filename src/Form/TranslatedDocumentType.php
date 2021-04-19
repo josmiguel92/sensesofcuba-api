@@ -4,30 +4,47 @@ namespace App\Form;
 
 use App\Entity\TranslatedDocument;
 use App\Entity\UsersGroup;
+use App\Repository\UsersGroupRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Vich\UploaderBundle\Form\Type\VichFileType;
 
 class TranslatedDocumentType extends AbstractType
 {
+    private array $groupsNames;
+
+    /**
+     * TranslatedDocumentType constructor.
+     */
+    public function __construct(UsersGroupRepository $groupRepository)
+    {
+        $this->groupsNames = $groupRepository->getUserGroupNamesArray();
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-            ->add('enFile', SocFileType::class, ['label'=>'English Version file', 'required'=>false])
-//            ->add('esFile', SocFileType::class, ['label'=>'Spanish Version file', 'required'=>false])
-            ->add('deFile', SocFileType::class, ['label'=>'German Version file', 'required'=>false])
+        $groupsInputOptions = [
+            'choice_label' => function ($name) {
+                return (string) $name;
+            },
+            'choices' => $this->groupsNames,
+            'multiple' => true,
+            'expanded' => true,
+            'required' => false
+        ];
 
-            ->add('showForGroups', EntityType::class, [
-                'class' => UsersGroup::class,
-                'choice_label' => 'name',
-                'multiple' => true,
-                'expanded' => true,
-                'choice_value' => function (UsersGroup $entity) {
-                    return $entity ? $entity->getName() : '';
-                },
-            ])
+        $builder
+            ->add('title', TextType::class, ['label' => 'Internal reference title', 'required' => false])
+            ->add('enFile', SocFileType::class, ['label' => 'English Version file', 'required' => false])
+//            ->add('esFile', SocFileType::class, ['label'=>'Spanish Version file', 'required'=>false])
+            ->add('deFile', SocFileType::class, ['label' => 'German Version file', 'required' => false])
+
+            ->add('showForGroups', ChoiceType::class, $groupsInputOptions)
+            ->add('hideForGroups', ChoiceType::class, $groupsInputOptions)
         ;
     }
 
@@ -35,6 +52,7 @@ class TranslatedDocumentType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => TranslatedDocument::class,
+            'attr' => ['class' => 'translated-doc']
         ]);
     }
 }
