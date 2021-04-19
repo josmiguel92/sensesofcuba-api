@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Api;
 
 use App\Entity\SocProduct;
 use App\Entity\SocProductTranslation;
@@ -19,29 +19,19 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/api", host="%app.main_domain%", name="api_")
+ * @Route("/api/products", host="%app.main_domain%", name="api_products_")
  */
-class ApiController extends AbstractController
+class ProductsController extends AbstractController
 {
-    public const DATE_FORMAT = 'Y/m/d H:i:s';
-
 
     /**
-     * @Route("/login", name="login")
-     */
-    public function login(): JsonResponse
-    {
-        return new JsonResponse([]);
-    }
-
-    /**
-     * @Route("/api/products", name="products")
+     * @Route("/", name="index")
      * @param SocProductRepository $productRepository
      * @param Request $request
      * @param UserRepository $userRepository
      * @return JsonResponse
      */
-    public function apiProducts(
+    public function index(
         Request $request,
         SocProductRepository $productRepository,
         UserRepository $userRepository
@@ -49,7 +39,7 @@ class ApiController extends AbstractController
         $user = null;
         $hiddenProducts = null;
         $useAlternativeDocuments = false;
-        if ($username = $this->getUserNameFromCookie($request)) {
+        if ($username = ApiController::getUserNameFromCookie($request)) {
             $user = $userRepository->findOneBy(['email' => $username]);
         }
         if ($user !== null) {
@@ -90,7 +80,7 @@ class ApiController extends AbstractController
                     'title' => $product->getTranslatedNameOrReference($lang),
                     'description' =>  $product->getTranslatedDescOrNull($lang),
                     'file' => $file,
-                    'modified_on' =>  $product->getUpdatedAt()->format(self::DATE_FORMAT),
+                    'modified_on' =>  $product->getUpdatedAt()->format(ApiController::DATE_FORMAT),
                     'image' => $product->hasImage() ? 'uploads/images/' . $product->getImage()->getThumbnailPath() : null,
                     'child_of' => $product->getParent() ? $product->getParent()->getId() : null,
                     'subscribed' => $user ? $user->getSubscribedProducts()->contains($product) : false,
@@ -105,8 +95,8 @@ class ApiController extends AbstractController
     }
 
     /**
-     * @Route("/api/product_subscribe/{id}/{action}",
-     *     name="api_product_subscribe",
+     * @Route("/subscribe/{id}/{action}",
+     *     name="subscribe",
      *     requirements={"action"="subscribe|unsubscribe"}
      *     )
      * @param SocProduct $product
@@ -120,12 +110,11 @@ class ApiController extends AbstractController
     public function subscribeToProduct(
         SocProduct $product,
         $action,
-        Request $request,
         UserRepository $userRepository,
         ManagerRegistry $managerRegistry
     ): JsonResponse {
         $user = null;
-        if ($username = $this->getUserNameFromCookie($request)) {
+        if ($username = $this->getUser()->getUsername()) {
             $user = $userRepository->findOneBy(['email' => $username]);
         }
 
@@ -147,121 +136,4 @@ class ApiController extends AbstractController
         return $this->json(['status' => 'product updated']);
     }
 
-    public function getUserNameFromCookie($request)
-    {
-        $cookieStr = $request->cookies->get(OnJWTAuthenticationSuccess::$cookieName);
-        if ($cookie = json_decode($cookieStr, true)) {
-            return $cookie['username'];
-        }
-        return false;
-    }
-
-
-    /**
-     * @Route("/api/documents", name="api_document")
-     * @param DocumentRepository $documentRepository
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function apiDocuments(DocumentRepository $documentRepository, Request $request): JsonResponse
-    {
-        $lang = $this->getLangFromHeaders($request);
-
-        $docs = $documentRepository->findBy(['enabled' => true], ['importance' => 'DESC', 'updatedAt' => 'DESC' ]);
-
-        $items = [];
-
-        foreach ($docs as $doc) {
-            if (!$doc->getTranslatedDocument()) {
-                continue;
-            }
-
-            $fallbackEnglish = $doc->isEnglishGlobalTranslation();
-            if (
-                $lang !== 'en'
-                && !$fallbackEnglish
-                && $doc->translate($lang, false)->getName() === null
-            ) {
-                continue;
-            }
-
-
-            $file = null;
-            if (
-                $doc->getTranslatedDocument()->translate($lang, $fallbackEnglish)
-                &&
-                $filename = $doc->getTranslatedDocument()->translate($lang, $fallbackEnglish)->getFileName()
-            ) {
-                $file = "uploads/files/" . $filename;
-            }
-
-            $items[] = [
-                'id' => $doc->getId(),
-                'title' => $doc->translate($lang)->getName() ?: $doc->getReferenceName(),
-                'description' => $doc->translate($lang)->getDescription(),
-                'file' => $file,
-                'created_on' =>  $doc->getCreatedAt()->format(self::DATE_FORMAT),
-                'modified_on' =>  $doc->getUpdatedAt()->format(self::DATE_FORMAT),
-            ];
-        }
-
-        return new JsonResponse($items);
-    }
-
-
-    /**
-     * @Route("/api/news", name="api_news")
-     * @param NewsRepository $newsRepository
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function apiNews(NewsRepository $newsRepository, Request $request): JsonResponse
-    {
-        $lang = $this->getLangFromHeaders($request);
-
-        $news = $newsRepository->findBy(['enabled' => true], ['updatedAt' => 'DESC']);
-
-        $items = [];
-
-        foreach ($news as $item) {
-            $fallbackEnglish = $item->isEnglishGlobalTranslation();
-            if (
-                $lang !== 'en'
-                && !$fallbackEnglish
-                && $item->translate($lang, false)->getTitle() === null
-            ) {
-                continue;
-            }
-
-
-            $file = null;
-            if (
-                $item->getTranslatedDocument()
-                &&
-                $item->getTranslatedDocument()->translate($lang, $fallbackEnglish)
-                &&
-                $filename = $item->getTranslatedDocument()->translate($lang, $fallbackEnglish)->getFileName()
-            ) {
-                $file = "uploads/files/" . $filename;
-            }
-
-            $updatedAt = $item->getCreatedOrUpdatedDate()->format(self::DATE_FORMAT);
-            $items[] = [
-                'id' => $item->getId(),
-                'title' => $item->translate($lang)->getTitle() ?: $item->getReferenceName(),
-                'description' => $item->translate($lang)->getDescription(),
-                'file' => $file,
-                'modified_on' =>  $updatedAt,
-            ];
-        }
-
-        return new JsonResponse($items);
-    }
-
-    private function getLangFromHeaders($request): string
-    {
-        $lang = substr($request->headers->get('Accept-Language'), 0, 2);
-        $lang = in_array($lang, ['en', 'es', 'de', 'fr']) ? $lang : 'en';
-        return $lang;
-    }
 }

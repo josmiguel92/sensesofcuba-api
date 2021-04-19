@@ -2,7 +2,7 @@
 
 namespace App\Tests\Controller;
 
-use App\Controller\ApiController;
+use App\Controller\DefaultController;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
