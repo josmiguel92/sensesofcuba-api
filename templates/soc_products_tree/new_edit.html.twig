@@ -113,8 +113,9 @@
         </div>
     </div>
 
+{% if  product.translatedDocument is not null and product.translatedDocument.empty == false %}
 
-<hr>
+    <hr>
     <div class="row">
         <div class="col-md-12">
             <h5>Product PDF File</h5>
@@ -122,67 +123,96 @@
     </div>
     <div class="row">
 
-                <div class="col-md-4 card-body">
-                    <div class="form-group">
-{#                        {{ form_row(form.file.title) }}#}
-{#                        {{ form_row(form.file.file) }}#}
-                        {% if form.translatedDocument.enFile is defined %}
-                            {{ form_row(form.translatedDocument.enFile) }}
-                        {% endif %}
+        <div class="well m-3 ml-5">
+        <p>
+            This product <b>"{{ product.referenceName }}"</b> contains associated files:
+        </p>
+        <ul>
+            {% for doc in product.translatedDocument.documents %}
+                <li><a href="{{ doc.file }}">{{ doc.lang }}</a></li>
+            {% endfor %}
+        </ul>
+        <p>
+            In order to edit this files, or its description, we have to update it on the database.<br>
+            Please, save this form to update the product and try again to see the edition form for this documents.
+        </p>
 
+        </div>
 
-                    </div>
-                </div>
-
-                <div class="col-md-4 card-body">
-                    <div class="form-group">
-{#                        {{ form_row(form.file.title) }}#}
-{#                        {{ form_row(form.file.file) }}#}
-                        {% if form.translatedDocument.deFile is defined %}
-                            {{ form_row(form.translatedDocument.deFile) }}
-                        {% endif %}
-
-
-                    </div>
-                </div>
-
-                <div class="col-md-4 card-body">
-                    <div class="form-group">
-                        {# { form_row(form.file.title) } #}
-{#                        {{ form_row(form.file.file) }} #}
-                        {% if form.translatedDocument.esFile is defined %}
-                            {{ form_row(form.translatedDocument.esFile) }}
-                        {% endif  %}
-
-
-                    </div>
-                </div>
     </div>
+{% endif %}
 
 
-    <div class="row accordion mb-4" id="accordion-{{ form.documentCollection.vars.id }}">
-            <div class="col-md-12">
+    {% if  product.alternativeTranslatedDocument is not null and product.alternativeTranslatedDocument.empty == false %}
+
+                <hr>
+                <div class="row">
+                    <div class="col-md-12">
+                        <h5>Alternative Product PDF File (Only for users with alternative prices)</h5>
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="well m-3 ml-5">
+                        <p>
+                            This product <b>"{{ product.referenceName }}"</b> contains associated files configured
+                            for show it to some user groups:
+                        </p>
+                        <ul>
+                            {% for doc in product.alternativeTranslatedDocument.documents %}
+                                <li><a href="{{ doc.file }}">{{ doc.lang }}</a></li>
+                            {% endfor %}
+                        </ul>
+                        <p>
+                            In order to edit this files, or the users tah should see (or not) this content,
+                            or its description, we have to update it on the database.<br>
+                            Please, save this form to update the product and try again
+                            to see the edition form for this documents.
+                        </p>
+
+                    </div>
+
+                </div>
+            {% endif %}
+
+    <div class="row accordion mb-4 mt-8" id="accordion-{{ form.documentCollection.vars.id }}">
+            <div class="col-md-12 mt-5">
                 <h5 data-toggle="collapse" data-target="#content-{{ form.documentCollection.vars.id }}"><i class="fa fa-list"></i>
                         Product's docs Collection
 
+                    {% if product.documentCollection.count > 0 %}
+                        <span class="badge badge-primary">{{ product.documentCollection.count }}</span>
+                    {% endif %}
+
                     <i class="fa fa-chevron-down"></i>
+
+
                 </h5>
 
 
             </div>
 
-            <div class="col-md-12 collapse collapsed" id="content-{{ form.documentCollection.vars.id }}" data-parent="#accordion-{{ form.documentCollection.vars.id }}">
-
-
-        {#        {{ dump(product.documentCollection) }}#}
+            <div class="col-md-12 collapse collapsed" id="content-{{ form.documentCollection.vars.id }}"
+                 data-parent="#accordion-{{ form.documentCollection.vars.id }}">
                 <ul class="documentCollection "  data-prototype="{{ form_row(form.documentCollection.vars.prototype)|e('html_attr') }}">
                     {% for document in form.documentCollection %}
-{#                        {{ dump(document) }}#}
                         <li class="row form-group" style="display: flex">{{ form_row(document) }}</li>
                     {% endfor %}
                 </ul>
 
-                <button type="button" class="btn btn-primary btn-sm add_item_link documentCollection_btn" data-collection-holder-class="documentCollection">Add a new Document</button>
+
+
+
+            </div>
+                <div class="col-md-12 pl-12" style="
+                        display: flex;
+                        justify-content: center">
+                    <button type="button" class="btn btn-secondary btn-sm add_item_link documentCollection_btn"
+                            data-collection-holder-class="documentCollection">
+                        <i class="fa fa-plus-circle"></i>
+                        Add a new Document</button>
+                </div>
+
 
 
                 <style>
@@ -216,6 +246,11 @@
                         grid-area: 3 / 3 / 4 / 4;
                     }
 
+                    .translated-doc > fieldset {
+                        display: flex;
+                        flex-direction: column;
+                        padding: 1em;
+                    }
 
                     ul.documentCollection li > div > .form-group
                     {max-width: 33.33333%;}
@@ -272,61 +307,17 @@
                 </script>
 
 
-
-            </div>
-
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <h5>Alternative Product PDF File (Only for users with alternative prices)</h5>
-        </div>
-    </div>
-    <div class="row">
-
-        <div class="col-md-4 card-body">
-            <div class="form-group">
-                {#                        {{ form_row(form.file.title) }}#}
-                {#                        {{ form_row(form.file.file) }}#}
-                {% if form.alternativeTranslatedDocument.enFile is defined %}
-                    {{ form_row(form.alternativeTranslatedDocument.enFile) }}
-                {% endif  %}
-
-
-            </div>
-        </div>
-
-        <div class="col-md-4 card-body">
-            <div class="form-group">
-                {#                        {{ form_row(form.file.title) }}#}
-                {#                        {{ form_row(form.file.file) }}#}
-{#                {{ form_row(form.alternativeTranslatedDocument.deFile) }}#}
-                {% if form.alternativeTranslatedDocument.deFile is defined %}
-                    {{ form_row(form.alternativeTranslatedDocument.deFile) }}
-                {% endif  %}
-
-
-            </div>
-        </div>
-
-        <div class="col-md-4 card-body">
-            <div class="form-group">
-                {#                        {{ form_row(form.file.title) }}#}
-                {#                        {{ form_row(form.file.file) }}#}
-{#                {{ form_row(form.alternativeTranslatedDocument.esFile) }}#}
-                {% if form.alternativeTranslatedDocument.esFile is defined %}
-                    {{ form_row(form.alternativeTranslatedDocument.esFile) }}
-                {% endif  %}
-
-
-            </div>
-        </div>
     </div>
 
 
-            <div class="flex justify-content-around" style="display: flex;">
+            <div class="flex justify-content-around mt-5 pt-3" style="
+            border-top: solid lightslategray 2px;
+            display: flex;">
                 <button type="submit" class="btn btn-primary action-save">
                     <span class="btn-label">Save changes</span>
                 </button>
+
+                {{ form_widget(form.saveAndContinueEditing) }}
                 {{ form_widget(form.saveAndAddNotification) }}
             </div>
 

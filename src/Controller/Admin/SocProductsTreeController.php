@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Admin;
 
 use App\Entity\SocProduct;
+use App\Entity\UsersGroup;
 use App\Form\SocProductType;
 use App\Message\Events\ProductUpdated;
 use App\Repository\SocProductRepository;
@@ -86,6 +87,7 @@ class SocProductsTreeController extends AbstractController
      * @param Request $request
      * @param MessageBusInterface $bus
      * @return RedirectResponse|Response
+     * @throws \Knp\DoctrineBehaviors\Exception\ShouldNotHappenException
      */
     public function edit(SocProduct $product, Request $request, MessageBusInterface $bus)
     {
@@ -95,11 +97,15 @@ class SocProductsTreeController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $sendNotification = false;
+            $continueEditingAfterSave = false;
             if ($product && $product->getParent() && $product->getId() === $product->getParent()->getId()) {
                 $this->addFlash('warning', 'The product cant be its own parent');
             } else {
                 if ($form->get('saveAndAddNotification')->isClicked()) {
                     $sendNotification = true;
+                }
+                if ($form->get('saveAndContinueEditing')->isClicked()) {
+                    $continueEditingAfterSave = true;
                 }
 
                 $bus->dispatch(new ProductUpdated($product->getId(), '', $sendNotification));
@@ -112,14 +118,50 @@ class SocProductsTreeController extends AbstractController
 
                 $product->updateTimestamps();
 
+                //Migrating from isolated document to documentCollection structure
+                if ($product->getTranslatedDocument() && !$product->getTranslatedDocument()->isEmpty()) {
+                    $product->addDocumentCollection($product->getTranslatedDocument());
+                    $product->setTranslatedDocument(null);
+                }
+
+                //Migrating from 'Alternative translated document' to documentCollection
+                /* If any document only for users with the 'alternative price' role
+                this document will be append to documentCollection and set this group mark to it
+                */
+                if (
+                    $product->getAlternativeTranslatedDocument()
+                    && !$product->getAlternativeTranslatedDocument()->isEmpty()
+                ) {
+                    $alternativeDoc = $product->getAlternativeTranslatedDocument();
+                    $alternativeDoc->setShowForGroups([UsersGroup::DEFAULT_HIDE_GROUP]);
+                    $product->addDocumentCollection($alternativeDoc);
+                    $product->setAlternativeTranslatedDocument(null);
+                    $this->addFlash(
+                        'warning',
+                        'This product was updated automatically to include and alternative document
+                        for a specific user group.
+                        Please review the visibility of the documents is correct.'
+                    );
+                }
+
                 foreach ($product->getDocumentCollection() as $item) {
-                    $item->setSocProduct($product);
+                    if ($item->isEmpty()) {
+                        if ($product->getDocumentCollection()->contains($item)) {
+                            $product->getDocumentCollection()->removeElement($item);
+                        }
+
+                        $this->getDoctrine()->getManager()->remove($item);
+                    } else {
+                        $item->setSocProduct($product);
+                    }
                 }
 
                 $this->getDoctrine()->getManager()->persist($product);
                 $this->getDoctrine()->getManager()->flush();
 
-                return $this->redirectToRoute('soc_product_index');
+                if (!$continueEditingAfterSave) {
+                    return $this->redirectToRoute('soc_product_index');
+                }
             }
         }
 

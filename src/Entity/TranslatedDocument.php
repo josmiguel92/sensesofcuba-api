@@ -53,7 +53,7 @@ class TranslatedDocument
 
     public function getEnFile(): ?SocFile
     {
-        return $this->enFile;
+        return $this->enFile ?? null;
     }
 
     public function setEnFile($enFile): self
@@ -65,7 +65,7 @@ class TranslatedDocument
 
     public function getEsFile(): ?SocFile
     {
-        return $this->esFile;
+        return $this->esFile ?? null;
     }
 
     public function setEsFile($esFile): self
@@ -77,7 +77,7 @@ class TranslatedDocument
 
     public function getDeFile(): ?SocFile
     {
-        return $this->deFile;
+        return $this->deFile ?? null;
     }
 
     public function setDeFile($deFile): self
@@ -141,7 +141,6 @@ class TranslatedDocument
      */
     public function translate($lang, $fallbackEnglish = false): ?SocFile
     {
-
         $translation = in_array($lang, ['en', 'es', 'de']) ? $this->getTranslation($lang) : null;
 
         if ($fallbackEnglish && $translation === null) {
@@ -179,5 +178,19 @@ class TranslatedDocument
         $this->title = $title;
 
         return $this;
+    }
+
+    public function isEmpty(): bool
+    {
+        if ($this->title !== null) {
+            return false;
+        }
+        if ($this->getDeFile() !== null) {
+            return false;
+        }
+        if ($this->getEnFile() !== null) {
+            return false;
+        }
+        return true;
     }
 }

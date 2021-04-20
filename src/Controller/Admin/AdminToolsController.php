@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Admin;
 
 use App\Entity\User;
 use App\Entity\UsersGroup;
@@ -230,20 +230,24 @@ class AdminToolsController extends AbstractController
 
     /**
      * @Route("/create_default_user_group", name="create_default_user_group")
-     * @param Messenger $messenger
+     * @param UsersGroupRepository $repository
+     * @param ManagerRegistry $registry
      * @return RedirectResponse
      */
-    public function createDefaultUserGroup(UsersGroupRepository $repository, ManagerRegistry $registry)
+    public function createDefaultUserGroup(UsersGroupRepository $repository, ManagerRegistry $registry): RedirectResponse
     {
-        if (null == ($defaultGroup = $repository->findBy(['name' => 'default']))) {
-            $defaultGroup = new UsersGroup('default');
+        foreach (UsersGroup::DEFAULT_GROUPS as $group => $description) {
+            $defaultGroup = new UsersGroup($group, $description);
             $registry->getManager()->persist($defaultGroup);
-            $registry->getManager()->flush();
-            $this->addFlash('notice', "The default users group was created");
-        } else {
-            $this->addFlash('notice', "The default users group exist already");
         }
 
+        try {
+            $registry->getManager()->flush();
+        } catch (Exception $exception) {
+            $this->addFlash('error', "Some error ocurred. Maybe the groups already exists.");
+        }
+
+        $this->addFlash('notice', "The default users group was created");
 
         return $this->redirectToRoute('admin_tools_index');
     }

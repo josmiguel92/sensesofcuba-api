@@ -27,10 +27,13 @@ trait ShowAndHideForUserGroups
 
     public function setShowForGroups($showForGroups): self
     {
+
+        $groups = [];
         foreach ($showForGroups as $item) {
             $str = (string) $item;
-            $this->showForGroups[] = $str;
+            $groups[] = $str;
         }
+        $this->showForGroups = array_unique($groups);
         return $this;
     }
 
@@ -41,10 +44,12 @@ trait ShowAndHideForUserGroups
 
     public function setHideForGroups($hideForGroups): self
     {
+        $groups = [];
         foreach ($hideForGroups as $item) {
             $str = (string) $item;
-            $this->hideForGroups[] = $str;
+            $groups[] = $str;
         }
+        $this->hideForGroups = array_unique($groups);
         return $this;
     }
 }
