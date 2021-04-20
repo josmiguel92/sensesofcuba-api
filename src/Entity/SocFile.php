@@ -63,7 +63,11 @@ class SocFile implements TimestampableInterface
      */
     public function getFile(): ?File
     {
-        return $this->file;
+        if (isset($this->file)) {
+            return $this->file;
+        } else {
+            return null;
+        }
     }
 
     /**

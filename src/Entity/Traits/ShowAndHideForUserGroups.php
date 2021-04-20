@@ -27,6 +27,7 @@ trait ShowAndHideForUserGroups
 
     public function setShowForGroups($showForGroups): self
     {
+        
         foreach ($showForGroups as $item) {
             $str = (string) $item;
             $this->showForGroups[] = $str;

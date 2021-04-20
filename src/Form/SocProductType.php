@@ -56,8 +56,12 @@ class SocProductType extends EasyAdminFormType
                 'entry_options' => ['label' => false],
             ])
 //            ->add('translatedDocument', TranslatedDocumentType::class)
-            ->add('alternativeTranslatedDocument', TranslatedDocumentType::class)
-            ->add('saveAndAddNotification', SubmitType::class, ['label' => 'Save and Add Notification'])
+//            ->add('alternativeTranslatedDocument', TranslatedDocumentType::class)
+
+            ->add('saveAndContinueEditing', SubmitType::class, ['label' => 'Save and continue editing'])
+            ->add('saveAndAddNotification', SubmitType::class, [
+                'label' => 'Save and Add Notification to subscribed users'
+            ])
 
         ;
     }

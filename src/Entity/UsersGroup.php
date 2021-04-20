@@ -12,6 +12,14 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class UsersGroup
 {
+
+    public const DEFAULT_HIDE_GROUP = 'alternative-prices';
+    public const DEFAULT_GROUPS = [
+            'default' => 'Default user Group. The new users will be in this group until an Admin changes it',
+            self::DEFAULT_HIDE_GROUP => 'Some users should see different versions of document for the same product'
+    ];
+
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -20,7 +28,7 @@ class UsersGroup
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=180)
+     * @ORM\Column(type="string", length=180, unique=true)
      */
     private $name;
 
@@ -38,9 +46,10 @@ class UsersGroup
      * UsersGroup constructor.
      * @param $name
      */
-    public function __construct($name = null)
+    public function __construct($name = null, $description = null)
     {
         $this->name = $name;
+        $this->description = $description;
         $this->users = new ArrayCollection();
     }
 

@@ -328,6 +328,11 @@ class SocProduct implements TimestampableInterface, TranslatableInterface
      */
     public function getDocumentCollection(): Collection
     {
+        return $this->documentCollection;
+    }
+
+    public function getDocumentCollectionInclusive(): Collection
+    {
         if ($this->translatedDocument !== null) {
             $elements = array_reverse($this->documentCollection->toArray(), true);
             $elements[] = ($this->translatedDocument);
@@ -335,7 +340,6 @@ class SocProduct implements TimestampableInterface, TranslatableInterface
         }
         return $this->documentCollection;
     }
-
     public function addDocumentCollection(TranslatedDocument $documentCollection): self
     {
         if (!$this->documentCollection->contains($documentCollection)) {

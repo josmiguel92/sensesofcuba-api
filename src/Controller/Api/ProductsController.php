@@ -39,13 +39,17 @@ class ProductsController extends AbstractController
         $user = null;
         $hiddenProducts = null;
         $useAlternativeDocuments = false;
-        if ($username = ApiController::getUserNameFromCookie($request)) {
+        if ($username = $this->getUser()->getUsername()) {
             $user = $userRepository->findOneBy(['email' => $username]);
         }
         if ($user !== null) {
             $hiddenProducts = $user->getHiddenProducts();
 
-            if ($user->getRole() == 'ROLE_ALTERNATIVE_PRICES_CLIENT') {
+            if (
+                $user->getUserGroup()->contains('alternative-prices')
+                ||
+                $user->getRole() == 'ROLE_ALTERNATIVE_PRICES_CLIENT'
+            ) {
                 $useAlternativeDocuments = true;
             }
         }
@@ -100,16 +104,14 @@ class ProductsController extends AbstractController
      *     requirements={"action"="subscribe|unsubscribe"}
      *     )
      * @param SocProduct $product
-     * @param $action
-     * @param Request $request
+     * @param string $action
      * @param UserRepository $userRepository
      * @param ManagerRegistry $managerRegistry
      * @return JsonResponse
-     * @throws NotFoundHttpException
      */
     public function subscribeToProduct(
         SocProduct $product,
-        $action,
+        string $action,
         UserRepository $userRepository,
         ManagerRegistry $managerRegistry
     ): JsonResponse {
@@ -135,5 +137,4 @@ class ProductsController extends AbstractController
 
         return $this->json(['status' => 'product updated']);
     }
-
 }
