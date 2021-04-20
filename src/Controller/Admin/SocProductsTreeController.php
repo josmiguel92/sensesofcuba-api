@@ -144,7 +144,6 @@ class SocProductsTreeController extends AbstractController
                     );
                 }
 
-                dump($product->getDocumentCollection());
                 foreach ($product->getDocumentCollection() as $item) {
                     if ($item->isEmpty()) {
                         if ($product->getDocumentCollection()->contains($item)) {
