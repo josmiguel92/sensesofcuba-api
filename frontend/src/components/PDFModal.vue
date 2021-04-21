@@ -5,7 +5,9 @@
                
                 <div class="card-actions mt-2 d-flex align-items-center justify-content-between">
                     <h4 class="card-title p-2"><i class="fa fa-tag"></i> {{ title }}</h4>
-                    <button @click="close" class="btn btn-link" :title="closeText"><i class="fa fa-times-circle fa-2x text-black" style="color: black !important;"></i> </button>
+                    <button @click="close" class="btn btn-link" :title="closeText">
+                        <i class="fa fa-times-circle fa-2x text-black" style="color: black !important;"></i> 
+                    </button>
                 </div>
                 <div class="card-content flex-grow-1">
                     <iframe id="view" :src="file"></iframe>
