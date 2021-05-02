@@ -1,5 +1,5 @@
 <template>
-    <button @click.stop="open" class="ml-2 btn btn-secondary btn-sm btn-icon">
+    <button @click.stop="open" class="flex-fill flex-grow-1  btn btn-secondary btn-sm btn-icon">
         <i class="fa fa-file-pdf"></i> 
         <span class="d-none d-md-inline">{{ buttonText }}</span>
     </button>
@@ -10,6 +10,8 @@ export default {
     props: ['item'],
     computed: {
         buttonText() {
+            if(this.item.title !== null)
+                return this.item.title;
             return this.$t('general.open');
         }
     },

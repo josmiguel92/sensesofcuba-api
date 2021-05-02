@@ -94,5 +94,7 @@
             "allow-contrib": false,
             "require": "5.2.*"
         }
-    }
+    },
+    "name": "habanatech/tourcomcuba-infonet",
+    "description": "An Infonet website for Senses of Cuba, by Tourcom"
 }

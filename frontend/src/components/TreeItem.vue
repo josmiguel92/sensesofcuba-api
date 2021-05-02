@@ -1,5 +1,5 @@
 <template>
-    <div @click.stop="toggle" class="tree-item"  v-if="item.children || item.file || item.description">
+    <div @click.stop="toggle" class="tree-item"  v-if="item.children || item.files || item.description">
         <div class="content d-flex flex-column p-2 justify-content-center">
             <div class="d-flex align-items-center">
                 <div class="d-flex flex-grow-1 align-items-center justify-content-between">
@@ -9,21 +9,28 @@
                         <span class="badge badge-pill badge-primary text-sm ml-2"  v-if="isParent">{{ item.children.length }}</span>
                     </span>
                     <small v-if="item.modified_on" class="d-none d-md-inline pr-2 pl-1 text-muted">{{ $t('general.updated') }}: {{ item.modified_on | date }}</small>
-                </div>
-                <div class="d-flex">
                     
-                    <SubscribeButton :item="item"></SubscribeButton>
-                    <OpenDocumentButton :item="item"  v-if="item.file"></OpenDocumentButton>
-                    <a role="button" :href="`${item.file}`" class="btn btn-secondary btn-sm" :download="item.title"  v-if="item.file">
-                        <i class="fa fa-download"></i> <span class="d-none d-md-inline">Download</span>
-                    </a>
+                </div>
+
+                <SubscribeButton :item="item"></SubscribeButton>
+                
+            </div>
+            <div class="d-flex flex-row-reverse">
+                <div class="docs-list d-flex flex-column mt-1 flex-shrink-0 w-20" v-if="item.files">
+                    <div class="btn-group  mt-1" role="group" aria-label="Product Document" v-for="(file, i) in item.files" :key="i" :item="file.title">
+                        <OpenDocumentButton :item="file"  v-if="file.file"></OpenDocumentButton>
+                        <a role="button" :href="`${file.file}`" class="btn btn-secondary btn-sm flex-grow-0" :download="file.title"  v-if="file.file">
+                            <i class="fa fa-download"></i> 
+                        </a>
+                    </div>
+                </div>
+                <div class="flex-grow-1 d-flex" v-if="item.description">
+                    <small class="ml-2 mt-2">
+                        <i class="mr-2 fa fa-info-circle"></i> {{ item.description }}
+                    </small>
                 </div>
             </div>
-            <div class="d-flex" v-if="item.description">
-                <small class="ml-2 mt-2">
-                    <i class="mr-2 fa fa-info-circle"></i> {{ item.description }}
-                </small>
-            </div>
+            
         </div>
         <div class="tree" v-if="isParent" v-show="isOpen">
             <TreeItem v-for="(child, i) in item.children" :key="i" :item="child"></TreeItem>
@@ -105,6 +112,9 @@ export default {
     }
     .tree {
         margin-left: 16px;
+    }
+    .w-20{
+        max-width: 20%;
     }
 }
 
