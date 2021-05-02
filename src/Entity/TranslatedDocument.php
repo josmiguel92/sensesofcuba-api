@@ -182,15 +182,15 @@ class TranslatedDocument
 
     public function isEmpty(): bool
     {
-        if ($this->title !== null) {
+        if ($this->getDeFile() && !$this->getDeFile()->isEmpty()) {
             return false;
         }
-        if ($this->getDeFile() !== null) {
+        if ($this->getEnFile() && !$this->getEnFile()->isEmpty()) {
             return false;
         }
-        if ($this->getEnFile() !== null) {
-            return false;
-        }
+//        if ($this->title !== null) {
+//            return false;
+//        }
         return true;
     }
 }

@@ -61,6 +61,7 @@ easy_admin:
             - { property: 'country' }
             - { property: 'web' }
             - { property: 'role',  permission: 'ROLE_ADMIN' }
+            - { property: 'userGroup' }
             - { property: 'subscribedProducts', help: 'Products about the user will receive notifications' }
             - { property: 'hiddenProducts', help: 'Select the products hidden for this user' }
         form:
@@ -76,7 +77,7 @@ easy_admin:
 #            - { property: 'roles', label: 'User Role',  help: 'Select one role', type: 'choice',  type_options: { expanded: true, choices: { Client: 'ROLE_CLIENT' , 'Premium Client': 'ROLE_PREMIUM_CLIENT', 'Alternative prices Client': 'ROLE_ALTERNATIVE_PRICES_CLIENT', '____________': '____________', Editor: 'ROLE_EDITOR', Administrator: 'ROLE_ADMIN'} } }
 #            - { property: 'roles', type: 'choice', type_options: { expanded: true, choices: ['ROLE_USER', 'ROLE_ADMIN' ] } }
             - {property: 'hasRoleAdmin', label: 'Role', type: 'choice', type_options: {choices: {'ROLE_USER': 'ROLE_USER', 'ROLE_ADMIN': 'ROLE_ADMIN'}}}
-
+            - { property: 'userGroup' , help: 'You can control which product''s document this user can view using this groups'}
             - { property: 'subscribedProducts', help: 'Products about the user will receive notifications' }
             - { property: 'hiddenProducts', help: 'Select the products hidden for this user' }
         list:

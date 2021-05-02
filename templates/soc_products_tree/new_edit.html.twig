@@ -6,6 +6,7 @@
 
 
 {% block content %}
+
 <link rel="stylesheet" href="{{ asset('assets/bootstrap-select.min.css') }}">
 <script src="{{ asset('assets/bs-custom-file-input.min.js') }}"></script>
 <script src="{{ asset('assets/bootstrap-select.min.js') }}"></script>
@@ -197,6 +198,8 @@
                 <ul class="documentCollection "  data-prototype="{{ form_row(form.documentCollection.vars.prototype)|e('html_attr') }}">
                     {% for document in form.documentCollection %}
                         <li class="row form-group" style="display: flex">{{ form_row(document) }}</li>
+                    {% else %}
+                        <li id="documentCollection-empty"><p>There aren't any document yet. :(</p></li>
                     {% endfor %}
                 </ul>
 
@@ -301,6 +304,7 @@
                         itemsCollection.dataset.index = itemsCollection.querySelectorAll('input').length
 
                         document.querySelector('.documentCollection_btn.add_item_link').addEventListener('click', function (e){
+                            $('#documentCollection-empty').hide();
                             addFormToCollection(elementSelector)
                         })
                     });

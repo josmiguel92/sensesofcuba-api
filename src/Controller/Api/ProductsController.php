@@ -2,6 +2,7 @@
 
 namespace App\Controller\Api;
 
+use App\DataTransformer\ProductViewConfigurator;
 use App\Entity\SocProduct;
 use App\Entity\SocProductTranslation;
 use App\EventSubscriber\OnJWTAuthenticationSuccess;
@@ -34,7 +35,8 @@ class ProductsController extends AbstractController
     public function index(
         Request $request,
         SocProductRepository $productRepository,
-        UserRepository $userRepository
+        UserRepository $userRepository,
+        \Vich\UploaderBundle\Templating\Helper\UploaderHelper $uploaderHelper
     ): JsonResponse {
         $user = null;
         $hiddenProducts = null;
@@ -67,28 +69,10 @@ class ProductsController extends AbstractController
                 continue;
             }
 
-            if ($hiddenProducts && $hiddenProducts->contains($product)) {
-                continue;
-            }
+            $productView = new ProductViewConfigurator($product, $user, $lang, $uploaderHelper);
 
-            $currentIsAvailable = $product->isAvailableForLang($lang);
-            if ($currentIsAvailable || !$product->getSocProducts()->isEmpty()) {
-                if ($useAlternativeDocuments && $product->getAlternativeTranslatedDocumentFilePathByLang($lang)) {
-                    $file = $product->getAlternativeTranslatedDocumentFilePathByLang($lang);
-                } else {
-                    $file = $product->getTranslatedDocumentFilePathByLang($lang);
-                }
-
-                $items[] = [
-                    'id' => $product->getId(),
-                    'title' => $product->getTranslatedNameOrReference($lang),
-                    'description' =>  $product->getTranslatedDescOrNull($lang),
-                    'file' => $file,
-                    'modified_on' =>  $product->getUpdatedAt()->format(ApiController::DATE_FORMAT),
-                    'image' => $product->hasImage() ? 'uploads/images/' . $product->getImage()->getThumbnailPath() : null,
-                    'child_of' => $product->getParent() ? $product->getParent()->getId() : null,
-                    'subscribed' => $user ? $user->getSubscribedProducts()->contains($product) : false,
-                ];
+            if ($productView->isAllowedToShow()) {
+                $items[] = $productView->formatAsArray();
             }
         }
 

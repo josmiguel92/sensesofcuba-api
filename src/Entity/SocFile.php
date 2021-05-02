@@ -48,7 +48,7 @@ class SocFile implements TimestampableInterface
 
     public function getFileName(): ?string
     {
-        return $this->fileName;
+        return $this->fileName ?? null;
     }
 
     public function setFileName(string $fileName = null): self
@@ -103,9 +103,19 @@ class SocFile implements TimestampableInterface
     }
 
 
+    public function isEmpty(): bool
+    {
+        if ($this->fileName !== null) {
+            return false;
+        }
+//        if ($this->title !== null) {
+//            return false;
+//        }
+        return true;
+    }
 
     public function __toString(): ?string
     {
-        return $this->fileName;
+        return $this->fileName ?? null;
     }
 }

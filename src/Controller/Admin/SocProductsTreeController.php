@@ -118,10 +118,12 @@ class SocProductsTreeController extends AbstractController
 
                 $product->updateTimestamps();
 
+                $onMigration = false;
                 //Migrating from isolated document to documentCollection structure
                 if ($product->getTranslatedDocument() && !$product->getTranslatedDocument()->isEmpty()) {
                     $product->addDocumentCollection($product->getTranslatedDocument());
                     $product->setTranslatedDocument(null);
+                    $onMigration = true;
                 }
 
                 //Migrating from 'Alternative translated document' to documentCollection
@@ -142,6 +144,7 @@ class SocProductsTreeController extends AbstractController
                         for a specific user group.
                         Please review the visibility of the documents is correct.'
                     );
+                    $onMigration = true;
                 }
 
                 foreach ($product->getDocumentCollection() as $item) {
@@ -151,6 +154,7 @@ class SocProductsTreeController extends AbstractController
                         }
 
                         $this->getDoctrine()->getManager()->remove($item);
+                        $onMigration = true;
                     } else {
                         $item->setSocProduct($product);
                     }
@@ -162,6 +166,12 @@ class SocProductsTreeController extends AbstractController
                 if (!$continueEditingAfterSave) {
                     return $this->redirectToRoute('soc_product_index');
                 }
+
+                if ($onMigration)
+                {
+                    return $this->redirectToRoute('soc_product_edit', ['id' => $product->getId()]);
+                }
+
             }
         }
 
@@ -172,7 +182,6 @@ class SocProductsTreeController extends AbstractController
                 $this->addFlash('danger', $error->getMessage());
             }
         }
-
 
         return $this->render('soc_products_tree/new_edit.html.twig', [
            'product' => $product,
