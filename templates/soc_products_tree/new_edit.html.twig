@@ -130,7 +130,7 @@
         </p>
         <ul>
             {% for doc in product.translatedDocument.documents %}
-                <li><a href="{{ doc.file }}">{{ doc.lang }}</a></li>
+                <li><a href="{{ vich_uploader_asset(doc.file, 'file', 'App\\Entity\\SocFile') }}">{{ doc.lang }}</a></li>
             {% endfor %}
         </ul>
         <p>
