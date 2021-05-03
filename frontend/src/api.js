@@ -62,11 +62,11 @@ class API {
     }
 
     subscribeToProduct(productId) {
-        return this.client.get(`product_subscribe/${productId}/subscribe`);
+        return this.client.get(`products/subscribe/${productId}/subscribe`);
     }
 
     unsubscribeToProduct(productId) {
-        return this.client.get(`product_subscribe/${productId}/unsubscribe`);
+        return this.client.get(`products/subscribe/${productId}/unsubscribe`);
     }
 }
 
