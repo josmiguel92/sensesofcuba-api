@@ -6,12 +6,22 @@
                     <span class="label d-flex align-items-center ml-2 mr-2">
                         <i class="mr-2" :class="iconClass"></i> {{ item.title }}
                         
-                        <span class="badge badge-pill badge-primary text-sm ml-2"  v-if="isParent">{{ item.children.length }}</span>
+                        <span class="badge badge-pill text-sm ml-2"
+                              v-bind:class="[!isOpen ? 'badge-primary' : 'badge-secondary text-muted']"
+                              v-if="isParent">
+                            {{ item.children.length }}
+                        </span>
                     </span>
-                    <small v-if="item.modified_on" class="d-none d-md-inline pr-2 pl-1 text-muted">{{ $t('general.updated') }}: {{ item.modified_on | date }}</small>
+                    
+                    <small v-if="item.modified_on" class="d-none d-md-inline pr-2 pl-1 text-muted">
+                        {{ $t('general.updated') }}: {{ item.modified_on | date }}
+                    </small>
                     
                 </div>
 
+                <a v-if="currentUser.roles === 0" role="button" :href="'admin/product/'+item.id+'/edit'" target="_blank" class="btn btn-sm d-md-inline">
+                    <i class="fa fa-pencil"></i> Edit
+                </a>
                 <SubscribeButton :item="item"></SubscribeButton>
                 
             </div>
@@ -41,7 +51,7 @@
 <script>
 import SubscribeButton from '~/components/SubscribeButton.vue';
 import OpenDocumentButton from '~/components/OpenDocumentButton.vue';
-import { mapActions } from 'vuex';
+import {mapActions, mapGetters} from 'vuex';
 
 export default {
     name: 'TreeItem',
@@ -70,7 +80,8 @@ export default {
             } else {
                 return 'fa fa-tag';
             }
-        }
+        },
+        ...mapGetters(['currentUser']),
     },
     methods: {
         ...mapActions(['subscribeToProduct', 'unsubscribeFromProduct']),

@@ -19,6 +19,12 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
+        api_anonymous:
+            pattern: ^/api/(register|reset-password)
+            anonymous: true
+            stateless: true
+#            provider: database_users
+
         api_login:
             pattern: ^/api/login
             anonymous: true
@@ -30,18 +36,6 @@ security:
                 password_path: password
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
-
-        api_register:
-            pattern: ^/api/register
-            anonymous: true
-            stateless: true
-            provider: database_users
-
-        api_reset_password:
-            pattern: ^/api/reset-password
-            anonymous: true
-            stateless: true
-            provider: database_users
 
         api:
             pattern: ^/api
@@ -75,9 +69,9 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/api/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/api/reset-password, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+#        - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/(login|register|reset-password), roles: IS_AUTHENTICATED_ANONYMOUSLY }
+#        - { path: ^/api/reset-password, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api, roles: ROLE_USER }
         - { path: ^/admin, roles: ROLE_EDITOR }
         - { path: ^/profile, roles: ROLE_USER }
