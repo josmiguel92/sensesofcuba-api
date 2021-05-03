@@ -92,7 +92,7 @@ class SocProduct implements TimestampableInterface, TranslatableInterface
 
     public function getId(): ?int
     {
-        return $this->id;
+        return $this->id ?? null;
     }
 
     public function getParent(): ?self
@@ -140,7 +140,7 @@ class SocProduct implements TimestampableInterface, TranslatableInterface
 
     public function getFile(): ?SocFile
     {
-        return $this->file;
+        return $this->file ?? null;
     }
 
     public function setFile(?SocFile $file): self
@@ -152,7 +152,7 @@ class SocProduct implements TimestampableInterface, TranslatableInterface
 
     public function getImage(): ?SocImage
     {
-        return $this->image;
+        return $this->image ?? null;
     }
 
     public function setImage(?SocImage $image): self
@@ -164,7 +164,7 @@ class SocProduct implements TimestampableInterface, TranslatableInterface
 
     public function getReferenceName(): ?string
     {
-        return $this->referenceName;
+        return $this->referenceName ?? null;
     }
 
     public function setReferenceName(string $referenceName): self
@@ -190,7 +190,7 @@ class SocProduct implements TimestampableInterface, TranslatableInterface
 
     public function getTranslatedDocument(): ?TranslatedDocument
     {
-        return $this->translatedDocument;
+        return $this->translatedDocument ?? null;
     }
 
     public function setTranslatedDocument(?TranslatedDocument $translatedDocument): self
@@ -230,7 +230,7 @@ class SocProduct implements TimestampableInterface, TranslatableInterface
 
     public function getImportance(): ?int
     {
-        return $this->importance;
+        return $this->importance ?? null;
     }
 
     public function setImportance(?int $importance): self

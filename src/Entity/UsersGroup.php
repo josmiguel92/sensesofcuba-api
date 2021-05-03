@@ -61,7 +61,7 @@ class UsersGroup
 
     public function getName(): ?string
     {
-        return $this->name;
+        return $this->name ?? null;
     }
 
     public function setName(string $name): self
@@ -76,7 +76,7 @@ class UsersGroup
      */
     public function getDescription()
     {
-        return $this->description;
+        return $this->description ?? null;
     }
 
     /**
@@ -119,6 +119,6 @@ class UsersGroup
 
     public function __toString()
     {
-        return $this->name;
+        return $this->name ?? '';
     }
 }

@@ -104,6 +104,7 @@ easy_admin:
                 - { name: 'soc_product_edit', type: 'route', label: 'Edit' }
                 - '-edit'
                 - '-delete'
+                - '-new'
         show:
             actions:
                 - { name: 'soc_product_edit', type: 'route', label: 'Edit', css_class: 'btn btn-primary' }

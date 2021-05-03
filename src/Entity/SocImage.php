@@ -38,12 +38,12 @@ class SocImage implements TimestampableInterface
 
     public function getId(): ?int
     {
-        return $this->id;
+        return $this->id ?? null;
     }
 
     public function getImageName(): ?string
     {
-        return $this->imageName;
+        return $this->imageName ?? null;
     }
 
     public function setImageName(string $imageName = null): self
