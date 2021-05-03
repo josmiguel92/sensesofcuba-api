@@ -5,6 +5,7 @@ namespace App\Controller\User;
 use App\Entity\User;
 use App\Form\ChangePasswordFormType;
 use App\Form\ResetPasswordRequestFormType;
+use App\Message\PasswordRequest;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -88,12 +89,12 @@ class ResetPasswordController extends AbstractController
         try {
             $user = $this->resetPasswordHelper->validateTokenAndFetchUser($token);
         } catch (ResetPasswordExceptionInterface $e) {
-            $this->addFlash('reset_password_error', sprintf(
-                'There was a problem validating your reset request - %s',
+            return $this->json(['message' => sprintf(
+                'There was a problem handling your password reset request - %s',
                 $e->getReason()
-            ));
+            )], 401);
 
-            return $this->redirectToRoute('app_forgot_password_request');
+//            return $this->redirectToRoute('app_forgot_password_request');
         }
 
         // The token is valid; allow the user to change their password.
@@ -124,47 +125,40 @@ class ResetPasswordController extends AbstractController
         ]);
     }
 
-    private function processSendingPasswordResetEmail(string $emailFormData, MailerInterface $mailer): RedirectResponse
+    private function processSendingPasswordResetEmail(string $emailFormData, MailerInterface $mailer)
     {
         $user = $this->getDoctrine()->getRepository(User::class)->findOneBy([
             'email' => $emailFormData,
         ]);
 
-        // Do not reveal whether a user account was found or not.
         if (!$user) {
-            return $this->redirectToRoute('app_check_email');
+            return $this->json(['message' => 'User does not exist. Check your email address'], 401);
         }
 
         try {
             $resetToken = $this->resetPasswordHelper->generateResetToken($user);
         } catch (ResetPasswordExceptionInterface $e) {
+
             // If you want to tell the user why a reset email was not sent, uncomment
             // the lines below and change the redirect to 'app_forgot_password_request'.
             // Caution: This may reveal if a user is registered or not.
             //
-            // $this->addFlash('reset_password_error', sprintf(
-            //     'There was a problem handling your password reset request - %s',
-            //     $e->getReason()
-            // ));
+//            $this->addFlash('reset_password_error', sprintf(
+//                'There was a problem handling your password reset request - %s',
+//                $e->getReason()
+//            ));
 
-            return $this->redirectToRoute('app_check_email');
+            return $this->json(['message' => sprintf(
+                'There was a problem handling your password reset request - %s',
+                $e->getReason()
+            )], 401);
         }
 
-        $email = (new TemplatedEmail())
-            ->from(new Address('no-reply.infonet@sensesofcuba.com', 'Infonet from SensesOfCuba'))
-            ->to($user->getEmail())
-            ->subject('Your password reset request')
-            ->htmlTemplate('reset_password/email.html.twig')
-            ->context([
-                'resetToken' => $resetToken,
-            ])
-        ;
-
-        $mailer->send($email);
+        $this->dispatchMessage(new PasswordRequest($user->getId(), $resetToken));
 
         // Store the token object in session for retrieval in check-email route.
         $this->setTokenObjectInSession($resetToken);
 
-        return $this->redirectToRoute('app_check_email');
+        return new Response('Please, check your email inbox');
     }
 }

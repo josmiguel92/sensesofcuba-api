@@ -3,17 +3,19 @@
 
 namespace App\Message;
 
+use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordToken;
+
 class PasswordRequest
 {
     private $userId;
-    public ?string $token;
+    public ResetPasswordToken $token;
 
     /**
      * PasswordRequest constructor.
      * @param $userId
-     * @param string|null $token
+     * @param ResetPasswordToken $token
      */
-    public function __construct($userId, string $token = null)
+    public function __construct($userId, ResetPasswordToken $token)
     {
         $this->userId = $userId;
         $this->token = $token;
@@ -28,9 +30,9 @@ class PasswordRequest
     }
 
     /**
-     * @return string|null
+     * @return ResetPasswordToken
      */
-    public function getToken(): ?string
+    public function getToken(): ResetPasswordToken
     {
         return $this->token;
     }

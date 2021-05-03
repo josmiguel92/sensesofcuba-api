@@ -9,7 +9,7 @@
                         <p>{{ $t('password_reset.subtitle') }}</p>
                         <div class="feedback mb-2">
                             <Loader color="#f9ce1c" :loading="inProgress"></Loader>
-                            <small class="text-danger" v-if="error"><i class="fa fa-info-circle"></i> {{ error }}</small>
+                            <small class="text-danger max-w-md-block" v-if="error"><i class="fa fa-info-circle"></i> {{ error }}</small>
                         </div>
                         <div class="form-group input-group">
                             <div class="input-group-prepend">
@@ -65,7 +65,12 @@ export default {
                 this.done = true;
             }).catch(e => {
                 this.inProgress = false;
-                this.error = e.message;
+                if(e.response && e.response.status === 401 && e.response.data.message !== 'undefined')
+                {
+                    this.error = e.response.data.message;
+                }
+                else this.error = e.message;
+                
             });
         }
     },
@@ -84,5 +89,9 @@ export default {
 <style lang="scss" scoped>
 #reset-password-page {
     background-image: url('~/assets/images/hero-loading.jpg');
+}
+.max-w-md-block{
+    max-width: 28rem;
+    display: block;
 }
 </style>
