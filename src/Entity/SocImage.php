@@ -58,7 +58,7 @@ class SocImage implements TimestampableInterface
      */
     public function getImageFile(): ?File
     {
-        return $this->imageFile;
+        return $this->imageFile ?? null;
     }
 
     /**
@@ -91,11 +91,13 @@ class SocImage implements TimestampableInterface
     public function createCustomThumbnail(): ?bool
     {
         $uploadDir = __DIR__ . '/../../public/uploads/images/';
-        return $this->createThumbnail(
+        if(isset($this->imageName))
+            return $this->createThumbnail(
             $uploadDir . $this->imageName,
             $uploadDir . 'thumbs/' . $this->imageName,
             400
         );
+        return false;
     }
 
     //TODO: create a Thumbnail service

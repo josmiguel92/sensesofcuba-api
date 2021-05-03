@@ -32,6 +32,10 @@ class ProductViewConfigurator
 
     public function isAllowedToShow(): bool
     {
+        if ($this->product->isEnabled() === false) {
+            return false;
+        }
+
         if ($this->user->getHiddenProducts() && $this->user->getHiddenProducts()->contains($this->product)) {
             return false;
         }
