@@ -5,7 +5,6 @@ namespace App\Entity;
 use App\Entity\Traits\CanBeConfirmed;
 use App\Entity\Traits\CanBeEnabled;
 use App\Entity\Traits\CreatedAtField;
-use App\Entity\Traits\ResettablePassword;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -24,7 +23,6 @@ class User implements UserInterface, Serializable
     use CreatedAtField;
     use CanBeEnabled;
     use CanBeConfirmed;
-    use ResettablePassword;
 
     public const ADMIN_ROLES = [ 'ROLE_ADMIN',
         'ROLE_EDITOR'];
