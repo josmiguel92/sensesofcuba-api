@@ -7,7 +7,7 @@
 
 <script>
 export default {
-    props: ['item'],
+    props: ['item', 'title'],
     computed: {
         buttonText() {
             if(this.item.title !== null)
@@ -17,7 +17,8 @@ export default {
     },
     methods: {
         open() {
-            this.$pdfModal.show(this.item.title, this.item.file, this.$t('general.close'));
+            let title = this.title ?? this.item.title;
+            this.$pdfModal.show(title, this.item.file, this.$t('general.close'));
         }
     }
 }

@@ -39,6 +39,8 @@ export default {
         },
         close() {
             this.isOpen = false;
+            this.file = undefined;
+            this.title = undefined;
         }
     },
     watch: {

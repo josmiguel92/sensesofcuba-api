@@ -28,7 +28,7 @@
             <div class="d-flex flex-row-reverse">
                 <div class="docs-list d-flex flex-column mt-1 flex-shrink-0 w-20" v-if="item.files">
                     <div class="btn-group  mt-1" role="group" aria-label="Product Document" v-for="(file, i) in item.files" :key="i" :item="file.title">
-                        <OpenDocumentButton :item="file"  v-if="file.file"></OpenDocumentButton>
+                        <OpenDocumentButton :item="file" :title="item.title"  v-if="file.file"></OpenDocumentButton>
                         <a role="button" :href="`${file.file}`" class="btn btn-secondary btn-sm flex-grow-0" :download="file.title"  v-if="file.file">
                             <i class="fa fa-download"></i> 
                         </a>
