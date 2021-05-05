@@ -7,6 +7,7 @@ use App\Entity\UsersGroup;
 use App\Repository\UsersGroupRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -39,6 +40,7 @@ class TranslatedDocumentType extends AbstractType
 
         $builder
             ->add('title', TextType::class, ['label' => 'Internal reference title', 'required' => false])
+
             ->add('enFile', SocFileType::class, ['label' => 'English Version file', 'required' => false])
 //            ->add('esFile', SocFileType::class, ['label'=>'Spanish Version file', 'required'=>false])
             ->add('deFile', SocFileType::class, ['label' => 'German Version file', 'required' => false])
@@ -51,6 +53,15 @@ class TranslatedDocumentType extends AbstractType
             ->add('hideForGroups', ChoiceType::class, array_merge($groupsInputOptions, [
                 'help' => 'Only select the group that shouldn\'t see this document.'
             ]))
+            ->add(
+                'isEnglishGlobalTranslation',
+                CheckboxType::class,
+                [
+                    'label_attr' => ['class' => 'switch-custom'],
+                    'label' => "English as fallback",
+                    'required' => false
+                ]
+            )
         ;
     }
 

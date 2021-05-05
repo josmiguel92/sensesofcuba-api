@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\IsEnglishGlobalTranslationTrait;
 use App\Entity\Traits\ShowAndHideForUserGroups;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
@@ -13,6 +14,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 class TranslatedDocument
 {
     use ShowAndHideForUserGroups;
+    use IsEnglishGlobalTranslationTrait;
 
     /**
      * @ORM\Id()

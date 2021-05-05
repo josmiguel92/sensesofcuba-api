@@ -11,22 +11,22 @@ trait IsEnglishGlobalTranslationTrait
 
     /** @var bool */
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", nullable=true)
      */
-    private bool $isEnglishGlobalTranslation = false;
+    private ?bool $isEnglishGlobalTranslation = false;
 
     /**
      * @return bool
      */
     public function isEnglishGlobalTranslation(): bool
     {
-        return $this->isEnglishGlobalTranslation;
+        return $this->isEnglishGlobalTranslation ?? false;
     }
 
     /**
      * @param bool $isEnglishGlobalTranslation
      */
-    public function setIsEnglishGlobalTranslation(bool $isEnglishGlobalTranslation)
+    public function setIsEnglishGlobalTranslation(?bool $isEnglishGlobalTranslation = false)
     {
         $this->isEnglishGlobalTranslation = $isEnglishGlobalTranslation;
         return $this;
