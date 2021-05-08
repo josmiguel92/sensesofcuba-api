@@ -2,10 +2,13 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\SocProduct;
+use App\Entity\TranslatedDocument;
 use App\Entity\User;
 use App\Entity\UsersGroup;
 use App\Message\CreateUser;
 use App\Repository\SocImageRepository;
+use App\Repository\SocProductRepository;
 use App\Repository\UsersGroupRepository;
 use Exception;
 use Doctrine\Persistence\ManagerRegistry;
@@ -65,6 +68,12 @@ class AdminToolsController extends AbstractController
                     'name' => 'Create default user group',
                     'link' => $this->generateUrl('admin_tools_create_default_user_group'),
                     'icon' => 'fa fa-user-alt'
+                ],
+
+                [
+                    'name' => 'Merge products child documents',
+                    'link' => $this->generateUrl('admin_tools_merge_products_child_documents'),
+                    'icon' => 'fa fa-invoice'
                 ],
 
             ]
@@ -250,5 +259,103 @@ class AdminToolsController extends AbstractController
         $this->addFlash('notice', "The default users group was created");
 
         return $this->redirectToRoute('admin_tools_index');
+    }
+
+    /**
+     * @Route("/merge_products_child_documents", name="merge_products_child_documents")
+     * @param SocProductRepository $repository
+     * @param ManagerRegistry $registry
+     * @return Response
+     */
+    public function mergeProductsChildDocuments(SocProductRepository $repository, ManagerRegistry $registry)
+    {
+        //show products that have only one children.
+        $allProducts = $repository->findAll();
+
+        $suggestion = [];
+        foreach ($allProducts as $product) {
+            if ($product->getParent() != null
+
+                && count($product->getSocProducts()) == 0 //has no childs
+                && count($product->getParent()->getSocProducts()) == 1 //has no siblings
+
+            ) {
+                $suggestion[] = $product;
+            }
+        }
+
+
+        return $this->render('admin/tools/merge_products_child_documents.html.twig', [
+            'products' => $suggestion
+        ]);
+    }
+
+
+    /**
+     * @Route("/merge_product_as_child_document/{id}", name="merge_product_as_child_document")
+     * @param SocProductRepository $repository
+     * @param ManagerRegistry $registry
+     * @return Response
+     */
+    public function mergeProductAsChildDocument(
+        SocProduct $product,
+        SocProductRepository $repository,
+        ManagerRegistry $registry
+    )
+    {
+        $parent = $product->getParent();
+        $documents = [];
+
+        if ($product->getTranslatedDocument()->isEmpty() === false) {
+            $documents[] = $product->getTranslatedDocument();
+        }
+
+        if ($product->getDocumentCollection()->isEmpty() === false) {
+            foreach ($product->getDocumentCollection() as $doc) {
+                $documents[] = $doc;
+            }
+        }
+
+        if (count($documents) == 0) {
+            $this->addFlash('notice', 'The product "'.$product->getReferenceName().'" do not contain documents for merge');
+        }
+        if (count($documents) == 1) {
+            $doc = $documents[0];
+            if ($doc instanceof TranslatedDocument) {
+                $doc->setTitle($product->getTranslatedNameOrReference('en'));
+                if ($doc->getEnFile()) {
+                    $doc->getEnFile()->setTitle($product->getTranslatedNameOrReference('en'));
+                }
+
+                if ($doc->getDeFile()) {
+                    $doc->getDeFile()->setTitle($product->getTranslatedNameOrReference('de'));
+                }
+                $parent->addDocumentCollection($doc);
+                $doc->setSocProduct($parent);
+
+                $registry->getManager()->persist($doc);
+
+                $parent->removeSocProduct($product);
+
+
+                $product->setTranslatedDocument(null);
+                $registry->getManager()->remove($product);
+
+                $registry->getManager()->persist($parent);
+                $registry->getManager()->flush();
+
+
+
+                $this->addFlash('notice', 'The product "'.$product->getReferenceName().'" was merged into its parent: '.$parent->getReferenceName());
+
+            }
+        }
+
+        if (count($documents) > 1) {
+            $this->addFlash('notice', 'The product "'.$product->getReferenceName().'" contains more than 1 docs for merge. Aborting');
+        }
+
+
+        return $this->redirectToRoute('admin_tools_merge_products_child_documents');
     }
 }
