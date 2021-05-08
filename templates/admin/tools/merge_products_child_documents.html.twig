@@ -1,0 +1,69 @@
+{% trans_default_domain easyadmin_config('translation_domain') %}
+{% extends easyadmin_config('design.templates.layout') %}
+
+{% block title %}Tools{% endblock %}
+
+{% block body_class 'page-blank' %}
+
+{% block content %}
+    <div class="content">
+        <section class="content-header ">
+            <div class="d-flex flex-row justify-content-between align-content-center w-100">
+                <div class="content-header-title">
+                    <h1 class="title">   Merge products</h1>
+                </div>
+
+            </div>
+
+
+
+        </section>
+
+        <section id="main" class="content-body">
+
+            <div class="container" style="display: flex">
+                <div class="col-md-6">
+                   <p>
+                       This list show a list of products that have not any child. Select the ones that must be merged as a document for its parent
+                   </p>
+                    <ul class="list-unstyled list-inline flex-column" style="display: flex">
+                        {% for product in products %}
+                            <li class="list-group-horizontal mt-4">
+                                <p>
+                                    <b>{{ product.referenceName }}</b> (child of: {{ product.parent }})
+                                    <br>
+                                    this product contains the following documents:
+                                    {% for doc in product.documentCollectionInclusive %}
+                                        {{ doc.title }} ({{ doc.id   }})
+                                        <ul>
+                                            {% for item in doc.getDocuments  %}
+                                               <li> {{ item.lang }} - <a href="{{ vich_uploader_asset(item.file) }}">{{ item.file }}</a> </li>
+                                            {% endfor %}
+                                        </ul>
+
+
+                                    {% endfor %}
+                                </p>
+                                <a href="{{ path('admin_tools_merge_product_as_child_document', {id: product.id}) }}"
+nt                                class="btn btn-primary">Merge as Document</a>
+                                <hr>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+
+
+
+            </div>
+
+
+
+        </section>
+
+
+
+    </div>
+
+
+{% endblock %}
