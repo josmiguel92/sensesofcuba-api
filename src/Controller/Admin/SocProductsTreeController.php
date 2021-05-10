@@ -147,7 +147,7 @@ class SocProductsTreeController extends AbstractController
                 $this->addFlash('danger', $error->getMessage());
             }
         }
-        
+
         return $this->render('soc_products_tree/new_edit.html.twig', [
            'product' => $product,
            'form' => $form->createView(),
@@ -232,7 +232,9 @@ class SocProductsTreeController extends AbstractController
         return $onMigration;
     }
 
-    public static function migrateTranslatedDocumentIntoDocumentCollection(SocProduct $product, AbstractController $controller): bool
+    public static function migrateTranslatedDocumentIntoDocumentCollection(
+        SocProduct $product,
+        AbstractController $controller): bool
     {
         $onMigration = false;
         //Migrating from isolated document to documentCollection structure
@@ -241,7 +243,7 @@ class SocProductsTreeController extends AbstractController
             $product->setTranslatedDocument(null);
             $controller->addFlash(
                 'warning',
-                'This product was updated automatically to include the linked document
+                'This product ('. $product->getId().' - '.$product->getReferenceName().') was updated automatically to include the linked document
                 as one item of its Document Collection'
             );
             $onMigration = true;

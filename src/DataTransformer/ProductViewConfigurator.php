@@ -96,8 +96,8 @@ class ProductViewConfigurator
 
 
             if (!$shouldHideThisDoc && $shouldShowThisDoc) {
-                $title = $doc->getTranslation($this->lang) ? $doc->getTranslation($this->lang)->getTitle() : null;
-                $file = $doc->getTranslation($this->lang) ? $this->uploaderHelper->asset($doc->getTranslation($this->lang), 'file') : null;
+                $title = $doc->translate($this->lang) ? $doc->translate($this->lang)->getTitle() : null;
+                $file = $doc->translate($this->lang) ? $this->uploaderHelper->asset($doc->translate($this->lang), 'file') : null;
 
                 if ($file) {
                     $files[] = [

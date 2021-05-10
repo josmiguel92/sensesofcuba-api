@@ -132,20 +132,19 @@ class TranslatedDocument
                 return $this->getDeFile();
             case 'en':
                 return $this->getEnFile();
-        }
+            }
         return null;
     }
 
     /**
      * @param $lang
-     * @param bool $fallbackEnglish
      * @return SocFile|null
      */
-    public function translate($lang, $fallbackEnglish = false): ?SocFile
+    public function translate($lang): ?SocFile
     {
         $translation = in_array($lang, ['en', 'es', 'de']) ? $this->getTranslation($lang) : null;
 
-        if ($fallbackEnglish && $translation === null) {
+        if ($this->isEnglishGlobalTranslation && $translation === null) {
             return $this->getEnFile();
         }
 

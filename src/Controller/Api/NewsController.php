@@ -40,11 +40,7 @@ class NewsController extends AbstractController
 
         foreach ($news as $item) {
             $fallbackEnglish = $item->isEnglishGlobalTranslation();
-            if (
-                $lang !== 'en'
-                && !$fallbackEnglish
-                && $item->translate($lang, false)->getTitle() === null
-            ) {
+            if ($item->translate($lang)->getTitle() === null) {
                 continue;
             }
 
@@ -53,9 +49,9 @@ class NewsController extends AbstractController
             if (
                 $item->getTranslatedDocument()
                 &&
-                $item->getTranslatedDocument()->translate($lang, $fallbackEnglish)
+                $item->getTranslatedDocument()->translate($lang)
                 &&
-                $filename = $item->getTranslatedDocument()->translate($lang, $fallbackEnglish)->getFileName()
+                $filename = $item->getTranslatedDocument()->translate($lang)->getFileName()
             ) {
                 $file = "uploads/files/" . $filename;
             }

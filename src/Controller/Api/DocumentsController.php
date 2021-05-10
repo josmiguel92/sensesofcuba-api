@@ -46,9 +46,7 @@ class DocumentsController extends AbstractController
 
             $fallbackEnglish = $doc->isEnglishGlobalTranslation();
             if (
-                $lang !== 'en'
-                && !$fallbackEnglish
-                && $doc->translate($lang, false)->getName() === null
+                $doc->translate($lang)->getName() === null
             ) {
                 continue;
             }
@@ -56,9 +54,9 @@ class DocumentsController extends AbstractController
 
             $file = null;
             if (
-                $doc->getTranslatedDocument()->translate($lang, $fallbackEnglish)
+                $doc->getTranslatedDocument()->translate($lang)
                 &&
-                $filename = $doc->getTranslatedDocument()->translate($lang, $fallbackEnglish)->getFileName()
+                $filename = $doc->getTranslatedDocument()->translate($lang)->getFileName()
             ) {
                 $file = "uploads/files/" . $filename;
             }
@@ -75,5 +73,4 @@ class DocumentsController extends AbstractController
 
         return new JsonResponse($items);
     }
-
 }

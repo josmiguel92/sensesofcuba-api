@@ -305,6 +305,8 @@ class AdminToolsController extends AbstractController
         SocProductsTreeController::migrateTranslatedDocumentIntoDocumentCollection($product, $this);
 
         $parent = $product->getParent();
+
+        SocProductsTreeController::migrateTranslatedDocumentIntoDocumentCollection($parent, $this);
         $documents = [];
 
         if ($product->getTranslatedDocument() !== null && $product->getTranslatedDocument()->isEmpty() === false) {
