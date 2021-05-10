@@ -50,7 +50,7 @@ class Document implements TranslatableInterface, TimestampableInterface
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
-    private $importance;
+    private $importance = null;
 
     public function getReferenceName(): string
     {

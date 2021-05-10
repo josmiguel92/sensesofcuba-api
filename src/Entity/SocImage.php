@@ -34,7 +34,7 @@ class SocImage implements TimestampableInterface
     /**
      * @ORM\Column(type="string", length=180, nullable=true)
      */
-    private ?string $imageName;
+    private ?string $imageName = null;
 
     public function getId(): ?int
     {

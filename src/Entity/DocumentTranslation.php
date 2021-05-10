@@ -35,7 +35,7 @@ class DocumentTranslation implements TranslationInterface
     /**
      * @ORM\Column(type="text", nullable=true)
      */
-    private $description;
+    private $description = null;
 
     /**
      * @return mixed

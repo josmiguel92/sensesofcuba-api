@@ -46,7 +46,7 @@ class TranslatedDocument
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $title;
+    private ?string $title = null;
 
     public function getId(): ?int
     {

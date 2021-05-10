@@ -27,17 +27,17 @@ class SocFile implements TimestampableInterface
     /**
     * @Vich\UploadableField(mapping="files", fileNameProperty="fileName")
     */
-    private ?File $file;
+    private ?File $file = null;
 
     /**
      * @ORM\Column(type="string", length=180, nullable=true)
      */
-    private ?string $fileName;
+    private ?string $fileName = null;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private ?string $title;
+    private ?string $title = null;
 
 
 
@@ -105,7 +105,7 @@ class SocFile implements TimestampableInterface
 
     public function isEmpty(): bool
     {
-        if ($this->fileName !== null) {
+        if (($this->fileName ?? null) !== null) {
             return false;
         }
 //        if ($this->title !== null) {
