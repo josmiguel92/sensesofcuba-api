@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use A2lix\AutoFormBundle\Tests\Fixtures\Entity\Product;
 use App\Entity\SocProduct;
+use App\Entity\TranslatedDocument;
 use App\Entity\UsersGroup;
 use App\Form\SocProductType;
 use App\Message\Events\ProductUpdated;
@@ -92,7 +93,6 @@ class SocProductsTreeController extends AbstractController
      */
     public function edit(SocProduct $product, Request $request, MessageBusInterface $bus)
     {
-
         if ($product->getTranslatedDocument() && !$product->getTranslatedDocument()->isEmpty()) {
             $this->migrateTranslatedDocumentIntoDocumentCollection($product, $this);
         }
@@ -234,12 +234,18 @@ class SocProductsTreeController extends AbstractController
 
     public static function migrateTranslatedDocumentIntoDocumentCollection(
         SocProduct $product,
-        AbstractController $controller): bool
+        AbstractController $controller
+    ): bool
     {
         $onMigration = false;
         //Migrating from isolated document to documentCollection structure
         if ($product->getTranslatedDocument() && !$product->getTranslatedDocument()->isEmpty()) {
-            $product->addDocumentCollection($product->getTranslatedDocument());
+            $doc = $product->getTranslatedDocument();
+            if (count($doc->getDocumentsLangs()) == 1) {
+                $doc->setIsEnglishGlobalTranslation(true);
+            }
+            $product->addDocumentCollection($doc);
+            
             $product->setTranslatedDocument(null);
             $controller->addFlash(
                 'warning',
@@ -257,8 +263,16 @@ class SocProductsTreeController extends AbstractController
             $product->getAlternativeTranslatedDocument()
             && !$product->getAlternativeTranslatedDocument()->isEmpty()
         ) {
+            /**
+             * @var TranslatedDocument $alternativeDoc
+             */
             $alternativeDoc = $product->getAlternativeTranslatedDocument();
             $alternativeDoc->setShowForGroups([UsersGroup::DEFAULT_HIDE_GROUP]);
+
+            if (count($alternativeDoc->getDocumentsLangs()) == 1) {
+                $alternativeDoc->setIsEnglishGlobalTranslation(true);
+            }
+
             $product->addDocumentCollection($alternativeDoc);
             $product->setAlternativeTranslatedDocument(null);
             $controller->addFlash(

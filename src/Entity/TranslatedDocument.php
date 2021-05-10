@@ -118,6 +118,28 @@ class TranslatedDocument
         return $docs;
     }
 
+    public function getDocumentsLangs()
+    {
+        $lang = [];
+        foreach ($this->getDocuments() as $doc) {
+            if (isset($doc['lang'])) {
+                switch ($doc['lang']) {
+                    case 'Spanish':
+                        $lang[] = 'es';
+                        break;
+                    case 'German':
+                        $lang[] = 'de';
+                        break;
+                    case 'English':
+                        $lang[] = 'en';
+                        break;
+                }
+            }
+        }
+        return $lang;
+    }
+
+
 
     public function getTranslation($lang): ?SocFile
     {
@@ -132,7 +154,7 @@ class TranslatedDocument
                 return $this->getDeFile();
             case 'en':
                 return $this->getEnFile();
-            }
+        }
         return null;
     }
 
