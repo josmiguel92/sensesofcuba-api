@@ -301,20 +301,23 @@ class AdminToolsController extends AbstractController
         SocProduct $product,
         SocProductRepository $repository,
         ManagerRegistry $registry
-    )
-    {
+    ) {
+        SocProductsTreeController::migrateTranslatedDocumentIntoDocumentCollection($product, $this);
+
         $parent = $product->getParent();
         $documents = [];
 
-        if ($product->getTranslatedDocument()->isEmpty() === false) {
+        if ($product->getTranslatedDocument() !== null && $product->getTranslatedDocument()->isEmpty() === false) {
             $documents[] = $product->getTranslatedDocument();
         }
 
-        if ($product->getDocumentCollection()->isEmpty() === false) {
+
+        if ($product->getDocumentCollection() !== null && $product->getDocumentCollection()->isEmpty() === false) {
             foreach ($product->getDocumentCollection() as $doc) {
                 $documents[] = $doc;
             }
         }
+
 
         if (count($documents) == 0) {
             $this->addFlash('notice', 'The product "'.$product->getReferenceName().'" do not contain documents for merge');
@@ -347,7 +350,6 @@ class AdminToolsController extends AbstractController
 
 
                 $this->addFlash('notice', 'The product "'.$product->getReferenceName().'" was merged into its parent: '.$parent->getReferenceName());
-
             }
         }
 
@@ -355,6 +357,8 @@ class AdminToolsController extends AbstractController
             $this->addFlash('notice', 'The product "'.$product->getReferenceName().'" contains more than 1 docs for merge. Aborting');
         }
 
+
+        SocProductsTreeController::cleanEmptyDocumentFromCollection($product, $this);
 
         return $this->redirectToRoute('admin_tools_merge_products_child_documents');
     }

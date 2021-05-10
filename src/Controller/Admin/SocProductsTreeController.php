@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use A2lix\AutoFormBundle\Tests\Fixtures\Entity\Product;
 use App\Entity\SocProduct;
 use App\Entity\UsersGroup;
 use App\Form\SocProductType;
@@ -91,6 +92,11 @@ class SocProductsTreeController extends AbstractController
      */
     public function edit(SocProduct $product, Request $request, MessageBusInterface $bus)
     {
+
+        if ($product->getTranslatedDocument() && !$product->getTranslatedDocument()->isEmpty()) {
+            $this->migrateTranslatedDocumentIntoDocumentCollection($product, $this);
+        }
+
         $deleteForm = $this->createDeleteForm($product);
         $form = $this->createForm(SocProductType::class, $product);
         $form->handleRequest($request);
@@ -118,46 +124,11 @@ class SocProductsTreeController extends AbstractController
 
                 $product->updateTimestamps();
 
-                $onMigration = false;
-                //Migrating from isolated document to documentCollection structure
-                if ($product->getTranslatedDocument() && !$product->getTranslatedDocument()->isEmpty()) {
-                    $product->addDocumentCollection($product->getTranslatedDocument());
-                    $product->setTranslatedDocument(null);
-                    $onMigration = true;
-                }
+                $this->cleanEmptyDocumentFromCollection($product, $this);
 
-                //Migrating from 'Alternative translated document' to documentCollection
-                /* If any document only for users with the 'alternative price' role
-                this document will be append to documentCollection and set this group mark to it
-                */
-                if (
-                    $product->getAlternativeTranslatedDocument()
-                    && !$product->getAlternativeTranslatedDocument()->isEmpty()
-                ) {
-                    $alternativeDoc = $product->getAlternativeTranslatedDocument();
-                    $alternativeDoc->setShowForGroups([UsersGroup::DEFAULT_HIDE_GROUP]);
-                    $product->addDocumentCollection($alternativeDoc);
-                    $product->setAlternativeTranslatedDocument(null);
-                    $this->addFlash(
-                        'warning',
-                        'This product was updated automatically to include and alternative document
-                        for a specific user group.
-                        Please review the visibility of the documents is correct.'
-                    );
-                    $onMigration = true;
-                }
 
                 foreach ($product->getDocumentCollection() as $item) {
-                    if ($item->isEmpty()) {
-                        if ($product->getDocumentCollection()->contains($item)) {
-                            $product->getDocumentCollection()->removeElement($item);
-                        }
-
-                        $this->getDoctrine()->getManager()->remove($item);
-                        $onMigration = true;
-                    } else {
-                        $item->setSocProduct($product);
-                    }
+                    $item->setSocProduct($product);
                 }
 
                 $this->getDoctrine()->getManager()->persist($product);
@@ -166,12 +137,6 @@ class SocProductsTreeController extends AbstractController
                 if (!$continueEditingAfterSave) {
                     return $this->redirectToRoute('soc_product_index');
                 }
-
-                if ($onMigration)
-                {
-                    return $this->redirectToRoute('soc_product_edit', ['id' => $product->getId()]);
-                }
-
             }
         }
 
@@ -182,7 +147,7 @@ class SocProductsTreeController extends AbstractController
                 $this->addFlash('danger', $error->getMessage());
             }
         }
-
+        
         return $this->render('soc_products_tree/new_edit.html.twig', [
            'product' => $product,
            'form' => $form->createView(),
@@ -243,5 +208,70 @@ class SocProductsTreeController extends AbstractController
         }
 
         return $this->redirectToRoute('soc_product_index');
+    }
+
+    public static function cleanEmptyDocumentFromCollection(SocProduct $product, AbstractController $controller): bool
+    {
+        $onMigration = false;
+        foreach ($product->getDocumentCollection() as $item) {
+            if ($item->isEmpty()) {
+                if ($product->getDocumentCollection()->contains($item)) {
+                    $product->getDocumentCollection()->removeElement($item);
+                }
+
+                $controller->getDoctrine()->getManager()->remove($item);
+
+                $controller->getDoctrine()->getManager()->persist($product);
+                $onMigration = true;
+            }
+        }
+
+        if ($onMigration) {
+            $controller->getDoctrine()->getManager()->flush();
+        }
+        return $onMigration;
+    }
+
+    public static function migrateTranslatedDocumentIntoDocumentCollection(SocProduct $product, AbstractController $controller): bool
+    {
+        $onMigration = false;
+        //Migrating from isolated document to documentCollection structure
+        if ($product->getTranslatedDocument() && !$product->getTranslatedDocument()->isEmpty()) {
+            $product->addDocumentCollection($product->getTranslatedDocument());
+            $product->setTranslatedDocument(null);
+            $controller->addFlash(
+                'warning',
+                'This product was updated automatically to include the linked document
+                as one item of its Document Collection'
+            );
+            $onMigration = true;
+        }
+
+        //Migrating from 'Alternative translated document' to documentCollection
+        /* If any document only for users with the 'alternative price' role
+        this document will be append to documentCollection and set this group mark to it
+        */
+        if (
+            $product->getAlternativeTranslatedDocument()
+            && !$product->getAlternativeTranslatedDocument()->isEmpty()
+        ) {
+            $alternativeDoc = $product->getAlternativeTranslatedDocument();
+            $alternativeDoc->setShowForGroups([UsersGroup::DEFAULT_HIDE_GROUP]);
+            $product->addDocumentCollection($alternativeDoc);
+            $product->setAlternativeTranslatedDocument(null);
+            $controller->addFlash(
+                'warning',
+                'This product was updated automatically to include and alternative document
+                        for a specific user group.
+                        Please review the visibility of the documents is correct.'
+            );
+            $onMigration = true;
+        }
+
+        if ($onMigration) {
+            $controller->getDoctrine()->getManager()->persist($product);
+            $controller->getDoctrine()->getManager()->flush();
+        }
+        return $onMigration;
     }
 }
