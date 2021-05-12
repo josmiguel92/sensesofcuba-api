@@ -52,7 +52,7 @@ security:
 
 
         main_admin:
-            pattern: ^/admin
+            pattern: ^/(admin|dash)
             anonymous: true
             provider: database_users
             form_login:
@@ -79,6 +79,7 @@ security:
 #        - { path: ^/api/reset-password, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api, roles: ROLE_USER }
         - { path: ^/admin, roles: ROLE_EDITOR }
+        - { path: ^/dash, roles: ROLE_EDITOR }
         - { path: ^/profile, roles: ROLE_USER }
         - { path: ^/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         #- { path: ^/, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }

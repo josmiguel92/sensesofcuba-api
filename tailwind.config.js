@@ -2,14 +2,14 @@ const colors = require('tailwindcss/colors')
 
 module.exports = {
     purge: {
-        enabled: true,
+        enabled: false,
         content: ['./assets/**/*.html',
                 './assets/**/*.vue',
                 './assets/**/*.jsx',
                 './templates/**/*.html',
                 './templates/**/*.twig']
     },
-    darkMode: false, // or 'media' or 'class'
+    darkMode: 'class', // or 'media' or 'class'
     theme: {
         extend: {
             height: {
@@ -62,7 +62,7 @@ module.exports = {
             pink: colors.pink,
             green: colors.teal,
             orange: colors.orange,
-            primary: colors.lightBlue,
+            primary: '#f9ce1c',
         },
         fontFamily: {
             display: ['Tenor Sans', 'Georgia', 'serif'],

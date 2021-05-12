@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+
+.btn {
+    @apply px-4 py-2 bg-blue-600 text-white rounded;
+}
+a.nav-link{
+    @apply w-full font-thin uppercase text-gray-500 dark:text-gray-200 flex items-center p-4 my-2 transition-colors duration-200 justify-start hover:text-gray-900;
+}
+a.nav-link.active{
+    @apply bg-gradient-to-r from-white to-yellow-200 border-r-4 border-primary dark:from-gray-700 dark:to-gray-800 border-r-4;
+}
+@tailwind utilities;
