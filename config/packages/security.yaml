@@ -19,6 +19,10 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
+        api_platform:
+            pattern: ^/api/v2/
+            anonymous: true
+
         api_anonymous:
             pattern: ^/api/(register|reset-password)
             anonymous: true
@@ -70,6 +74,7 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
 #        - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/v2/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/(login|register|reset-password), roles: IS_AUTHENTICATED_ANONYMOUSLY }
 #        - { path: ^/api/reset-password, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api, roles: ROLE_USER }
