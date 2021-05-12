@@ -3,14 +3,20 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\DataTransformer\ImageThumbnailer;
 use App\Repository\ProductCategoryRepository;
+use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ApiResource()
  * @ORM\Entity(repositoryClass=ProductCategoryRepository::class)
+ * @Vich\Uploadable()
+ * @ORM\HasLifecycleCallbacks()
  */
 class ProductCategory
 {
@@ -30,6 +36,51 @@ class ProductCategory
      * @ORM\OneToMany(targetEntity=Product::class, mappedBy="category", orphanRemoval=true)
      */
     private $products;
+
+    /**
+     * @Vich\UploadableField(mapping="images", fileNameProperty="imageName")
+     */
+    private ?File $imageFile;
+
+    /**
+     * @ORM\Column(type="string", length=180, nullable=true)
+     */
+    private ?string $imageName = null;
+
+
+    public function getImageName(): ?string
+    {
+        return $this->imageName ?? null;
+    }
+
+    public function setImageName(string $imageName = null): self
+    {
+        $this->imageName = $imageName;
+
+        return $this;
+    }
+
+    /**
+     * @return File
+     */
+    public function getImageFile(): ?File
+    {
+        return $this->imageFile ?? null;
+    }
+
+    /**
+     * @param File|null $file
+     * @return SocImage
+     */
+    public function setImageFile(?File $file = null): self
+    {
+        $this->imageFile = $file;
+        if (null !== $file) {
+            $this->updatedAt = new DateTimeImmutable();
+        }
+        return $this;
+    }
+
 
     public function __construct()
     {
@@ -82,4 +133,28 @@ class ProductCategory
 
         return $this;
     }
+
+
+    public function getThumbnailPath(): string
+    {
+        return 'thumbs/' . $this->imageName;
+    }
+
+    /**
+     * @ORM\PrePersist()
+     * @ORM\PostUpdate()
+     */
+    public function createCustomThumbnail(): ?bool
+    {
+
+        if (isset($this->imageName)) {
+            $uploadDir = __DIR__ . '/../../public/uploads/images/';
+            $thumbnail = new ImageThumbnailer($uploadDir, $this->imageName);
+            return $thumbnail->makeThumb();
+
+        }
+        return false;
+    }
+
+
 }

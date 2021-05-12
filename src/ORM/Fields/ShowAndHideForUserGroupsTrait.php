@@ -1,11 +1,11 @@
 <?php
 
 
-namespace App\Entity\Traits;
+namespace App\ORM\Fields;
 
 use Doctrine\ORM\Mapping as ORM;
 
-trait ShowAndHideForUserGroups
+trait ShowAndHideForUserGroupsTrait
 {
 
 
