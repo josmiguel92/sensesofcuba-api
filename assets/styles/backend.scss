@@ -10,4 +10,18 @@ a.nav-link{
 a.nav-link.active{
     @apply bg-gradient-to-r from-white to-yellow-200 border-r-4 border-primary dark:from-gray-700 dark:to-gray-800 border-r-4;
 }
+
+.alert {
+    @apply flex items-center text-white text-sm font-bold px-4 py-3 relative w-full;
+}
+.alert-info{
+    @apply bg-blue-500;
+}
+.alert-warning{
+    @apply bg-yellow-500;
+}
+.alert-danger{
+    @apply bg-red-500;
+}
+
 @tailwind utilities;
