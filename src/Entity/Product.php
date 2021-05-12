@@ -8,24 +8,28 @@ use App\ORM\Fields\MetadataTrait;
 use App\ORM\Fields\PriorityTrait;
 use App\ORM\Fields\TimestampableTrait;
 use App\ORM\Fields\UniqueIdTrait;
+use App\ORM\Interfaces\MetadataFieldInterface;
 use App\ORM\Interfaces\TranslatableMetadataInterface;
 use App\Repository\ProductRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 /**
  * @ApiResource()
  * @ORM\Entity(repositoryClass=ProductRepository::class)
  * @ORM\HasLifecycleCallbacks
  */
-class Product implements TranslatableMetadataInterface
+class Product implements MetadataFieldInterface, TranslatableMetadataInterface
 {
     use TimestampableTrait;
     use MetadataTrait;
     use ActiveFieldTrait;
     use PriorityTrait;
     use UniqueIdTrait;
+
+    public const ENABLED_LANGUAGES = ['en', 'de'];
 
     /**
      * @ORM\Id
@@ -120,12 +124,18 @@ class Product implements TranslatableMetadataInterface
         return $this;
     }
 
-    public function getLangList(): array
+    public static function getLangList(): array
     {
-        return ['en', 'de'];
+        return self::ENABLED_LANGUAGES;
     }
 
-    public function getTranslatableMetadataNames(): array
+
+    public static function getMetadataFieldTypeList(): array
+    {
+        return ['useDefaultLanguage' => CheckboxType::class];
+    }
+
+    public static function getTranslatableMetadataNames(): array
     {
         return [
             'name',
@@ -144,4 +154,5 @@ class Product implements TranslatableMetadataInterface
 
         return $this;
     }
+
 }

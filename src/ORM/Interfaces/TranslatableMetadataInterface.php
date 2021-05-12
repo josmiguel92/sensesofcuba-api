@@ -11,8 +11,8 @@ interface TranslatableMetadataInterface
 
     public function setMetadata(array $metadata): self;
 
-    public function getLangList(): array;
+    public static function getLangList(): array;
 
-    public function getTranslatableMetadataNames(): array;
+    public static function getTranslatableMetadataNames(): array;
 
 }

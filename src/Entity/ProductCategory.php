@@ -4,11 +4,17 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\DataTransformer\ImageThumbnailer;
+use App\ORM\Fields\MetadataTrait;
+use App\ORM\Fields\PriorityTrait;
+use App\ORM\Fields\TimestampableTrait;
+use App\ORM\Interfaces\MetadataFieldInterface;
+use App\ORM\Interfaces\TranslatableMetadataInterface;
 use App\Repository\ProductCategoryRepository;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
@@ -18,8 +24,12 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  * @Vich\Uploadable()
  * @ORM\HasLifecycleCallbacks()
  */
-class ProductCategory
+class ProductCategory implements MetadataFieldInterface, TranslatableMetadataInterface
 {
+    use MetadataTrait;
+    use TimestampableTrait;
+    use PriorityTrait;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -151,10 +161,27 @@ class ProductCategory
             $uploadDir = __DIR__ . '/../../public/uploads/images/';
             $thumbnail = new ImageThumbnailer($uploadDir, $this->imageName);
             return $thumbnail->makeThumb();
-
         }
         return false;
     }
 
+    public static function getMetadataFieldTypeList(): array
+    {
+        return [
+            'useDefaultLanguage' => CheckboxType::class
+        ];
+    }
 
+    public static function getLangList(): array
+    {
+        return Product::ENABLED_LANGUAGES;
+    }
+
+    public static function getTranslatableMetadataNames(): array
+    {
+        return [
+            'name',
+            'description',
+        ];
+    }
 }

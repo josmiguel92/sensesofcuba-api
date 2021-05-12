@@ -1,0 +1,13 @@
+{% extends 'dash/base.html.twig' %}
+
+{% block title %}Edit Product{% endblock %}
+
+{% block body %}
+    <h1>Edit Product</h1>
+
+    {{ include('dash_product/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('dash_product_index') }}">back to list</a>
+
+    {{ include('dash_product/_delete_form.html.twig') }}
+{% endblock %}

@@ -16,7 +16,7 @@ trait MetadataTrait
 
     protected function createPropertyAccessor(): void
     {
-        if ($this->propertyAccessor instanceof PropertyAccessor === false) {
+        if (!isset($this->propertyAccessor) || $this->propertyAccessor instanceof PropertyAccessor === false) {
             $this->propertyAccessor = PropertyAccess::createPropertyAccessorBuilder()
                 ->disableExceptionOnInvalidPropertyPath()
                 ->getPropertyAccessor();
