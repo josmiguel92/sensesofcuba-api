@@ -1,37 +1,97 @@
-{% extends 'dash/base.html.twig' %}
 
-{% block title %}ProductCategory index{% endblock %}
+<section class="bg-white dark:bg-gray-800 container"
+x-data="{open: false}" >
+    <div class="flex justify-between"  @click="open = !open">
+        <div class=" w-3/4 flex gap-x-2 ">
+            <h1 class="my-4 ml-4 text-xl font-semibold text-gray-800 dark:text-white">Categories</h1>
+            <button type="button" class="w-6 h-6 mt-4 text-base  rounded-full text-white bg-red-500">
+            <span class="p-1">
+                {{ product_categories | length }}
+            </span>
+            </button>
+        </div>
 
-{% block body %}
-    <h1>ProductCategory index</h1>
+        <div class="m-4">
+            <svg class="w-10 h-10"  :class="{ 'transform rotate-180': open === true }"  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
+            </svg>
+        </div>
+    </div>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>ImageName</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for product_category in product_categories %}
-            <tr>
-                <td>{{ product_category.id }}</td>
-                <td>{{ product_category.name }}</td>
-                <td>{{ product_category.imageName }}</td>
-                <td>
-                    <a href="{{ path('dash_product_category_show', {'id': product_category.id}) }}">show</a>
-                    <a href="{{ path('dash_product_category_edit', {'id': product_category.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="4">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <div class="container px-6 py-3 mx-auto" x-show="open">
 
-    <a href="{{ path('dash_product_category_new') }}">Create new</a>
-{% endblock %}
+        <div class="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3 border-b-2 pb-4 mb-4">
+
+            {% for product_category in product_categories %}
+{#                <tr>#}
+{#                    <td>{{ product_category.id }}</td>#}
+{#                    <td>{{ product_category.name }}</td>#}
+{#                    <td>{{ product_category.imageName }}</td>#}
+{#                    <td>#}
+{#                        <a href="{{ path('dash_product_category_show', {'id': product_category.id}) }}">show</a>#}
+{#                        <a href="{{ path('dash_product_category_edit', {'id': product_category.id}) }}">edit</a>#}
+{#                    </td>#}
+{#                </tr>#}
+                <div class="flex max-w-md bg-white shadow-lg rounded-lg overflow-hidden">
+                    <div class="w-1/3 bg-cover"
+                         style="background-image: url('{{ vich_uploader_asset(product_category) }}')"
+{#                         TODO: use thumbnail#}
+{#                         style="background-image: url('{{ asset('/uploads/images/'~product_category.thumbnailPath) }}')"#}
+                    >
+                    </div>
+                    <div class="w-2/3 p-4">
+                        <h1 class="text-gray-900 font-bold text-2xl">
+                            {{ product_category.name }}
+                        </h1>
+
+                        <div class="flex item-center justify-around mt-3">
+{#                            <h1 class="text-gray-700 font-bold text-xl">#}
+{#                                {{ product_category.products.count }}#}
+{#                            </h1>#}
+                            <a href="{{ path('dash_product_category_show', {'id': product_category.id}) }}" class="px-3 py-2 bg-gray-800 text-white text-xs font-bold uppercase rounded">
+                                View details
+                            </a>
+                            <a href="{{ path('dash_product_category_edit', {'id': product_category.id}) }}"class="px-3 py-2 bg-gray-800 text-white text-xs font-bold uppercase rounded">
+                                Edit
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+
+            {% else %}
+                <div class="p-4 bg-white dark:bg-gray-800 w-64 m-auto">
+                    <div class="w-full h-full text-center align-items-end">
+                        <div class="flex h-full flex-col justify-between">
+                            <svg  class="h-12 w-12 mt-4 m-auto text-green-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M4.649 3.084A1 1 0 015.163 4.4 13.95 13.95 0 004 10c0 1.993.416 3.886 1.164 5.6a1 1 0 01-1.832.8A15.95 15.95 0 012 10c0-2.274.475-4.44 1.332-6.4a1 1 0 011.317-.516zM12.96 7a3 3 0 00-2.342 1.126l-.328.41-.111-.279A2 2 0 008.323 7H8a1 1 0 000 2h.323l.532 1.33-1.035 1.295a1 1 0 01-.781.375H7a1 1 0 100 2h.039a3 3 0 002.342-1.126l.328-.41.111.279A2 2 0 0011.677 14H12a1 1 0 100-2h-.323l-.532-1.33 1.035-1.295A1 1 0 0112.961 9H13a1 1 0 100-2h-.039zm1.874-2.6a1 1 0 011.833-.8A15.95 15.95 0 0118 10c0 2.274-.475 4.44-1.332 6.4a1 1 0 11-1.832-.8A13.949 13.949 0 0016 10c0-1.993-.416-3.886-1.165-5.6z" clip-rule="evenodd"/>
+                            </svg>
+
+                            <p class="text-gray-600 dark:text-gray-100 text-md py-2 px-6">
+                                You must add some categories
+                            </p>
+                            <div class="flex items-center justify-between gap-4 w-full mt-8">
+                                <a href="{{ path('dash_product_category_new') }}" class="btn py-2 px-4 w-full">
+                                    Add category
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+
+
+        </div>
+
+        <div class="flex justify-end">
+            <a class="btn btn-sm" href="{{ path('dash_product_category_new') }}">
+                <svg class="h-5 w-5 inline" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"/>
+                </svg>
+                Add category
+            </a>
+        </div>
+    </div>
+
+
+</section>

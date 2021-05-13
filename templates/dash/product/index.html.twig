@@ -3,6 +3,9 @@
 {% block title %}Product index{% endblock %}
 
 {% block body %}
+
+    {{ render(controller('App\\Controller\\Dash\\ProductCategoryController::index')) }}
+
     <h1>Product index</h1>
 
     <table class="table">
