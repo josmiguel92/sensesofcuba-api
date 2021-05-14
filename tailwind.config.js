@@ -48,6 +48,10 @@ module.exports = {
             spacing: {
                 128: '32rem',
             },
+            backgroundImage: (theme) => ({
+                check: "url('base64,data:PHN2ZyB2aWV3Qm94PScwIDAgMTYgMTYnIGZpbGw9J3doaXRlJyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnPjxwYXRoIGQ9J001LjcwNyA3LjI5M2ExIDEgMCAwIDAtMS40MTQgMS40MTRsMiAyYTEgMSAwIDAgMCAxLjQxNCAwbDQtNGExIDEgMCAwIDAtMS40MTQtMS40MTRMNyA4LjU4NiA1LjcwNyA3LjI5M3onLz48L3N2Zz4')",
+                landscape: "url('/images/landscape/2.jpg')",
+            }),
         },
         colors: {
             extend: {},
@@ -72,7 +76,12 @@ module.exports = {
         }
     },
     variants: {
-        extend: {},
+        extend: {
+            backgroundColor: ["checked"],
+            borderColor: ["checked"],
+            inset: ["checked"],
+            zIndex: ["hover", "active"],
+        },
     },
     plugins: [
         require('@tailwindcss/typography'),

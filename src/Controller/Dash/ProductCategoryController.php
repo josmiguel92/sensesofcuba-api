@@ -18,8 +18,12 @@ class ProductCategoryController extends AbstractController
     /**
      * @Route("/", name="dash_product_category_index", methods={"GET"})
      */
-    public function index(ProductCategoryRepository $productCategoryRepository): Response
+    public function index(ProductCategoryRepository $productCategoryRepository, Request $request): Response
     {
+        if ($request->getPathInfo() !== '/_fragment') {
+            return $this->redirectToRoute('dash_product_index');
+        }
+
         return $this->render('dash/product_category/index.html.twig', [
             'product_categories' => $productCategoryRepository->findAll(),
         ]);
@@ -40,6 +44,13 @@ class ProductCategoryController extends AbstractController
             $entityManager->flush();
 
             return $this->redirectToRoute('dash_product_category_index');
+        }
+        if($form->isSubmitted() && !$form->isValid())
+        {
+            foreach ($form->getErrors(true, true) as $error)
+            {
+                $this->addFlash('warning', $error->getMessage());
+            }
         }
 
         return $this->render('dash/product_category/new.html.twig', [

@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\DataTransformer\ImageThumbnailer;
+use App\ORM\Fields\ActiveFieldTrait;
 use App\ORM\Fields\MetadataTrait;
 use App\ORM\Fields\PriorityTrait;
 use App\ORM\Fields\TimestampableTrait;
@@ -15,6 +16,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
@@ -29,6 +32,7 @@ class ProductCategory implements MetadataFieldInterface, TranslatableMetadataInt
     use MetadataTrait;
     use TimestampableTrait;
     use PriorityTrait;
+    use ActiveFieldTrait;
 
     /**
      * @ORM\Id
@@ -172,16 +176,18 @@ class ProductCategory implements MetadataFieldInterface, TranslatableMetadataInt
         ];
     }
 
+    public static function getTranslatableMetadataNames(): array
+    {
+        return [
+            'title' => TextType::class,
+            'description' => TextareaType::class,
+        ];
+    }
+
     public static function getLangList(): array
     {
         return Product::ENABLED_LANGUAGES;
     }
 
-    public static function getTranslatableMetadataNames(): array
-    {
-        return [
-            'name',
-            'description',
-        ];
-    }
+
 }
