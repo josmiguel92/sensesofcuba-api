@@ -94,10 +94,12 @@ class ProductViewConfigurator
                 }
             }
 
-
             if (!$shouldHideThisDoc && $shouldShowThisDoc) {
-                $title = $doc->translate($this->lang) ? $doc->translate($this->lang)->getTitle() : null;
+                $doc->setIsEnglishGlobalTranslation(true);
                 $file = $doc->translate($this->lang) ? $this->uploaderHelper->asset($doc->translate($this->lang), 'file') : null;
+
+                $translationTitle = $doc->getTranslation($this->lang) ? $doc->getTranslation($this->lang)->getTitle() : null;
+                $title = $translationTitle ?? null;
 
                 if ($file) {
                     $files[] = [

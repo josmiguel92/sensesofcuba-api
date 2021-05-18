@@ -60,7 +60,7 @@ class ProductsController extends AbstractController
 
 
         $lang = substr($request->headers->get('Accept-Language'), 0, 2);
-        $lang = in_array($lang, ['en', 'es', 'de', 'fr']) ? $lang : 'en';
+        $lang = in_array($lang, ['en', 'de']) ? $lang : 'en';
 
         $items = [];
 

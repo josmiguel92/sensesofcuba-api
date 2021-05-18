@@ -166,7 +166,9 @@ class TranslatedDocument
     {
         $translation = in_array($lang, ['en', 'es', 'de']) ? $this->getTranslation($lang) : null;
 
-        if ($this->isEnglishGlobalTranslation && $translation === null) {
+        if (
+            $this->isEnglishGlobalTranslation && $translation === null ||
+            ($translation != null && $translation->isEmpty())) {
             return $this->getEnFile();
         }
 

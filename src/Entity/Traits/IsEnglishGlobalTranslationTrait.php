@@ -13,7 +13,7 @@ trait IsEnglishGlobalTranslationTrait
     /**
      * @ORM\Column(type="boolean", nullable=true)
      */
-    private ?bool $isEnglishGlobalTranslation = false;
+    private ?bool $isEnglishGlobalTranslation = true;
 
     /**
      * @return bool
