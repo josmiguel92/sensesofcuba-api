@@ -13,10 +13,10 @@
         "a2lix/translation-form-bundle": "^3.0",
         "api-platform/core": "^2.6",
         "composer/package-versions-deprecated": "1.11.99.1",
-        "doctrine/annotations": "^1.0",
+        "doctrine/annotations": "^1.13",
         "doctrine/doctrine-bundle": "^2.3",
-        "doctrine/doctrine-migrations-bundle": "^3.0",
-        "doctrine/orm": "^2.8",
+        "doctrine/doctrine-migrations-bundle": "^3.1",
+        "doctrine/orm": "^2.9",
         "easycorp/easyadmin-bundle": "^2.3",
         "erusev/parsedown": "^1.7",
         "knplabs/doctrine-behaviors": "^2.2",
@@ -47,7 +47,7 @@
         "symfony/validator": "^5.3",
         "symfony/webpack-encore-bundle": "^1.11",
         "symfony/yaml": "^5.2",
-        "symfonycasts/reset-password-bundle": "^1.7",
+        "symfonycasts/reset-password-bundle": "^1.8",
         "twig/cssinliner-extra": "^3.0",
         "twig/inky-extra": "^3.0",
         "twig/markdown-extra": "^3.0",
@@ -56,7 +56,7 @@
     "require-dev": {
         "symfony/browser-kit": "4.4.*",
         "symfony/css-selector": "4.4.*",
-        "symfony/maker-bundle": "^1.21",
+        "symfony/maker-bundle": "^1.31",
         "symfony/phpunit-bridge": "^5.3"
     },
     "config": {
