@@ -22,6 +22,7 @@ Encore
      */
     .addEntry('app', './assets/app.js')
     .addEntry('backend', './assets/backend.js')
+    .addEntry('backend-texteditor', './assets/backend-texteditor.js')
 
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
     .enableStimulusBridge('./assets/controllers.json')
@@ -70,6 +71,15 @@ Encore
     // uncomment to get integrity="..." attributes on your script & link tags
     // requires WebpackEncoreBundle 1.4 or higher
     .enableIntegrityHashes(Encore.isProduction())
+
+
+    .copyFiles([
+            { from: './node_modules/tinymce/skins', to: 'skins/[path][name].[ext]' },
+            { from: './node_modules/tinymce/langs', to: 'langs/[path][name].[ext]' },
+        ]);
+    // .addExternals({
+    //     tinymce: ['https://cdn.tiny.cloud/1/z0slbjd1c4bl0a75tvm11pqdtd945h4jn0o16uyuslzkkk5p/tinymce/5/tinymce.min.js', '_', 'tinymce'],
+    // })
 
     // uncomment if you're having problems with a jQuery plugin
     //.autoProvidejQuery()
