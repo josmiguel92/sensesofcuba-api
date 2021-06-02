@@ -8,6 +8,15 @@
         {{ encore_entry_link_tags('backend') }}
     {% endblock %}
 
+    <script>
+        // Setting the dark mode class if it's present
+        // On page load or when changing themes, best to add inline in `head` to avoid FOUC
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark')
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+    </script>
 </head>
 <body>
 
@@ -130,6 +139,48 @@
                         </div>
 
                         <div class="relative p-1 flex items-center justify-end w-1/4 ml-5 mr-4 sm:mr-0 sm:right-auto">
+
+                            <div class="relative" x-data="{ open: false, darkMode: darkMode() }">
+                                <!-- Menu toggle button -->
+                                <button class="relative z-10 block p-2 transition-colors duration-200 transform bg-blue-600 rounded-md dark:bg-gray-800 hover:bg-blue-500 dark:hover:bg-gray-700 focus:outline-none focus:bg-blue-500 dark:focus:bg-gray-700"
+                                        @click="open = true"
+                                >
+                                    <!-- Moon -->
+                                    <svg x-show="darkMode.isDark" class="w-6 h-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+                                    </svg>
+
+                                    <!-- Sun -->
+                                    <svg x-show="!darkMode.isDark" class="w-6 h-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+                                    </svg>
+
+                                </button>
+
+                                <!-- Menu list -->
+                                <div class="absolute right-0 z-20 w-48 mt-2 overflow-hidden bg-white rounded-md shadow-xl dark:bg-gray-700"
+                                     x-show="open"
+                                     @click.away="open = false"
+                                     @click="open = false"
+
+                                >
+                                    <a href="#"
+                                       @click="darkMode.setDark()"
+                                       class="block px-4 py-2 text-sm text-gray-800 border-b dark:text-gray-200 dark:border-gray-500 hover:bg-gray-200 dark:hover:bg-gray-600">
+                                        Set Dark mode
+                                    </a>
+                                    <a href="#"
+                                       @click="darkMode.setLight()"
+                                       class="block px-4 py-2 text-sm text-gray-800 border-b dark:text-gray-200 dark:border-gray-500 hover:bg-gray-200 dark:hover:bg-gray-600">
+                                        Set Ligth mode
+                                    </a>
+                                    <a href="#"
+                                       @click="darkMode.setDefault()"
+                                       class="block px-4 py-2 text-sm text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600">
+                                        Follow the OS</a>
+                                </div>
+                            </div>
+
                             <div class="ml-4 flex items-center md:ml-6">
                                 <div class="relative inline-block text-left" x-data="{ open: false }">
                                         <div>
