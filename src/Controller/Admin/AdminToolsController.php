@@ -282,8 +282,9 @@ class AdminToolsController extends AbstractController
         foreach ($allProducts as $product) {
             if (
                 $product->getTranslations()->get('en') === null &&
-                $product->isEnglishGlobalTranslation() &&
-                $product->getTranslations()->get('de') !== null
+                $product->isEnglishGlobalTranslation()
+// &&
+                //$product->getTranslations()->get('de') !== null
             ) {
 
                 $product->translate('en')->setName($product->getReferenceName());
