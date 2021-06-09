@@ -12,13 +12,11 @@ class TranslatableFieldType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        foreach ($options['allowed_lang'] as $lang)
-        {
+        foreach ($options['allowed_lang'] as $lang) {
             $builder
                 ->add($lang, $options['formType'])
             ;
         }
-
     }
 
     public function configureOptions(OptionsResolver $resolver)

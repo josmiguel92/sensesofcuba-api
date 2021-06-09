@@ -4,10 +4,13 @@ namespace App\Controller\Dash;
 
 use App\Entity\ConfigValue;
 use App\Entity\Product;
+use App\Entity\ProductCategory;
 use App\Form\ConfigValueType;
 use App\Form\ProductType;
 use App\Repository\ConfigValueRepository;
+use App\Repository\ProductCategoryRepository;
 use App\Repository\ProductRepository;
+use App\Repository\SocProductRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,9 +33,18 @@ class ConfigController extends AbstractController
             new ConfigValue(),
             ['action' => $this->generateUrl('dash_config_new')]
         );
+
+        $migrationTools = [
+            [
+                'name' => 'Migrate Product Category',
+                'description' => 'Convert the old parent products into categories format' ,
+                'path' => 'dash_config_product_category_migrate'
+            ],
+        ];
         return $this->render('dash/config/index.html.twig', [
             'configValues' => $configValues,
-            'configValuesForm' => $configValuesForm->createView()
+            'configValuesForm' => $configValuesForm->createView(),
+            'migrationTools' => $migrationTools
         ]);
     }
 
@@ -69,7 +81,7 @@ class ConfigController extends AbstractController
 
 
     /**
-     * @Route("/{id}/edit", name="dash_product_category_edit", methods={"POST"})
+     * @Route("/{id}/edit", name="edit", methods={"POST"})
      */
     public function edit(Request $request, ConfigValue $configValue): Response
     {
@@ -81,5 +93,52 @@ class ConfigController extends AbstractController
         }
 
         return $this->redirectToRoute('dash_config_index');
+    }
+
+
+    /**
+     * @Route("/migration/tool/product_category", name="product_category_migrate", methods={"GET"})
+     */
+    public function productCategoryMigrate(
+        SocProductRepository $socProductRepository,
+        ProductCategoryRepository $categoryRepository
+    ): Response {
+        $categoryRaw = $socProductRepository->findBy(['parent' => null]);
+
+        $countMigration = 0;
+        foreach ($categoryRaw as $item) {
+            $category = $categoryRepository->findOneBy(['name' => $item->getReferenceName()]);
+            if (!($category instanceof ProductCategory)) {
+                $category = new ProductCategory();
+                $category->setName($item->getReferenceName())
+                    ->setPriority($item->getImportance())
+                    ->setActive($item->isEnabled())
+                    ->setImageName($item->getImage()->getImageName());
+
+                $category->__set('useDefaultLanguage', $item->isEnglishGlobalTranslation());
+                $category->__set('title', [
+                        'en' => $item->getTranslatedNameOrNull('en'),
+                        'de' => $item->getTranslatedNameOrNull('de'),
+                    ]);
+                $category->__set('description', [
+                        'en' => $item->getTranslatedDescOrNull('en'),
+                        'de' => $item->getTranslatedDescOrNull('de'),
+                    ]);
+
+                $this->getDoctrine()->getManager()->persist($category);
+                $countMigration++;
+            }
+        }
+
+        try {
+            $this->getDoctrine()->getManager()->flush();
+            $this->addFlash('info', "Created $countMigration categories from previous schema");
+        } catch (\Exception $exception) {
+            $this->addFlash('danger', $exception->getMessage());
+        }
+
+
+
+        return $this->redirectToRoute('dash_product_index');
     }
 }

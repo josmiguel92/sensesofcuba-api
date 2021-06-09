@@ -317,6 +317,21 @@ class SocProduct implements TimestampableInterface, TranslatableInterface
         }
     }
 
+
+    /**
+     * @param $lang
+     * @return string|null
+     * @deprecated
+     */
+    public function getTranslatedNameOrNull($lang): ?string
+    {
+        if ($this->translate($lang) !== null && $this->translate($lang)->getName()) {
+            return $this->translate($lang)->getName();
+        } else {
+            return null;
+        }
+    }
+
     /**
      * @param $lang
      * @return string|null

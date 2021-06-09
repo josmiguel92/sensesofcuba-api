@@ -3,6 +3,9 @@
 
     {% if _flash_messages|length > 0 %}
         <div id="flash-messages" class="w-full">
+{#
+.alert-info, alert-warning, alert-danger
+#}
             {% for label, messages in _flash_messages %}
                 {% for message in messages %}
 
