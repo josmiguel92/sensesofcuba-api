@@ -188,11 +188,20 @@ class SocProduct implements TimestampableInterface, TranslatableInterface
         $this->enabled = $enabled;
     }
 
+    /**
+     * @return TranslatedDocument|null
+     * @deprecated
+     */
     public function getTranslatedDocument(): ?TranslatedDocument
     {
         return $this->translatedDocument ?? null;
     }
 
+    /**
+     * @param TranslatedDocument|null $translatedDocument
+     * @return $this
+     * @deprecated
+     */
     public function setTranslatedDocument(?TranslatedDocument $translatedDocument): self
     {
         $this->translatedDocument = $translatedDocument;
@@ -240,6 +249,11 @@ class SocProduct implements TimestampableInterface, TranslatableInterface
         return $this;
     }
 
+    /**
+     * @param string $lang
+     * @return bool
+     * @deprecated
+     */
     public function isAvailableForLang(string $lang): bool
     {
         if ($this->translate($lang, $this->isEnglishGlobalTranslation())->getId() != null) {
@@ -248,7 +262,7 @@ class SocProduct implements TimestampableInterface, TranslatableInterface
 
         if (
             $this->getTranslatedDocument()
-            && $this->getTranslatedDocument()->translate($lang, $this->isEnglishGlobalTranslation())
+            && $this->getTranslatedDocument()->translate($lang)
         ) {
             return true;
         }
@@ -260,10 +274,9 @@ class SocProduct implements TimestampableInterface, TranslatableInterface
     {
         if (
             $this->getTranslatedDocument()
-            && $this->getTranslatedDocument()->translate($lang, $this->isEnglishGlobalTranslation)
+            && $this->getTranslatedDocument()->translate($lang)
             && $filename = $this->getTranslatedDocument()->translate(
-                $lang,
-                $this->isEnglishGlobalTranslation
+                $lang
             )->getFileName()
         ) {
             return 'uploads/files/' . $filename;
@@ -271,7 +284,11 @@ class SocProduct implements TimestampableInterface, TranslatableInterface
         return null;
     }
 
-
+    /**
+     * @param $lang
+     * @return string|null
+     * @deprecated
+     */
     public function getAlternativeTranslatedDocumentFilePathByLang($lang): ?string
     {
         if (
@@ -286,6 +303,11 @@ class SocProduct implements TimestampableInterface, TranslatableInterface
         return null;
     }
 
+    /**
+     * @param $lang
+     * @return string
+     * @deprecated
+     */
     public function getTranslatedNameOrReference($lang): string
     {
         if ($this->translate($lang) !== null && $this->translate($lang)->getName()) {
@@ -295,6 +317,11 @@ class SocProduct implements TimestampableInterface, TranslatableInterface
         }
     }
 
+    /**
+     * @param $lang
+     * @return string|null
+     * @deprecated
+     */
     public function getTranslatedDescOrNull($lang): ?string
     {
         if ($this->translate($lang) !== null && $this->translate($lang)->getDescription()) {
@@ -306,6 +333,7 @@ class SocProduct implements TimestampableInterface, TranslatableInterface
 
     /**
      * @return mixed
+     * @deprecated
      */
     public function getAlternativeTranslatedDocument()
     {
@@ -315,6 +343,7 @@ class SocProduct implements TimestampableInterface, TranslatableInterface
     /**
      * @param mixed $alternativeTranslatedDocument
      * @return SocProduct
+     * @deprecated
      */
     public function setAlternativeTranslatedDocument($alternativeTranslatedDocument): SocProduct
     {
@@ -331,6 +360,10 @@ class SocProduct implements TimestampableInterface, TranslatableInterface
         return $this->documentCollection;
     }
 
+    /**
+     * @return Collection
+     * expectedDeprecation
+     */
     public function getDocumentCollectionInclusive(): Collection
     {
         if ($this->translatedDocument !== null) {

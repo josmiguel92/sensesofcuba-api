@@ -76,6 +76,12 @@ class AdminToolsController extends AbstractController
                     'icon' => 'fa fa-invoice'
                 ],
 
+                [
+                    'name' => 'Complete english title for products using reference name as public title',
+                    'link' => $this->generateUrl('admin_tools_complete_english_title'),
+                    'icon' => 'fa fa-invoice'
+                ],
+
             ]
         ]);
     }
@@ -259,6 +265,38 @@ class AdminToolsController extends AbstractController
         $this->addFlash('notice', "The default users group was created");
 
         return $this->redirectToRoute('admin_tools_index');
+    }
+
+    /**
+     * @Route("/admin_tools_complete_english_title", name="complete_english_title")
+     * @param SocProductRepository $repository
+     * @param ManagerRegistry $registry
+     * @return Response
+     */
+    public function completeEnglishTitle(SocProductRepository $repository)
+    {
+        //show products that have only one children.
+        $allProducts = $repository->findAll();
+
+        $suggestion = [];
+        foreach ($allProducts as $product) {
+            if (
+                $product->getTranslations()->get('en') === null &&
+                $product->isEnglishGlobalTranslation() &&
+                $product->getTranslations()->get('de') !== null
+            ) {
+
+                $product->translate('en')->setName($product->getReferenceName());
+                $product->mergeNewTranslations();
+                $this->getDoctrine()->getManager()->persist($product);
+            }
+        }
+        $this->getDoctrine()->getManager()->flush();
+
+
+        return $this->render('admin/tools/merge_products_child_documents.html.twig', [
+            'products' => $suggestion
+        ]);
     }
 
     /**

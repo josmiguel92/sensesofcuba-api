@@ -39,6 +39,17 @@ class ProductViewConfigurator
         if ($this->user->getHiddenProducts() && $this->user->getHiddenProducts()->contains($this->product)) {
             return false;
         }
+
+        if ($this->lang === 'en' && $this->product->getTranslations()->get($this->lang) === null  && !$this->product->isEnglishGlobalTranslation()) {
+            return false;
+        }
+
+        if ($this->product->getTranslations()->get($this->lang) === null && !$this->product->isEnglishGlobalTranslation()) {
+            return false;
+        }
+        if (!$this->product->isAvailableForLang($this->lang)) {
+            return false;
+        }
         return true;
     }
     public function formatAsArray()
