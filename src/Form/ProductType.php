@@ -23,8 +23,6 @@ class ProductType extends AbstractType
         foreach (Product::getMetadataFieldTypeList() as $field => $formType) {
             $builder->add($field, $formType);
         }
-
-
     }
 
     public function configureOptions(OptionsResolver $resolver)
