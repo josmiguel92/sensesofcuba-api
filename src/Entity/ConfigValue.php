@@ -15,6 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 /**
  * @ApiResource()
  * @ORM\Entity(repositoryClass=ConfigValueRepository::class)
+ * @ORM\HasLifecycleCallbacks()
  */
 class ConfigValue implements MachineNameInterface, MetadataFieldInterface
 {
@@ -38,6 +39,15 @@ class ConfigValue implements MachineNameInterface, MetadataFieldInterface
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $value;
+
+    /**
+     * ConfigValue constructor.
+     */
+    public function __construct()
+    {
+        $this->setActive(false);
+    }
+
 
     public function getId(): ?int
     {

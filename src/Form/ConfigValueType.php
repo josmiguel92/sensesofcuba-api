@@ -14,15 +14,12 @@ class ConfigValueType extends AbstractType
         $builder
             ->add('name')
             ->add('value')
-            ->add('machineName')
-            ->add('metadata')
-            ->add('active')
         ;
 
 
-        foreach (ConfigValue::getMetadataFieldTypeList() as $field => $formType) {
-            $builder->add($field, $formType);
-        }
+//        foreach (ConfigValue::getMetadataFieldTypeList() as $field => $formType) {
+//            $builder->add($field, $formType);
+//        }
     }
 
     public function configureOptions(OptionsResolver $resolver)

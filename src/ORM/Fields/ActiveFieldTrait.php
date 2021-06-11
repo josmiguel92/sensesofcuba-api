@@ -16,12 +16,12 @@ trait ActiveFieldTrait
 
     public function getActive(): ?bool
     {
-        return $this->active;
+        return $this->active ?? false;
     }
 
     public function isActive(): ?bool
     {
-        return $this->active;
+        return $this->getActive();
     }
 
     public function setActive(bool $active = true): self
@@ -33,7 +33,7 @@ trait ActiveFieldTrait
 
     public function toggleActive(): self
     {
-        $this->active = !$this->active;
+        $this->active = !$this->getActive();
 
         return $this;
     }
