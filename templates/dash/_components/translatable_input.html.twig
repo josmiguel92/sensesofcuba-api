@@ -1,0 +1,25 @@
+{# langList: Array of lang names, ex: ['es', 'en']#}
+{# input: to use in form_widget function #}
+<div class="max-w-sm mx-auto space-y-5 md:w-2/3" x-data="{active: '{{ langList[0]}}'}">
+    <nav class="flex flex-col sm:flex-row justify-end">
+        {% for lang in langList %}
+            <button x-on:click.prevent="active = '{{ lang }}'"
+                    x-bind:class="{'bg-gray-200 border-yellow-400': active === '{{ lang }}'}"
+                    class="uppercase text-gray-600 py-1 px-5 block hover:text-yellow-500 focus:outline-none text-gray-500 border-b-2 font-medium border-gray-400"
+            >
+                {{ lang }}</button>
+        {% endfor %}
+    </nav>
+
+    <div>
+        {% for lang in langList %}
+            <div class="relative" x-show="active === '{{ lang }}'" >
+                {{ form_widget(input[lang], {
+                    attr: {
+                        class: 'rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent'
+                    }
+                }) }}
+            </div>
+        {% endfor %}
+    </div>
+</div>

@@ -154,6 +154,11 @@ class ProductCategory implements MetadataFieldInterface, TranslatableMetadataInt
         return 'thumbs/' . $this->imageName;
     }
 
+    public function getThumbnailURL(): string
+    {
+        return 'uploads/images/' . $this->getThumbnailPath();
+    }
+
     /**
      * @ORM\PrePersist()
      * @ORM\PostUpdate()
@@ -188,6 +193,4 @@ class ProductCategory implements MetadataFieldInterface, TranslatableMetadataInt
     {
         return Product::ENABLED_LANGUAGES;
     }
-
-
 }

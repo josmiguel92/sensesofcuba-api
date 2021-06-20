@@ -3,9 +3,13 @@
 {% block title %}New Category of products{% endblock %}
 
 {% block body %}
-    <h1>Create new Category of products</h1>
+    <div class="w-full lg:pr-10 lg:py-6 mb-6 lg:mb-0 flex flex-row justify-between">
+        <h2 class="text-sm title-font text-gray-500 tracking-widest">Create new Category</h2>
+
+        <a href="{{ path('dash_product_category_index') }}">back to list</a>
+    </div>
 
     {{ include('dash/product_category/_form.html.twig') }}
 
-    <a href="{{ path('dash_product_category_index') }}">back to list</a>
+
 {% endblock %}

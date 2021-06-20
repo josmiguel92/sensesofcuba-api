@@ -17,6 +17,7 @@ class ProductCategoryType extends AbstractType
             ->add('active')
             ->add('name')
             ->add('imageFile', VichImageType::class, [
+                'required' => false
             ])
             ->add('priority', IntegerType::class, [
                 'attr' => ['min' => 0, 'max' => 100],
