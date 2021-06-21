@@ -7,8 +7,8 @@
                 <div class="mx-auto md:w-full md:mx-0">
                     <div class="inline-flex items-center space-x-4 w-full">
                         <a href="#" class="block relative">
-                            {% if product_category.id != null %}
-                            <img alt="category image" src="{{ asset(product_category.thumbnailURL) }}" class="mx-auto object-cover rounded-full h-16 w-16 "/>
+                            {% if product_category.id != null and product_category.thumbnailURL != null %}
+                                <img alt="category image" src="{{ asset(product_category.thumbnailURL) }}" class="mx-auto object-cover rounded-full h-16 w-16 "/>
                             {% else %}
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="mx-auto object-cover rounded-full h-16 w-16 ">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14v6m-3-3h6M6 10h2a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2zm10 0h2a2 2 0 002-2V6a2 2 0 00-2-2h-2a2 2 0 00-2 2v2a2 2 0 002 2zM6 20h2a2 2 0 002-2v-2a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2z"/>
@@ -45,7 +45,7 @@
                         Image
                     </h2>
                     <div class="max-w-sm mx-auto md:w-2/3">
-                        <div class=" relative ">
+                        <div class=" relative overflow-x-hidden">
                             {{ form_widget(form.imageFile) }}
 {#                            <input type="text" id="user-info-email" class=" rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent" placeholder="Email"/>#}
                         </div>
@@ -109,20 +109,21 @@
     {{ form_widget(form) }}
     {{ form_end(form) }}
 
-
+    {% if product_category.id != null %}
     <div class="p-4 bg-gray-600 border-t-2 border-red-400 rounded-lg bg-opacity-5">
         <div class="mx-auto md:w-full md:mx-0">
             <div class="inline-flex items-center space-x-4 w-full">
 
 
-                {% if product_category.id != null %}
+
                     {{ include('dash/product_category/_delete_form.html.twig') }}
-                {% endif %}
+
 
                 <p>Delete this category will delete the contained products! This action can not be undone.</p>
             </div>
         </div>
     </div>
+    {% endif %}
 
 </section>
 

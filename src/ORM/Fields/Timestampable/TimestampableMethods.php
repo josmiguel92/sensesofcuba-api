@@ -70,6 +70,10 @@ trait TimestampableMethods
     /**
      * Updates createdAt and updatedAt timestamps.
      */
+    /**
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate ()
+     */
     public function updateTimestamps(): void
     {
         // Create a datetime with microseconds

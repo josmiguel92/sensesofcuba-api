@@ -45,10 +45,8 @@ class ProductCategoryController extends AbstractController
 
             return $this->redirectToRoute('dash_product_category_index');
         }
-        if($form->isSubmitted() && !$form->isValid())
-        {
-            foreach ($form->getErrors(true, true) as $error)
-            {
+        if ($form->isSubmitted() && !$form->isValid()) {
+            foreach ($form->getErrors(true, true) as $error) {
                 $this->addFlash('warning', $error->getMessage());
             }
         }
@@ -78,8 +76,9 @@ class ProductCategoryController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $this->getDoctrine()->getManager()->persist($productCategory);
             $this->getDoctrine()->getManager()->flush();
-
+            $this->addFlash('info', 'The Category was updated successfully');
             return $this->redirectToRoute('dash_product_category_index');
         }
 

@@ -92,6 +92,7 @@ class ProductCategory implements MetadataFieldInterface, TranslatableMetadataInt
         if (null !== $file) {
             $this->updatedAt = new DateTimeImmutable();
         }
+
         return $this;
     }
 
@@ -149,23 +150,22 @@ class ProductCategory implements MetadataFieldInterface, TranslatableMetadataInt
     }
 
 
-    public function getThumbnailPath(): string
+    public function getThumbnailPath(): ?string
     {
-        return 'thumbs/' . $this->imageName;
+        return $this->imageName ? 'thumbs/' . $this->imageName : null;
     }
 
-    public function getThumbnailURL(): string
+    public function getThumbnailURL(): ?string
     {
-        return 'uploads/images/' . $this->getThumbnailPath();
+        return $this->imageName ? 'uploads/images/' . $this->getThumbnailPath() : null;
     }
 
     /**
-     * @ORM\PrePersist()
-     * @ORM\PostUpdate()
+     * @ORM\PostPersist()
+     * @ORM\PostUpdate ()
      */
     public function createCustomThumbnail(): ?bool
     {
-
         if (isset($this->imageName)) {
             $uploadDir = __DIR__ . '/../../public/uploads/images/';
             $thumbnail = new ImageThumbnailer($uploadDir, $this->imageName);

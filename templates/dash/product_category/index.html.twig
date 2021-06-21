@@ -5,7 +5,7 @@ x-data="{open: false}" >
         <div class=" w-3/4 flex gap-x-2 items-center">
             <h1 class="my-4 ml-4 text-xl font-semibold text-gray-800 dark:text-white">Categories</h1>
             <button type="button" class="w-6 h-6 text-base  rounded-full text-white bg-red-500">
-            <span class="p-1">
+            <span class="p-1 text-sm">
                 {{ product_categories | length }}
             </span>
             </button>
@@ -27,7 +27,10 @@ x-data="{open: false}" >
                 <div class="flex max-w-md bg-white shadow-lg rounded-lg overflow-hidden
                     {% if product_category.active == false %}opacity-70{% endif %}">
                     <div class="w-1/3 bg-cover"
-                         style="background-image: url('{{ asset(product_category.thumbnailURL) }}')">
+                        {% if product_category.thumbnailURL != null %}
+                            style="background-image: url('{{ asset(product_category.thumbnailURL) }}')"
+                        {% endif %}
+                    >
                     </div>
                     <div class="w-2/3 p-4 flex flex-col justify-between {% if product_category.active == false %}bg-gray-300{% endif %}">
                         <h1 class="text-gray-900 font-bold text-lg">

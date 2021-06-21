@@ -1,0 +1,25 @@
+{# propertyName: String #}
+{# langList: Array of lang names, ex: ['es', 'en']#}
+{# propertyValue: string #}
+
+<div class="mb-8" x-data="{active: '{{ langList[0]}}'}">
+    <div class="flex mb-4">
+        <a class="flex-grow py-2 text-lg px-1">{{ propertyName }}</a>
+        {% for lang in langList %}
+            <a x-on:click.prevent="active = '{{ lang }}'"
+               x-bind:class="{'bg-gray-200 border-yellow-400': active === '{{ lang }}'}"
+               class="border-b-2 border-gray-300 px-5 py-2 text-sm px-1 uppercase">{{ lang }}</a>
+        {% endfor %}
+    </div>
+    {% for lang in langList %}
+        <p
+            x-show="active === '{{ lang }}'"
+            x-transition:enter="transition ease-out duration-300 origin-top"
+            x-transition:enter-start="opacity-0 transform scale-y-0"
+            x-transition:enter-end="opacity-100 transform scale-y-100"
+            class="leading-relaxed mb-4">
+            {{ propertyValue[lang] }}
+        </p>
+    {% endfor %}
+</div>
+
