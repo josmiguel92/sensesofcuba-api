@@ -55,13 +55,18 @@ class Product implements MetadataFieldInterface, TranslatableMetadataInterface
 
     /**
      * @ORM\ManyToOne(targetEntity=ProductCategory::class, inversedBy="products")
-     * @ORM\JoinColumn(nullable=false)
      */
     private $category;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Attachment::class, mappedBy="product", cascade={"persist"})
+     */
+    private $attachmentCollection;
 
     public function __construct()
     {
         $this->products = new ArrayCollection();
+        $this->attachmentCollection = new ArrayCollection();
         $this->updateTimestamps();
     }
 
@@ -151,6 +156,38 @@ class Product implements MetadataFieldInterface, TranslatableMetadataInterface
     public function setCategory(?ProductCategory $category): self
     {
         $this->category = $category;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Attachment[]
+     */
+    public function getAttachmentCollection(): Collection
+    {
+        return $this->attachmentCollection;
+    }
+
+
+    public function addAttachmentCollection(Attachment $attachment): self
+    {
+        if (!$this->attachmentCollection->contains($attachment)) {
+            $this->attachmentCollection[] = $attachment;
+            $attachment->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAttachmentCollection(Attachment $attachment): self
+    {
+        if ($this->attachmentCollection->contains($attachment)) {
+            $this->attachmentCollection->removeElement($attachment);
+            // set the owning side to null (unless already changed)
+            if ($attachment->getProduct() === $this) {
+                $attachment->setProduct(null);
+            }
+        }
 
         return $this;
     }

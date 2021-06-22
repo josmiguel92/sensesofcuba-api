@@ -39,6 +39,11 @@ class Attachment implements MetadataFieldInterface
      */
     private ?string $fileName = null;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Product::class, inversedBy="attachmentCollection")
+     */
+    private Product $product;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -102,5 +107,25 @@ class Attachment implements MetadataFieldInterface
             'lang' => TextType::class
         ];
     }
+
+    /**
+     * @return mixed
+     */
+    public function getProduct(): Product
+    {
+        return $this->product;
+    }
+
+    /**
+     * @param mixed $product
+     * @return Attachment
+     */
+    public function setProduct(Product $product): Attachment
+    {
+        $this->product = $product;
+        return $this;
+    }
+
+
 
 }

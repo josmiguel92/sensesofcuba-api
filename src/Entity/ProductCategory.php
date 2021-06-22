@@ -193,4 +193,11 @@ class ProductCategory implements MetadataFieldInterface, TranslatableMetadataInt
     {
         return Product::ENABLED_LANGUAGES;
     }
+
+    public function __toString()
+    {
+        return $this->name;
+    }
+
+
 }
