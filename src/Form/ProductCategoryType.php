@@ -35,10 +35,6 @@ class ProductCategoryType extends AbstractType
                 'formType' => $formType,
                 'required' => false
             ]);
-//
-//            foreach (ProductCategory::getLangList() as $lang) {
-//                $builder->add(sprintf("%s:%s", $field, $lang));
-//            }
         }
     }
 
