@@ -137,7 +137,13 @@ class Product implements MetadataFieldInterface, TranslatableMetadataInterface
 
     public static function getMetadataFieldTypeList(): array
     {
-        return ['useDefaultLanguage' => CheckboxType::class];
+        return [
+            'useDefaultLanguage' =>
+                [
+                    'type' => CheckboxType::class,
+                    'options' => ['required' => false]
+                ]
+            ];
     }
 
     public static function getTranslatableMetadataNames(): array
@@ -192,4 +198,8 @@ class Product implements MetadataFieldInterface, TranslatableMetadataInterface
         return $this;
     }
 
+    public function __toString()
+    {
+        return $this->name;
+    }
 }

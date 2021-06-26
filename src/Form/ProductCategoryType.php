@@ -25,16 +25,22 @@ class ProductCategoryType extends AbstractType
             ])
         ;
 
-        foreach (ProductCategory::getMetadataFieldTypeList() as $field => $formType) {
-            $builder->add($field, $formType, ['required' => false]);
+        foreach (ProductCategory::getMetadataFieldTypeList() as $field => $form) {
+            $builder->add($field, $form['type'] ?? null, $form['options'] ?? null);
         }
 
-        foreach (ProductCategory::getTranslatableMetadataNames() as $field => $formType) {
-            $builder->add($field, TranslatableFieldType::class, [
-                'allowed_lang' => ProductCategory::getLangList(),
-                'formType' => $formType,
-                'required' => false
-            ]);
+        foreach (ProductCategory::getTranslatableMetadataNames() as $field => $form) {
+            $builder->add(
+                $field,
+                TranslatableFieldType::class,
+                array_merge(
+                    [
+                    'allowed_lang' => ProductCategory::getLangList(),
+                    'formType' => $form['type'],
+                    ],
+                    $form['options']
+                )
+            );
         }
     }
 

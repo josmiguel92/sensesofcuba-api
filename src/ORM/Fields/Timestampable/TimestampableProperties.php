@@ -13,12 +13,12 @@ use Doctrine\ORM\Mapping as ORM;
 trait TimestampableProperties
 {
     /**
-     * @ORM\Column(type="date_immutable")
+     * @ORM\Column(type="datetime")
      */
     protected $createdAt;
 
     /**
-     * @ORM\Column(type="date_immutable")
+     * @ORM\Column(type="datetime")
      */
     protected $updatedAt;
 }

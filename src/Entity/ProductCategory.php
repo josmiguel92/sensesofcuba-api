@@ -177,15 +177,24 @@ class ProductCategory implements MetadataFieldInterface, TranslatableMetadataInt
     public static function getMetadataFieldTypeList(): array
     {
         return [
-            'useDefaultLanguage' => CheckboxType::class
+            'useDefaultLanguage' => [
+                'type' => CheckboxType::class,
+                'options' => ['required' => false],
+            ]
         ];
     }
 
     public static function getTranslatableMetadataNames(): array
     {
         return [
-            'title' => TextType::class,
-            'description' => TextareaType::class,
+            'title' => [
+                'type' => TextType::class,
+                'options' => ['required' => false],
+            ],
+            'description' => [
+                'type' => TextareaType::class,
+                'options' => ['required' => false],
+            ],
         ];
     }
 

@@ -17,7 +17,6 @@ class ProductType extends AbstractType
             ->add('name')
             ->add('active')
             ->add('priority')
-            ->add('uniqueId')
             ->add('parent')
             ->add('category')
             ->add('attachmentCollection', CollectionType::class, [
@@ -27,11 +26,12 @@ class ProductType extends AbstractType
                 'delete_empty' => true,
                 'prototype' => true,
                 'entry_options' => ['label' => false],
+                'by_reference' => false
             ])
         ;
 
-        foreach (Product::getMetadataFieldTypeList() as $field => $formType) {
-            $builder->add($field, $formType);
+        foreach (Product::getMetadataFieldTypeList() as $field => $form) {
+            $builder->add($field, $form['type'] ?? null, $form['options'] ?? null);
         }
     }
 

@@ -15,7 +15,6 @@ export default class extends Controller {
     {
 
         this.addBtn = this.element.querySelector("[data-name='addAttachment']");
-        this.delBtn = this.element.querySelector("[data-name='deleteAttachment']");
         this.collectionContainer = this.element.querySelector("[data-prototype]")
         this.fieldPrototype = this.collectionContainer.dataset.prototype;
         this.counter = this.collectionContainer.dataset['counter'] || this.collectionContainer.children.length;
@@ -23,11 +22,11 @@ export default class extends Controller {
         this.addBtn.addEventListener('click',this.addField.bind(this));
 
 
-        // this.delBtn.addEventListener('click',this.delField());
 
     }
 
-    addField () {
+    addField()
+    {
         // grab the prototype template
         let newWidget = this.fieldPrototype;
         // replace the "__name__" used in the id and name of the prototype
@@ -44,12 +43,33 @@ export default class extends Controller {
         // create a new list element and add it to the list
         let newElem = document.createElement('div');
         newElem.innerHTML = newWidget;
+        newElem.setAttribute('class', "border-2 border-gray-200 margin-2");
 
         this.collectionContainer.append(newElem);
+        let delLink = document.createElement('a');
+        delLink.href = "#";
+        delLink.setAttribute('class', "btn bg-red-600 text-white delete-attachment");
+        delLink.dataset.name = 'deleteAttachment';
+        delLink.innerHTML = "Delete attachment";
+        newElem.append(delLink);
+
+        let btnList = this.element.querySelectorAll("[data-name='deleteAttachment']");
+        let currentDelBtn = btnList[btnList.length - 1];
+
+        currentDelBtn.addEventListener('click',function (e) {
+                    e.stopPropagation();
+            if (e.currentTarget.classList.contains('delete-attachment')) {
+                let container = e.currentTarget.parentElement;
+                console.log(container);
+                if (window.confirm("Do you really want to delete this item?")) {
+                    container.remove();
+                }
+            }
+
+        });
+
+
 
     }
 
-    delField() {
-        return true;
-    }
 }

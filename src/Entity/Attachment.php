@@ -16,6 +16,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\AttachmentRepository")
  * @Vich\Uploadable()
+ * @ORM\HasLifecycleCallbacks
  */
 class Attachment implements MetadataFieldInterface
 {
@@ -41,6 +42,7 @@ class Attachment implements MetadataFieldInterface
 
     /**
      * @ORM\ManyToOne(targetEntity=Product::class, inversedBy="attachmentCollection")
+     * @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
      */
     private Product $product;
 
