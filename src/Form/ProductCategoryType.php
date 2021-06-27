@@ -26,7 +26,7 @@ class ProductCategoryType extends AbstractType
         ;
 
         foreach (ProductCategory::getMetadataFieldTypeList() as $field => $form) {
-            $builder->add($field, $form['type'] ?? null, $form['options'] ?? null);
+            $builder->add($field, $form['type'] ?? null, $form['options'] ?? []);
         }
 
         foreach (ProductCategory::getTranslatableMetadataNames() as $field => $form) {

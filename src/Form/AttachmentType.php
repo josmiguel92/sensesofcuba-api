@@ -17,7 +17,7 @@ class AttachmentType extends AbstractType
         ;
 
         foreach (Attachment::getMetadataFieldTypeList() as $field => $formType) {
-            $builder->add($field, $formType, ['required' => false]);
+            $builder->add($field, $form['type'] ?? null, $form['options'] ?? []);
         }
     }
 
