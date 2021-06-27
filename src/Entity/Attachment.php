@@ -9,7 +9,7 @@ use App\ORM\Interfaces\TranslatableMetadataInterface;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
@@ -42,9 +42,9 @@ class Attachment implements MetadataFieldInterface
 
     /**
      * @ORM\ManyToOne(targetEntity=Product::class, inversedBy="attachmentCollection")
-     * @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
+     * @ORM\JoinColumn(nullable=false)
      */
-    private Product $product;
+    private ?Product $product;
 
     public function getId(): ?int
     {
@@ -105,8 +105,16 @@ class Attachment implements MetadataFieldInterface
     {
         return [
             //check if is simple language attachment. It will be used on every language as it.
-            'multilingual' => CheckboxType::class,
-            'lang' => TextType::class
+            'multilingual' => [
+                'type' => CheckboxType::class,
+                'options' => ['required' => false]
+                ],
+            'lang' => [
+                'type' => ChoiceType::class,
+                'options' => [
+                        'choices'  => array_combine(Product::getLangList(), Product::getLangList()),
+                    ],
+                ]
         ];
     }
 
@@ -122,7 +130,7 @@ class Attachment implements MetadataFieldInterface
      * @param mixed $product
      * @return Attachment
      */
-    public function setProduct(Product $product): Attachment
+    public function setProduct(?Product $product): Attachment
     {
         $this->product = $product;
         return $this;

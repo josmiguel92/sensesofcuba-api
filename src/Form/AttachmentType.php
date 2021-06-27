@@ -13,10 +13,12 @@ class AttachmentType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('file', VichImageType::class)
+            ->add('file', VichImageType::class, [
+                'required' => false
+            ])
         ;
 
-        foreach (Attachment::getMetadataFieldTypeList() as $field => $formType) {
+        foreach (Attachment::getMetadataFieldTypeList() as $field => $form) {
             $builder->add($field, $form['type'] ?? null, $form['options'] ?? []);
         }
     }

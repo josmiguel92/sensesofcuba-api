@@ -20,8 +20,7 @@ export default class extends Controller {
         this.counter = this.collectionContainer.dataset['counter'] || this.collectionContainer.children.length;
 
         this.addBtn.addEventListener('click',this.addField.bind(this));
-
-
+        this.collectionContainer.children.forEach((e) => this.addDeleteBtn(e));
 
     }
 
@@ -39,25 +38,28 @@ export default class extends Controller {
         // And store it, the length cannot be used if deleting widgets is allowed
         this.collectionContainer.dataset['counter'] = this.counter;
 
-        console.log(this.counter);
         // create a new list element and add it to the list
         let newElem = document.createElement('div');
         newElem.innerHTML = newWidget;
-        newElem.setAttribute('class', "border-2 border-gray-200 margin-2");
-
+        newElem.setAttribute('class', "border-2 border-gray-200 margin-2 overflow-hidden");
         this.collectionContainer.append(newElem);
+        this.addDeleteBtn(newElem);
+    }
+
+    addDeleteBtn(element)
+    {
         let delLink = document.createElement('a');
         delLink.href = "#";
         delLink.setAttribute('class', "btn bg-red-600 text-white delete-attachment");
         delLink.dataset.name = 'deleteAttachment';
         delLink.innerHTML = "Delete attachment";
-        newElem.append(delLink);
+        element.append(delLink);
 
-        let btnList = this.element.querySelectorAll("[data-name='deleteAttachment']");
+        let btnList = this.collectionContainer.querySelectorAll("[data-name='deleteAttachment']");
         let currentDelBtn = btnList[btnList.length - 1];
 
-        currentDelBtn.addEventListener('click',function (e) {
-                    e.stopPropagation();
+        currentDelBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
             if (e.currentTarget.classList.contains('delete-attachment')) {
                 let container = e.currentTarget.parentElement;
                 console.log(container);
@@ -65,10 +67,7 @@ export default class extends Controller {
                     container.remove();
                 }
             }
-
         });
-
-
 
     }
 

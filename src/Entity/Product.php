@@ -61,7 +61,7 @@ class Product implements MetadataFieldInterface, TranslatableMetadataInterface
     private $category;
 
     /**
-     * @ORM\OneToMany(targetEntity=Attachment::class, mappedBy="product", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity=Attachment::class, mappedBy="product", cascade={"persist", "remove"}, orphanRemoval=true)
      */
     private $attachmentCollection;
 
