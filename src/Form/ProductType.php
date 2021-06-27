@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Attachment;
 use App\Entity\Product;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -17,7 +18,15 @@ class ProductType extends AbstractType
             ->add('name')
             ->add('active')
             ->add('priority')
-            ->add('parent')
+            ->add(
+                'parent',
+//                EntityType::class,
+//                [
+//                    'class' => Product::class,
+//                    'choice_attr' => ['data-category' => fn ($e) => $e->__toSring() ],
+//                    'attr' => ['data-name' => 'test']
+//                ]
+            )
             ->add('category')
             ->add('attachmentCollection', CollectionType::class, [
                 'entry_type' => AttachmentType::class,
@@ -32,6 +41,20 @@ class ProductType extends AbstractType
 
         foreach (Product::getMetadataFieldTypeList() as $field => $form) {
             $builder->add($field, $form['type'] ?? null, $form['options'] ?? null);
+        }
+
+        foreach (Product::getTranslatableMetadataNames() as $field => $form) {
+            $builder->add(
+                $field,
+                TranslatableFieldType::class,
+                array_merge(
+                    [
+                        'allowed_lang' => Product::getLangList(),
+                        'formType' => $form['type'],
+                    ],
+                    $form['options']
+                )
+            );
         }
     }
 

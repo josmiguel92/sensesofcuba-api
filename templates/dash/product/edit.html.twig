@@ -3,11 +3,14 @@
 {% block title %}Edit Product{% endblock %}
 
 {% block body %}
-    <h1>Edit Product</h1>
+    <div class="w-full lg:pr-10 lg:py-6 mb-6 lg:mb-0 flex flex-row justify-between">
+        <h2 class="text-sm title-font text-gray-500 tracking-widest">Edit Product</h2>
+
+        <a  class="text-sm title-font text-gray-500 tracking-widest" href="{{ path('dash_product_index') }}">
+            Back to list
+        </a>
+    </div>
 
     {{ include('dash/product/_form.html.twig', {'button_label': 'Update'}) }}
 
-    <a href="{{ path('dash_product_index') }}">back to list</a>
-
-    {{ include('dash/product/_delete_form.html.twig') }}
 {% endblock %}

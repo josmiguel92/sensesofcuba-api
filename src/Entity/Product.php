@@ -15,6 +15,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 /**
  * @ApiResource()
@@ -68,6 +70,7 @@ class Product implements MetadataFieldInterface, TranslatableMetadataInterface
         $this->products = new ArrayCollection();
         $this->attachmentCollection = new ArrayCollection();
         $this->updateTimestamps();
+        $this->setUniqueId();
     }
 
     public function getId(): ?int
@@ -149,8 +152,14 @@ class Product implements MetadataFieldInterface, TranslatableMetadataInterface
     public static function getTranslatableMetadataNames(): array
     {
         return [
-            'name',
-            'description',
+            'title' => [
+                'type' => TextType::class,
+                'options' => ['required' => false],
+            ],
+            'description' => [
+                'type' => TextareaType::class,
+                'options' => ['required' => false],
+            ],
         ];
     }
 
