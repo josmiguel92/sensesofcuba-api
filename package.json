@@ -1,27 +1,27 @@
 {
     "devDependencies": {
-        "@symfony/stimulus-bridge": "^2.0.0",
-        "@symfony/webpack-encore": "^1.0.0",
+        "@symfony/stimulus-bridge": "^2.1.0",
+        "@symfony/webpack-encore": "^1.5.0",
         "core-js": "^3.0.0",
-        "postcss": "^8.2.4",
-        "postcss-import": "^14.0.0",
-        "postcss-loader": "^5.0.0",
-        "regenerator-runtime": "^0.13.2",
-        "sass": "1.32.8",
-        "sass-loader": "^11.0.1",
+        "postcss": "^8.3.5",
+        "postcss-import": "^14.0.2",
+        "postcss-loader": "^5.3.0",
+        "regenerator-runtime": "^0.13.7",
+        "sass": "^1.35.1",
+        "sass-loader": "^12.1.0",
         "stimulus": "^2.0.0",
-        "copy-webpack-plugin": "^8.1.1",
+        "copy-webpack-plugin": "^9.0.1",
         "file-loader": "^6.2.0",
         "typeahead.js": "^0.11.1",
-        "webpack-notifier": "^1.6.0"
+        "webpack-notifier": "^1.13.0"
     },
     "dependencies": {
-        "@tailwindcss/forms": "^0.2.1",
-        "@tailwindcss/typography": "^0.3.1",
-        "alpinejs": "^3.1",
+        "@tailwindcss/forms": "^0.3.3",
+        "@tailwindcss/typography": "^0.4.1",
+        "alpinejs": "^3.2.1",
         "axios": "^0.21.1",
-        "tailwindcss": "^2.0.2",
-        "tinymce": "^5.7.1"
+        "tailwindcss": "^2.2.4",
+        "tinymce": "^5.8.2"
     },
     "license": "UNLICENSED",
     "private": true,
