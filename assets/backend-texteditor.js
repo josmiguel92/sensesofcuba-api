@@ -9,35 +9,35 @@ import "tinymce/skins/ui/oxide/skin.min.css";
 import "tinymce/skins/ui/oxide/content.min.css";
 
 import "tinymce/icons/default/icons.min";
-import "tinymce/plugins/importcss/plugin.min";
+
+// import "tinymce/plugins/importcss/plugin.min";
 import "tinymce/plugins/table/plugin.min";
 import "tinymce/plugins/link/plugin.min";
 import "tinymce/plugins/hr/plugin.min";
 import "tinymce/plugins/template/plugin.min";
-import "tinymce/plugins/toc/plugin.min";
+// import "tinymce/plugins/toc/plugin.min";
 import "tinymce/plugins/lists/plugin.min";
-import "tinymce/plugins/wordcount/plugin.min";
+// import "tinymce/plugins/wordcount/plugin.min";
 import "tinymce/plugins/imagetools/plugin.min";
 import "tinymce/plugins/image/plugin.min";
 import "tinymce/plugins/quickbars/plugin.min";
-import "tinymce/plugins/print/plugin.min";
-import "tinymce/plugins/preview/plugin.min";
+// import "tinymce/plugins/print/plugin.min";
+// import "tinymce/plugins/preview/plugin.min";
 import "tinymce/plugins/paste/plugin.min";
-import "tinymce/plugins/importcss/plugin.min";
-import "tinymce/plugins/searchreplace/plugin.min";
+// import "tinymce/plugins/searchreplace/plugin.min";
 import "tinymce/plugins/autolink/plugin.min";
-import "tinymce/plugins/code/plugin.min";
+// import "tinymce/plugins/code/plugin.min";
 import "tinymce/plugins/visualblocks/plugin.min";
 import "tinymce/plugins/media/plugin.min";
 import "tinymce/plugins/autosave/plugin.min";
 import "tinymce/plugins/save/plugin.min";
-import "tinymce/plugins/textpattern/plugin.min";
-import "tinymce/plugins/fullpage/plugin.min";
-import "tinymce/plugins/fullscreen/plugin.min";
+// import "tinymce/plugins/textpattern/plugin.min";
+// import "tinymce/plugins/fullpage/plugin.min";
+// import "tinymce/plugins/fullscreen/plugin.min";
 import "tinymce/plugins/textcolor/plugin.min";
 import "tinymce/plugins/insertdatetime/plugin.min";
 import "tinymce/plugins/anchor/plugin.min";
-import "tinymce/plugins/visualchars/plugin.min";
+// import "tinymce/plugins/visualchars/plugin.min";
 import "tinymce/plugins/advlist/plugin.min";
 (function () {
 
@@ -50,7 +50,7 @@ import "tinymce/plugins/advlist/plugin.min";
     tinymce.init({
         selector: 'textarea.__editor',
         language: 'es',
-        plugins: 'print preview paste importcss searchreplace autolink autosave save  code visualblocks visualchars fullscreen image link media template table hr anchor toc insertdatetime advlist lists wordcount imagetools textpattern quickbars',
+        plugins: 'paste autolink autosave save visualblocks image link media template table hr anchor insertdatetime advlist lists imagetools quickbars',
         // imagetools_cors_hosts: ['festhabana.wip', 'festivaldepoesiadelahabana.com'],
         images_upload_url: add_attachment_url,
         images_upload_handler: function (blobInfo, success, failure, progress) {

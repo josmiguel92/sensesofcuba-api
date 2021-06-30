@@ -75,7 +75,7 @@ Encore
 
     .copyFiles([
             { from: './node_modules/tinymce/skins', to: 'skins/[path][name].[ext]' },
-            { from: './node_modules/tinymce/langs', to: 'langs/[path][name].[ext]' },
+            { from: './assets/vendors/tinymce/langs', to: 'langs/[path][name].[ext]' },
         ]);
     // .addExternals({
     //     tinymce: ['https://cdn.tiny.cloud/1/z0slbjd1c4bl0a75tvm11pqdtd945h4jn0o16uyuslzkkk5p/tinymce/5/tinymce.min.js', '_', 'tinymce'],
