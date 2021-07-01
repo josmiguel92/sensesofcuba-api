@@ -1,6 +1,9 @@
 window.darkMode = function () {
     return {
         isDark: (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)),
+        isDefault: !('theme' in localStorage) &&  window.matchMedia('(prefers-color-scheme: dark)').matches,
+        isDarkThemed: localStorage.theme === 'dark',
+        isLightThemed: localStorage.theme === 'light',
         setDark() {
             localStorage.theme = 'dark';
             this.updateTheme()
