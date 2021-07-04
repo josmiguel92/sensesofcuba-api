@@ -1,5 +1,6 @@
 @tailwind base;
 @tailwind components;
+@import 'components/loading';
 
 .btn {
     @apply px-4 py-2 bg-primary text-gray-800 rounded focus:ring-orange-400 focus:ring-offset-orange-200  transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg ;
@@ -30,5 +31,12 @@ a.nav-link.active{
 .alert-danger{
     @apply bg-red-500;
 }
-
+.dash-box{
+    @apply shadow-lg rounded-2xl bg-white dark:bg-gray-700 w-full relative;
+    &-header{
+        @apply font-bold p-4 text-black dark:text-white;
+    }
+    &-content{
+    }
+}
 @tailwind utilities;

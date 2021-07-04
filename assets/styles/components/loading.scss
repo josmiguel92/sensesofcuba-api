@@ -1,0 +1,24 @@
+.loading{
+    position: absolute;
+    right: 3px;
+    top: 3px;
+    height: 2.5rem;
+    width: 2.5rem;
+    &, &::before{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 1px;
+        border: 8px solid transparent;
+        border-color: #f08013 transparent transparent #f08013;
+        border-radius: 50%;
+        animation: rotating-thing 3s cubic-bezier(0.35, -0.14, 0.79, 1.22) infinite;
+        content: " ";
+    }
+
+}
+@keyframes rotating-thing {
+    100% {
+        transform: rotateZ(1turn);
+    }
+}

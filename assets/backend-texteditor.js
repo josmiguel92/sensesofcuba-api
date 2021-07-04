@@ -3,18 +3,17 @@
 // require 'https://cdn.tiny.cloud/1/z0slbjd1c4bl0a75tvm11pqdtd945h4jn0o16uyuslzkkk5p/tinymce/5/tinymce.min.js';
 import tinymce from "tinymce/tinymce.min";
 import "tinymce/themes/silver/theme";
-
 import "tinymce/skins/content/default/content.css";
 import "tinymce/skins/ui/oxide/skin.min.css";
 import "tinymce/skins/ui/oxide/content.min.css";
-
 import "tinymce/icons/default/icons.min";
 
+//PLUGINS
 // import "tinymce/plugins/importcss/plugin.min";
 import "tinymce/plugins/table/plugin.min";
 import "tinymce/plugins/link/plugin.min";
 import "tinymce/plugins/hr/plugin.min";
-import "tinymce/plugins/template/plugin.min";
+// import "tinymce/plugins/template/plugin.min";
 // import "tinymce/plugins/toc/plugin.min";
 import "tinymce/plugins/lists/plugin.min";
 // import "tinymce/plugins/wordcount/plugin.min";
@@ -35,8 +34,8 @@ import "tinymce/plugins/save/plugin.min";
 // import "tinymce/plugins/fullpage/plugin.min";
 // import "tinymce/plugins/fullscreen/plugin.min";
 import "tinymce/plugins/textcolor/plugin.min";
-import "tinymce/plugins/insertdatetime/plugin.min";
-import "tinymce/plugins/anchor/plugin.min";
+// import "tinymce/plugins/insertdatetime/plugin.min";
+// import "tinymce/plugins/anchor/plugin.min";
 // import "tinymce/plugins/visualchars/plugin.min";
 import "tinymce/plugins/advlist/plugin.min";
 (function () {
@@ -50,7 +49,10 @@ import "tinymce/plugins/advlist/plugin.min";
     tinymce.init({
         selector: 'textarea.__editor',
         language: 'es',
-        plugins: 'paste autolink autosave save visualblocks image link media template table hr anchor insertdatetime advlist lists imagetools quickbars',
+        plugins:   [
+            'paste advlist autosave save autolink lists link image ',
+            'visualblocks imagetools quickbars textcolor',
+            'media table hr paste'],
         // imagetools_cors_hosts: ['festhabana.wip', 'festivaldepoesiadelahabana.com'],
         images_upload_url: add_attachment_url,
         images_upload_handler: function (blobInfo, success, failure, progress) {
