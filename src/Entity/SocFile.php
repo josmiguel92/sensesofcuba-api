@@ -114,8 +114,8 @@ class SocFile implements TimestampableInterface
         return true;
     }
 
-    public function __toString(): ?string
+    public function __toString(): string
     {
-        return $this->fileName ?? null;
+        return $this->fileName ?? '';
     }
 }

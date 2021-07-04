@@ -96,9 +96,9 @@ class Attachment implements MetadataFieldInterface
         return true;
     }
 
-    public function __toString(): ?string
+    public function __toString(): string
     {
-        return $this->fileName ?? null;
+        return $this->fileName ?? '';
     }
 
     public static function getMetadataFieldTypeList(): array
