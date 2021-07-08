@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Attachment;
 use App\Entity\Product;
+use App\Entity\ProductCategory;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -20,14 +21,28 @@ class ProductType extends AbstractType
             ->add('priority')
             ->add(
                 'parent',
-//                EntityType::class,
-//                [
-//                    'class' => Product::class,
-//                    'choice_attr' => ['data-category' => fn ($e) => $e->__toSring() ],
+                EntityType::class,
+                [
+                    'class' => Product::class,
+                    'choice_attr' => static function ($choice, $key, $value) {
+                        return ['data-category' => $choice->getName() ];
+                        },
 //                    'attr' => ['data-name' => 'test']
-//                ]
+                    'group_by' => function($choice, $key, $value) {
+//                        if ($choice <= new \DateTime('+3 days')) {
+//                            return 'Soon';
+//                        }
+                        /**
+                         * @var Product $choice
+                         */
+                        return $choice->getCategory() ? $choice->getCategory()->getName() : '';
+                    },
+                    'required' => false
+                ]
             )
-            ->add('category')
+            ->add('category', EntityType::class,[
+                'class' => ProductCategory::class,
+            ])
             ->add('attachmentCollection', CollectionType::class, [
                 'entry_type' => AttachmentType::class,
                 'allow_add' => true,

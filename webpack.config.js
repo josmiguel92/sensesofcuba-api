@@ -51,6 +51,9 @@ Encore
         config.plugins.push('@babel/plugin-proposal-class-properties');
     })
 
+    // // .enableVueLoader()
+    // .enableVueLoader(() => {}, { runtimeCompilerBuild: false })
+
     // enables @babel/preset-env polyfills
     .configureBabelPresetEnv((config) => {
         config.useBuiltIns = 'usage';

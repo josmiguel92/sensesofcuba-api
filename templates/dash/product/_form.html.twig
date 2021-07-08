@@ -1,4 +1,6 @@
+{#{{ dump(form.category.vars.choices) }}#}
 <section class="bg-gray-100 bg-opacity-50 w-2/3 mx-auto max-w-4xl">
+
     {{ form_start(form) }}
     <div class="container mx-auto shadow-md w-full">
 
@@ -37,17 +39,22 @@
         <div class="space-y-6 bg-white">
 
 
-            <div class="items-center w-full p-4 space-y-4 text-gray-500 md:inline-flex md:space-y-0 border-b">
+            <div class="items-center w-full p-4 space-y-4 text-gray-500 md:inline-flex md:space-y-0 border-b"
+                 data-controller="product-category">
 
                 <div class="max-w-sm mx-auto space-y-5 md:w-2/3 flex flex-col items-center">
                     <h2 class="max-w-sm mx-auto mb-2">
                         Category
                     </h2>
-                    {{ form_widget(form.category, {
-                        attr: {
-                            'class': 'rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent',
-                        },
-                    }) }}
+
+                    {% include 'dash/_components/custom_select.html.twig' with {
+                        field: form.category
+                    } %}
+{#                    {{ form_widget(form.category, { #}
+{#                        attr: {#}
+{#                            'class': 'rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent',#}
+{#                        },#}
+{#                    }) }}#}
                 </div>
                 <div class="max-w-sm mx-auto space-y-5 md:w-1/3">
                     <h2 class="max-w-sm mx-auto">
