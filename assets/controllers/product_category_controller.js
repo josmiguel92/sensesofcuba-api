@@ -10,7 +10,39 @@ import { Controller } from 'stimulus';
  * Delete this file or adapt it for your use!
  */
 export default class extends Controller {
-    connect() {
+
+    static targets = [ "category" ];
+
+    connect()
+    {
         // this.element.innerHTML = 'Hello Stimulus! Edit me in assets/controllers/product_category_controller.js';
+        //filter products by selected category
+        this.productSelect = this.element.querySelector("[name='product\[category\]']");
+        this.parentSelect = this.element.querySelector("[name='product\[parent\]']");
+        this.customCategorySelect = this.categoryTarget.querySelector('ul');
+
+        this.customCategorySelect.addEventListener('click', function (event) {
+            this.productSelectUpdate(event)
+        }.bind(this));
+    }
+
+    productSelectUpdate(event)
+    {
+        let listItem = event.target;
+        while (listItem.tagName !== 'LI') {
+            listItem = listItem.parentNode;
+        }
+        let item =  listItem.querySelector('span[data-value-name]');
+        this.activeCategory = item.dataset.valueName;
+
+        let options = this.parentSelect.querySelectorAll('optgroup');
+
+        options.forEach(function (element) {
+            if (element.attributes.label.value !== this.activeCategory) {
+                element.classList.add('hidden');
+            } else {
+                element.classList.remove('hidden');
+            }
+        }.bind(this))
     }
 }
