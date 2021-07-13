@@ -1,8 +1,9 @@
 <?php
 
-
 namespace App\ORM\Fields;
 
+use ApiPlatform\Core\Annotation\ApiProperty;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
@@ -48,6 +49,9 @@ trait MetadataTrait
 
     public function __get($name)
     {
+        if (in_array($name, ['propertyAccessor'])) {
+            return null;
+        }
         $this->createPropertyAccessor();
 
         if (property_exists($this, $name) === true) {

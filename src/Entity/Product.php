@@ -42,11 +42,13 @@ class Product implements MetadataFieldInterface, TranslatableMetadataInterface
 
     /**
      * @ORM\ManyToOne(targetEntity=Product::class, inversedBy="products")
+     * @ORM\JoinColumn (nullable="true", onDelete="SET NULL")
      */
     private ?Product $parent;
 
     /**
      * @ORM\OneToMany(targetEntity=Product::class, mappedBy="parent")
+     * @ORM\JoinColumn (nullable=true)
      */
     private $products;
 

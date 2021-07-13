@@ -6,6 +6,107 @@
 
     {{ render(controller('App\\Controller\\Dash\\ProductCategoryController::index')) }}
 
+
+
+    <section class="bg-white dark:bg-gray-800 container shadow-lg rounded-2xl mt-5">
+        <div class="flex justify-between">
+            <div class=" w-3/4 flex gap-x-2 items-center">
+                <h1 class="my-4 ml-4 text-xl font-semibold text-gray-800 dark:text-white">Products</h1>
+
+            </div>
+
+
+        </div>
+
+        <div class="container px-6 py-3 mx-auto">
+
+            <div class="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-4 border-b-2 pb-4 mb-4">
+
+                {% for product in products %}
+
+                    <div class="flex max-w-md bg-white shadow-lg rounded-lg overflow-hidden
+                    {% if product.active == false %}opacity-70{% endif %}">
+                        <div class="w-1/3 bg-cover"
+{#                            {% if product.thumbnailURL != null %}#}
+{#                                style="background-image: url('{{ asset(product.thumbnailURL) }}')"#}
+{#                            {% endif %}#}
+                        >
+                        </div>
+                        <div class="w-2/3 p-4 flex flex-col justify-between {% if product.active == false %}bg-gray-300{% endif %}">
+                            <h1 class="text-gray-900 font-bold text-lg">
+                                {{ product.name }}
+                            </h1>
+
+                            <div class="flex item-center justify-around mt-3">
+                                {#                            <h1 class="text-gray-700 font-bold text-xl">#}
+                                {#                                {{ product.products.count }}#}
+                                {#                            </h1>#}
+                                <a href="{{ path('dash_product_show', {'id': product.id}) }}" class="px-3 py-2 bg-gray-800 text-white text-xs font-bold uppercase rounded">
+                                    View details
+                                </a>
+                                <a href="{{ path('dash_product_edit', {'id': product.id}) }}"class="px-3 py-2 bg-gray-800 text-white text-xs font-bold uppercase rounded">
+                                    Edit
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+
+                {% else %}
+                    <div class="p-4 bg-white dark:bg-gray-800 w-64 m-auto">
+                        <div class="w-full h-full text-center align-items-end">
+                            <div class="flex h-full flex-col justify-between">
+                                <svg  class="h-12 w-12 mt-4 m-auto text-green-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M4.649 3.084A1 1 0 015.163 4.4 13.95 13.95 0 004 10c0 1.993.416 3.886 1.164 5.6a1 1 0 01-1.832.8A15.95 15.95 0 012 10c0-2.274.475-4.44 1.332-6.4a1 1 0 011.317-.516zM12.96 7a3 3 0 00-2.342 1.126l-.328.41-.111-.279A2 2 0 008.323 7H8a1 1 0 000 2h.323l.532 1.33-1.035 1.295a1 1 0 01-.781.375H7a1 1 0 100 2h.039a3 3 0 002.342-1.126l.328-.41.111.279A2 2 0 0011.677 14H12a1 1 0 100-2h-.323l-.532-1.33 1.035-1.295A1 1 0 0112.961 9H13a1 1 0 100-2h-.039zm1.874-2.6a1 1 0 011.833-.8A15.95 15.95 0 0118 10c0 2.274-.475 4.44-1.332 6.4a1 1 0 11-1.832-.8A13.949 13.949 0 0016 10c0-1.993-.416-3.886-1.165-5.6z" clip-rule="evenodd"/>
+                                </svg>
+
+                                <p class="text-gray-600 dark:text-gray-100 text-md py-2 px-6">
+                                    You must add some products
+                                </p>
+                                <div class="flex items-center justify-between gap-4 w-full mt-8">
+                                    <a href="{{ path('dash_product_new') }}" class="btn py-2 px-4 w-full">
+                                        Add product
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-4 bg-white dark:bg-gray-800 w-64 m-auto">
+                        <div class="w-full h-full text-center align-items-end">
+                            <div class="flex h-full flex-col justify-between">
+                                <svg  class="h-12 w-12 mt-4 m-auto text-green-500" xmlns="http://www.w3.org/2000/svg"  fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"/>  </svg>
+
+                                <p class="text-gray-600 dark:text-gray-100 text-md py-2 px-6">
+                                    You can import categories from the previous Products Tree schema
+                                </p>
+                                <div class="flex items-center justify-between gap-4 w-full mt-8">
+                                    <a href="{#  { path('dash_config_product_migrate') } #}" class="btn py-2 px-4 w-full">
+                                        Import from Previous schema
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+
+
+            </div>
+
+            <div class="flex justify-end">
+                <a class="btn btn-sm py-2 px-6" href="{{ path('dash_product_new') }}">
+                    <svg class="h-5 w-5 inline" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"/>
+                    </svg>
+                    Add Product
+                </a>
+            </div>
+        </div>
+
+
+    </section>
+
     <h1>Product index</h1>
 
     <table class="table">

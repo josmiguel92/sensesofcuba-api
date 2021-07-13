@@ -4,10 +4,12 @@ namespace App\Controller\Dash;
 
 use App\Entity\Product;
 use App\Form\ProductType;
+use App\Message\DeleteProductMessage;
 use App\Repository\ProductRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -81,12 +83,17 @@ class ProductController extends AbstractController
     /**
      * @Route("/{id}", name="dash_product_delete", methods={"POST"})
      */
-    public function delete(Request $request, Product $product): Response
+    public function delete(Request $request, Product $product, MessageBusInterface $bus): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$product->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($product);
-            $entityManager->flush();
+
+        if ($this->isCsrfTokenValid('delete' . $product->getId(), $request->request->get('_token'))) {
+
+            $bus->dispatch(
+                new DeleteProductMessage(
+                    $product->getId(),
+                    $request->request->get('delete_children') ?? false
+                )
+            );
         }
 
         return $this->redirectToRoute('dash_product_index');
