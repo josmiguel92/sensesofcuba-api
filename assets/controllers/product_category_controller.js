@@ -19,8 +19,12 @@ export default class extends Controller {
         //filter products by selected category
         this.productSelect = this.element.querySelector("[name='product\[category\]']");
         this.parentSelect = this.element.querySelector("[name='product\[parent\]']");
-        this.customCategorySelect = this.categoryTarget.querySelector('ul');
+        this.productId = this.element.dataset.productId;
 
+        this.currentOption = this.parentSelect.querySelector('option[value="' + this.productId  + '"]');
+        this.currentOption.classList.add('hidden');
+
+        this.customCategorySelect = this.categoryTarget.querySelector('ul');
         this.customCategorySelect.addEventListener('click', function (event) {
             this.productSelectUpdate(event)
         }.bind(this));

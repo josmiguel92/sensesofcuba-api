@@ -15,5 +15,5 @@ final class CompleteProductDeletionMessage
     {
         return $this->id;
     }
-    
+
 }
