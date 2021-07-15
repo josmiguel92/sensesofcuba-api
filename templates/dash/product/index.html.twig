@@ -82,7 +82,7 @@
                                     You can import categories from the previous Products Tree schema
                                 </p>
                                 <div class="flex items-center justify-between gap-4 w-full mt-8">
-                                    <a href="{#  { path('dash_config_product_migrate') } #}" class="btn py-2 px-4 w-full">
+                                    <a href="{{ path('dash_config_product_migrate') }}" class="btn py-2 px-4 w-full">
                                         Import from Previous schema
                                     </a>
                                 </div>
@@ -107,41 +107,4 @@
 
     </section>
 
-    <h1>Product index</h1>
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Metadata</th>
-                <th>Active</th>
-                <th>Priority</th>
-                <th>UniqueId</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for product in products %}
-            <tr>
-                <td>{{ product.id }}</td>
-                <td>{{ product.name }}</td>
-                <td>{{ product.metadata ? product.metadata|json_encode : '' }}</td>
-                <td>{{ product.active ? 'Yes' : 'No' }}</td>
-                <td>{{ product.priority }}</td>
-                <td>{{ product.uniqueId }}</td>
-                <td>
-                    <a href="{{ path('dash_product_show', {'id': product.id}) }}">show</a>
-                    <a href="{{ path('dash_product_edit', {'id': product.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="7">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="{{ path('dash_product_new') }}">Create new</a>
 {% endblock %}

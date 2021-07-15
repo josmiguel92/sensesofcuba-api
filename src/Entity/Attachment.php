@@ -10,6 +10,7 @@ use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
@@ -114,7 +115,13 @@ class Attachment implements MetadataFieldInterface
                 'options' => [
                         'choices'  => array_combine(Product::getLangList(), Product::getLangList()),
                     ],
-                ]
+                ],
+            'title' => [
+                'type' => TextType::class,
+                'options' => [
+                    'required' => false,
+                    ],
+                ],
         ];
     }
 
