@@ -16,6 +16,7 @@ export default class extends Controller {
         let selectedItem = this.element.querySelector('span[data-selected-value]');
         if (selectedItem !== null) {
             this.valueTarget.innerHTML = selectedItem.dataset.valueName;
+            this.imageTarget.src = selectedItem.parentNode.querySelector("img").src;
         }
         // this.element.innerHTML = 'Hello Stimulus! Edit me in assets/controllers/product_category_controller.js';
     }
@@ -31,12 +32,12 @@ export default class extends Controller {
         let allCheckIcons = listItem.parentNode.querySelectorAll('span.check-icon');
 
         if (item !== null && item.dataset.valueName !== 'undefined') {
-
             //remove previous checkmarks
             allCheckIcons.forEach(value => {value.classList.add('hidden')});
 
             this.valueTarget.innerHTML = item.dataset.valueName;
             this.fieldTarget.querySelector('select').value = item.dataset.valueIndex;
+            this.imageTarget.src = item.parentNode.querySelector("img").src;
             checkIcon.classList.remove('hidden');
         }
 

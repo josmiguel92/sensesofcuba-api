@@ -26,13 +26,8 @@
 
                     <div class="flex max-w-md bg-white shadow-lg rounded-lg overflow-hidden
                     {% if product.active == false %}opacity-70{% endif %}">
-                        <div class="w-1/3 bg-cover"
-{#                            {% if product.thumbnailURL != null %}#}
-{#                                style="background-image: url('{{ asset(product.thumbnailURL) }}')"#}
-{#                            {% endif %}#}
-                        >
-                        </div>
-                        <div class="w-2/3 p-4 flex flex-col justify-between {% if product.active == false %}bg-gray-300{% endif %}">
+
+                        <div class="w-full p-4 flex flex-col justify-between {% if product.active == false %}bg-gray-300{% endif %}">
                             <h1 class="text-gray-900 font-bold text-lg">
                                 {{ product.name }}
                             </h1>
