@@ -18,15 +18,15 @@ class ProductCategoryController extends AbstractController
     /**
      * @Route("/", name="dash_product_category_index", methods={"GET"})
      */
-    public function index(ProductCategoryRepository $productCategoryRepository, Request $request): Response
+    public function index(): Response
     {
-        if ($request->getPathInfo() !== '/_fragment') {
+//        if ($request->getPathInfo() !== '/_fragment') {
             return $this->redirectToRoute('dash_product_index');
-        }
-
-        return $this->render('dash/product_category/index.html.twig', [
-            'product_categories' => $productCategoryRepository->findAll(),
-        ]);
+//        }
+//
+//        return $this->render('dash/product_category/index.html.twig', [
+//            'product_categories' => $productCategoryRepository->findAll(),
+//        ]);
     }
 
     /**

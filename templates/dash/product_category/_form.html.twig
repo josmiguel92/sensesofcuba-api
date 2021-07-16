@@ -111,20 +111,7 @@
     {{ form_end(form) }}
 
     {% if product_category.id != null %}
-    <div class="p-4 bg-gray-600 border-t-2 border-red-400 rounded-lg bg-opacity-5">
-        <div class="mx-auto md:w-full md:mx-0">
-            <div class="inline-flex items-center space-x-4 w-full">
-
-
-
-                    {{ include('dash/product_category/_delete_form.html.twig') }}
-
-
-                <p>Delete this category will delete the contained products, documents and metadata!<br>
-                    This action can not be undone.
-                </p>            </div>
-        </div>
-    </div>
+        {{ include('dash/product_category/_delete_form.html.twig') }}
     {% endif %}
 
 </section>

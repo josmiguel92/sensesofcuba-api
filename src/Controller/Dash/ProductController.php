@@ -5,6 +5,7 @@ namespace App\Controller\Dash;
 use App\Entity\Product;
 use App\Form\ProductType;
 use App\Message\DeleteProductMessage;
+use App\Repository\ProductCategoryRepository;
 use App\Repository\ProductRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,10 +21,12 @@ class ProductController extends AbstractController
     /**
      * @Route("/", name="dash_product_index", methods={"GET"})
      */
-    public function index(ProductRepository $productRepository): Response
+    public function index(ProductRepository $productRepository, ProductCategoryRepository $categoryRepository): Response
     {
+
         return $this->render('dash/product/index.html.twig', [
             'products' => $productRepository->findAll(),
+            'product_categories' => $categoryRepository->findAll(),
         ]);
     }
 
