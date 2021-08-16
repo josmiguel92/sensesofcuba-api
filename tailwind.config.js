@@ -1,6 +1,7 @@
 const colors = require('tailwindcss/colors')
 
 module.exports = {
+    mode: 'jit',
     purge: {
         enabled: false,
         content: ['./assets/**/*.html',
@@ -85,6 +86,7 @@ module.exports = {
     },
     plugins: [
         require('@tailwindcss/typography'),
-        require('@tailwindcss/forms')
+        require('@tailwindcss/forms'),
+        require('daisyui'),
     ],
 }

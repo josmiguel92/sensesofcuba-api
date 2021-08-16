@@ -2,6 +2,41 @@
 
 {% block title %}Product index{% endblock %}
 
+{% block card_product %}
+    <div class="accordion" id="accordion-{{ product.id }}">
+        <div class="card" data-id="{{ product.id }}">
+            <div class="card-header" id="product-{{ product.id }}">
+
+                <h4>
+
+                    {{ product.name }}
+                    {% if product.products | length > 0 %}
+                        <small class="badge-primary badge-pill">
+                            {{ product.products | length }}
+                        </small>
+                    {% endif %}
+
+                </h4>
+
+                {% if product.products | length > 0 %}
+                    <h3 class="mb-0">
+                        <span class="btn btn-link" type="button" data-toggle="collapse" data-target="#children_of-{{ product.id }}"><i class="fa fa-list"></i> View {{ product.products | length }} products inside</span>
+                    </h3>
+                {% endif %}
+
+            </div>
+            <div class="collapse collapsed" id="children_of-{{ product.id }}" data-parent="#accordion-{{ product.id }}">
+                <div class="card-body">
+                    {% for product in product.products %}
+                        {{ block('card_product') }}
+                    {% endfor %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}
+
 {% block body %}
 
     {% include 'dash/product_category/index.html.twig' %}
@@ -50,32 +85,38 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 gap-4 gap-y-5 md:grid-cols-2 lg:grid-cols-4 border-b-2 pb-4 mb-4">
+            <div class="grid grid-cols-1 gap-4 gap-y-5 md:grid-cols-2 border-b-2 pb-4 mb-4">
 
-                {% for product in category.products %}
+                {% for product in category.products%}
 
-                    <div class="flex max-w-2 bg-white shadow-lg rounded-lg overflow-hidden
-                    {% if product.active == false %}opacity-70{% endif %}">
+                    {% if product.parent == null %}
+                        <div class="flex flex-col max-w-2 bg-white shadow-lg rounded-lg overflow-hidden
+                            {% if product.active == false %}opacity-70{% endif %}">
 
-                        <div class="w-full p-4 flex flex-col justify-between {% if product.active == false %}bg-gray-300{% endif %}">
-                            <h1 class="text-gray-900 font-bold text-lg">
-                                {{ product.name }}
-                            </h1>
+                            <div class="w-full p-4 flex justify-between {% if product.active == false %}bg-gray-300{% endif %}">
+                                <h1 class="text-gray-900 font-bold text-lg">
+                                    {{ product.name }}
+                                </h1>
 
-                            <div class="flex item-center justify-around mt-3">
-                                {#                            <h1 class="text-gray-700 font-bold text-xl">#}
-                                {#                                {{ product.products.count }}#}
-                                {#                            </h1>#}
-                                <a href="{{ path('dash_product_show', {'id': product.id}) }}" class="px-3 py-2 bg-gray-800 text-white text-xs font-bold uppercase rounded">
-                                    View details
-                                </a>
-                                <a href="{{ path('dash_product_edit', {'id': product.id}) }}"class="px-3 py-2 bg-gray-800 text-white text-xs font-bold uppercase rounded">
-                                    Edit
-                                </a>
+                                <div class="justify-around">
+                                    {#                            <h1 class="text-gray-700 font-bold text-xl">#}
+                                    {#                                {{ product.products.count }}#}
+                                    {#                            </h1>#}
+
+                                    <a href="{{ path('dash_product_edit', {'id': product.id}) }}"class="px-3 py-2 bg-gray-800 text-white text-xs font-bold uppercase rounded">
+                                        Edit
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="w-full m-4">
+                                {% for product in product.products %}
+                                    {{ block('card_product') }}
+                                {% endfor %}
+
                             </div>
                         </div>
-                    </div>
 
+                    {% endif %}
 
                 {% else %}
                     <div class="p-4 bg-white dark:bg-gray-800 w-64 m-auto">
@@ -97,23 +138,23 @@
                         </div>
                     </div>
 
-                    <div class="p-4 bg-white dark:bg-gray-800 w-64 m-auto">
-                        <div class="w-full h-full text-center align-items-end">
-                            <div class="flex h-full flex-col justify-between">
-                                <svg  class="h-12 w-12 mt-4 m-auto text-green-500" xmlns="http://www.w3.org/2000/svg"  fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"/>  </svg>
+{#                    <div class="p-4 bg-white dark:bg-gray-800 w-64 m-auto">#}
+{#                        <div class="w-full h-full text-center align-items-end">#}
+{#                            <div class="flex h-full flex-col justify-between">#}
+{#                                <svg  class="h-12 w-12 mt-4 m-auto text-green-500" xmlns="http://www.w3.org/2000/svg"  fill="none" viewBox="0 0 24 24" stroke="currentColor">#}
+{#                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"/>  </svg>#}
 
-                                <p class="text-gray-600 dark:text-gray-100 text-md py-2 px-6">
-                                    You can import categories from the previous Products Tree schema
-                                </p>
-                                <div class="flex items-center justify-between gap-4 w-full mt-8">
-                                    <a href="{{ path('dash_config_product_migrate') }}" class="btn py-2 px-4 w-full">
-                                        Import from Previous schema
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+{#                                <p class="text-gray-600 dark:text-gray-100 text-md py-2 px-6">#}
+{#                                    You can import categories from the previous Products Tree schema#}
+{#                                </p>#}
+{#                                <div class="flex items-center justify-between gap-4 w-full mt-8">#}
+{#                                    <a href="{{ path('dash_config_product_migrate') }}" class="btn py-2 px-4 w-full">#}
+{#                                        Import from Previous schema#}
+{#                                    </a>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
                 {% endfor %}
 
 
