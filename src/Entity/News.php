@@ -84,4 +84,13 @@ class News implements TranslatableInterface
 
         return $this;
     }
+
+    /**
+     * @ORM\PrePersist ()
+     * @ORM\PreUpdate()
+     */
+    public function selfUpdateTimestamps()
+    {
+        $this->updateTimestamps();
+    }
 }

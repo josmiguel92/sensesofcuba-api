@@ -5,6 +5,9 @@ namespace App\Entity\Traits;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
+/**
+ *  * @ORM\HasLifecycleCallbacks
+ */
 trait CreatedAtField
 {
     /** @var DateTimeInterface */
@@ -20,17 +23,17 @@ trait CreatedAtField
     private DateTimeInterface $updatedAt;
 
 
-    public function getCreatedAt(): DateTimeInterface
+    public function getCreatedAt(): ?DateTimeInterface
     {
-        return $this->createdAt;
+        return $this->createdAt ?? null;
     }
 
     /**
-     * @return DateTimeInterface
+     * @return DateTimeInterface|null
      */
-    public function getUpdatedAt(): DateTimeInterface
+    public function getUpdatedAt(): ?DateTimeInterface
     {
-        return $this->updatedAt;
+        return $this->updatedAt ?? null;
     }
 
     /**
@@ -42,7 +45,7 @@ trait CreatedAtField
         $dateTime = \DateTime::createFromFormat('U.u', sprintf('%.6F', microtime(true)));
         $dateTime->setTimezone(new \DateTimeZone(date_default_timezone_get()));
 
-        if (null === $this->createdAt) {
+        if (null === $this->getCreatedAt()) {
             $this->createdAt = $dateTime;
         }
 
