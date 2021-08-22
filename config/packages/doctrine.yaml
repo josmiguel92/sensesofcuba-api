@@ -9,7 +9,7 @@ doctrine:
             collate: utf8mb4_unicode_ci
         url: '%env(resolve:DATABASE_URL)%'
         schema_filter: '~^(?!messenger_messages)~'
-        override_url: true
+#        override_url: true
 
     orm:
         auto_generate_proxy_classes: true
