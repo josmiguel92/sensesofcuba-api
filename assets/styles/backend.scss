@@ -2,12 +2,6 @@
 @tailwind components;
 @import 'components/loading';
 
-.btn {
-    @apply px-4 py-2 bg-primary text-gray-800 rounded focus:ring-orange-400 focus:ring-offset-orange-200  transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg ;
- &-sm{
-     @apply p-1;
- }
-}
 a.nav-link{
     @apply w-full font-thin uppercase text-gray-500 dark:text-gray-200 flex items-center p-4 my-2 transition-colors duration-200 justify-start hover:text-gray-900;
     & svg{
@@ -19,18 +13,6 @@ a.nav-link.active{
     @apply bg-gradient-to-r from-white to-yellow-200 border-r-4 border-primary dark:from-gray-700 dark:to-gray-800 border-r-4;
 }
 
-.alert {
-    @apply flex items-center text-white text-sm font-bold px-4 py-3 relative w-full;
-}
-.alert-info{
-    @apply bg-blue-500;
-}
-.alert-warning{
-    @apply bg-yellow-500;
-}
-.alert-danger{
-    @apply bg-red-500;
-}
 .dash-box{
     @apply shadow-lg rounded-2xl bg-white dark:bg-gray-700 w-full relative;
     &-header{
