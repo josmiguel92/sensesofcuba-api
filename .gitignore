@@ -21,7 +21,9 @@
 ###< lexik/jwt-authentication-bundle ###
 
 .idea
-public/
+public/_uploads
+public/uploads
+public/bundles
 /.env.*
 /dist/.env.*
 ###> symfony/phpunit-bridge ###

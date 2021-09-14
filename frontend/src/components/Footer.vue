@@ -64,24 +64,22 @@
                 <div class="col d-flex align-items-center flex-column">
                     <div class="nav flex-column flex-md-row align-items-center justify-content-center">
                         <div class="nav-item">
-                            <a href="#" class="nav-link" v-on:click="openModals(
-                                $t('home.footer.links.imprint'), 
-                                'https://sensesofcuba.com/wp-content/themes/Theme/static_impresum.html')">
+                            <a href="https://sensesofcuba.com/legal-notice/" class="nav-link" target="_blank">
                                 {{ $t('home.footer.links.imprint') }}
                             </a>
                         </div>
-                        <div class="nav-item" v-on:click="openModals(
-                                $t('home.footer.links.privacy_policy'), 
-                                'https://sensesofcuba.com/wp-content/themes/Theme/static_datens.html')">
-                            <a href="#" class="nav-link">{{ $t('home.footer.links.privacy_policy') }}</a>
+                        <div class="nav-item">
+                            <a href="https://sensesofcuba.com/privacy-policy/" class="nav-link" target="_blank">
+                                {{ $t('home.footer.links.privacy_policy') }}
+                            </a>
                         </div>
 <!--                        <div class="nav-item">-->
 <!--                            <a href="#" class="nav-link">{{ $t('home.footer.links.cooperations') }}</a>-->
 <!--                        </div>-->
-                        <div class="nav-item"  v-on:click="openModals(
-                                $t('home.footer.links.general_and_conditions'), 
-                                'https://sensesofcuba.com/wp-content/themes/Theme/static_generalConditions.html')">
-                            <a href="#" class="nav-link">{{ $t('home.footer.links.general_and_conditions') }}</a>
+                        <div class="nav-item">
+                            <a href="https://sensesofcuba.com/general-terms/" class="nav-link" target="_blank">
+                                {{ $t('home.footer.links.general_and_conditions') }}
+                            </a>
                         </div>
                     </div>
                     <small class="copyright mt-4">
