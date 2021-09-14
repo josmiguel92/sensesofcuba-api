@@ -25,6 +25,24 @@
     "brick/math": {
         "version": "0.9.2"
     },
+    "composer/ca-bundle": {
+        "version": "1.2.10"
+    },
+    "composer/composer": {
+        "version": "2.1-dev"
+    },
+    "composer/metadata-minifier": {
+        "version": "1.0.0"
+    },
+    "composer/semver": {
+        "version": "3.2.5"
+    },
+    "composer/spdx-licenses": {
+        "version": "1.5.5"
+    },
+    "composer/xdebug-handler": {
+        "version": "2.0.2"
+    },
     "doctrine/annotations": {
         "version": "1.0",
         "recipe": {
@@ -138,6 +156,9 @@
     "jms/metadata": {
         "version": "2.1.0"
     },
+    "justinrainbow/json-schema": {
+        "version": "5.2.11"
+    },
     "knplabs/doctrine-behaviors": {
         "version": "1.6.0"
     },
@@ -236,6 +257,15 @@
     },
     "ramsey/uuid": {
         "version": "4.1.1"
+    },
+    "react/promise": {
+        "version": "v2.8.0"
+    },
+    "seld/jsonlint": {
+        "version": "1.8.3"
+    },
+    "seld/phar-utils": {
+        "version": "1.1.2"
     },
     "sensio/framework-extra-bundle": {
         "version": "5.2",
@@ -475,6 +505,9 @@
     },
     "symfony/polyfill-php81": {
         "version": "v1.23.0"
+    },
+    "symfony/process": {
+        "version": "v5.3.7"
     },
     "symfony/property-access": {
         "version": "v4.3.4"
