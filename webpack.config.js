@@ -20,6 +20,7 @@ Encore
      * Each entry will result in one JavaScript file (e.g. app.js)
      * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
      */
+    .addEntry('frontend', './assets/frontend/main.js')
     .addEntry('app', './assets/app.js')
     .addEntry('backend', './assets/backend.js')
     .addEntry('backend-texteditor', './assets/backend-texteditor.js')
@@ -52,7 +53,7 @@ Encore
     })
 
     // // .enableVueLoader()
-    // .enableVueLoader(() => {}, { runtimeCompilerBuild: false })
+    .enableVueLoader(() => {}, { runtimeCompilerBuild: false })
 
     // enables @babel/preset-env polyfills
     .configureBabelPresetEnv((config) => {

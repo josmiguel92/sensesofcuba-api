@@ -31,13 +31,10 @@ class DefaultController extends AbstractController
      */
     public function homepage(): \Symfony\Component\HttpFoundation\Response
     {
-        //   return new RedirectResponse('index.html');
-        $file = __DIR__ . '/../../public/index.html';
 
-        if (file_exists($file)) {
-            return new Response(file_get_contents($file));
-        }
-        throw new \Exception('file index.html Not Found.', 500);
+        return $this->render('frontend/index.html.twig', [
+        ]);
+
     }
 
 
@@ -48,7 +45,7 @@ class DefaultController extends AbstractController
     {
         OnJWTAuthenticationSuccess::unsetCookie();
 
-        return new RedirectResponse('index.html');
+        return $this->redirectToRoute('homepage');
     }
 
 
