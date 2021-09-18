@@ -61,6 +61,7 @@ class CreateUserHandler implements MessageHandlerInterface
 
         $user->setPassword($encodedPassword);
         $this->registry->getManager()->persist($user);
+        //Do not catch the duplicated entry exception, to fire the user notification on RegisterController!
         $this->registry->getManager()->flush();
 
         $this->bus->dispatch(new UserRegistered($user->getId()))->with(new DispatchAfterCurrentBusStamp());

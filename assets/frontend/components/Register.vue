@@ -156,7 +156,7 @@ export default {
             }).catch(e => {
                 console.error(e);
                 this.inProgress = false;
-                this.error = e.message;
+                this.error = e.response.data.message !== undefined ? e.response.data.message : e.message;
             })
         }
     },
