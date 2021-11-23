@@ -8,7 +8,7 @@
                         <div class="nav-item">
                             <strong>{{ $t('home.contact.address') }}</strong>
                             <br>
-                            <span>Edificio Bacardi, Oficina 404, Calle Monserrate</span>
+                            <span>Edificio Someillan, Piso 28 (28th Floor), Calle O No. 2 e/ Linea y 17. Vedado</span>
                         </div>
                         <div class="nav-item">
                             <strong>{{ $t('home.contact.phone') }}</strong>
