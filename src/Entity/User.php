@@ -516,6 +516,7 @@ class User implements UserInterface, Serializable
 
     public function unserialize($serialized)
     {
+//        dump($serialized);
         // add $this->salt too if you don't use Bcrypt or Argon2i
         [$this->id, $this->email, $this->password] = unserialize($serialized, ['allowed_classes' => false]);
     }
@@ -563,6 +564,35 @@ class User implements UserInterface, Serializable
         $this->userGroup->removeElement($userGroup);
 
         return $this;
+    }
+
+    public function __unserialize(array $data): void
+    {
+//        dump($data);
+//        dump($data["\x00App\Entity\User\x00id"]);
+        $this->name= $data["\x00App\Entity\User\x00name"];
+        $this->enterprise= $data["\x00App\Entity\User\x00enterprise"];
+        $this->travelAgency= $data["\x00App\Entity\User\x00travelAgency"];
+        $this->country= $data["\x00App\Entity\User\x00country"];
+        $this->web= $data["\x00App\Entity\User\x00web"];
+        $this->email= $data["\x00App\Entity\User\x00email"];
+        $this->roles= [$data["\x00App\Entity\User\x00role"]];
+        $this->subscribedProducts= $data["\x00App\Entity\User\x00subscribedProducts"];
+        $this->hiddenProducts= $data["\x00App\Entity\User\x00hiddenProducts"];
+        $this->wasEnabled= $data["\x00App\Entity\User\x00wasEnabled"];
+        $this->preferedLang= $data["\x00App\Entity\User\x00preferedLang"] ?? 'en';
+        $this->credential= $data["\x00App\Entity\User\x00credential"];
+        $this->passwordResetToken= $data["\x00App\Entity\User\x00passwordResetToken"];
+        $this->passwordRequestedAt= $data["\x00App\Entity\User\x00passwordRequestedAt"];
+        $this->createdAt= $data["\x00App\Entity\User\x00createdAt"];
+        $this->enabled= $data["\x00App\Entity\User\x00enabled"];
+        $this->confirmationToken= $data["\x00App\Entity\User\x00confirmationToken"];
+        $this->confirmedAt= $data["\x00App\Entity\User\x00confirmationToken"];
+//      $this->unserialize($data);
+//      dump($this);
+
+
+        // TODO: Implement __unserialize() method.
     }
 
 

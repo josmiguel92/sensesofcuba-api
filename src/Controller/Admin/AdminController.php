@@ -6,6 +6,8 @@ use App\Entity\ProductNotification;
 use App\Entity\SocProduct;
 use App\Entity\User;
 use App\Message\Events\NotifyUserAboutProductUpdate;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\EasyAdminController;
 use Symfony\Component\Messenger\MessageBusInterface;
 
@@ -25,8 +27,8 @@ class AdminController extends EasyAdminController
      * Send notifications to users from products updates
      *
      * @param array $ids
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws ORMException
+     * @throws OptimisticLockException
      * @throws \Throwable
      */
     public function sendBatchAction(array $ids)
