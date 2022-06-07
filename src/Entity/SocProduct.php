@@ -97,7 +97,7 @@ class SocProduct implements TimestampableInterface, TranslatableInterface
 
     public function getParent(): ?self
     {
-        return $this->parent;
+        return $this->parent ?? null;
     }
 
     public function setParent(?self $parent): self
