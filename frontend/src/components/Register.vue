@@ -175,5 +175,6 @@ export default {
 <style lang="scss" scoped>
 #register-page {
     background-image: url('~/assets/images/hero-loading.jpg');
+    height: 100vh;
 }
 </style>
