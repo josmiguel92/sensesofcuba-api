@@ -69,7 +69,7 @@ class SocProduct implements TimestampableInterface, TranslatableInterface
     private $alternativeTranslatedDocument;
 
     /**
-     * @ORM\OneToMany(targetEntity=TranslatedDocument::class, mappedBy="socProduct", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity=TranslatedDocument::class, mappedBy="socProduct", cascade={"persist","remove"})
      */
     private $documentCollection;
 

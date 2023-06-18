@@ -190,6 +190,37 @@ class SocProductsTreeController extends AbstractController
             $em = $this->getDoctrine()->getManager();
 
             if ($product->getSocProducts()->isEmpty()) {
+
+
+                if($product->getAlternativeTranslatedDocument() !== null)
+                {
+                   $em->remove($product->getAlternativeTranslatedDocument());
+                }
+                if($product->getTranslatedDocument() !== null)
+                {
+                    $em->remove($product->getTranslatedDocument());
+                }
+                if($product->getTranslations() !== null)
+                {
+                    foreach ($product->getTranslations() as $key => $item) {
+                        $em->remove($item);
+                    }
+                    $product->setTranslations([]);
+                }
+                if($product->getDocumentCollection() !== null)
+                {
+                    foreach ($product->getDocumentCollection() as $item) {
+                        $product->removeDocumentCollection($item);
+                        $em->remove($item);
+                    }
+
+                }
+                if($product->getTranslatedDocument() !== null)
+                    foreach ($product->getTranslatedDocument() as $item) {
+                        $em->remove($item);
+                    }
+
+
                 $em->remove($product);
                 $wasError = false;
                 try {
@@ -245,7 +276,7 @@ class SocProductsTreeController extends AbstractController
                 $doc->setIsEnglishGlobalTranslation(true);
             }
             $product->addDocumentCollection($doc);
-            
+
             $product->setTranslatedDocument(null);
             $controller->addFlash(
                 'warning',

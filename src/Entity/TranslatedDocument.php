@@ -24,7 +24,7 @@ class TranslatedDocument
     private ?int $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity=SocProduct::class, inversedBy="documentCollection")
+     * @ORM\ManyToOne(targetEntity=SocProduct::class, inversedBy="documentCollection", cascade={"persist", "remove"})
      */
     private $socProduct;
 
