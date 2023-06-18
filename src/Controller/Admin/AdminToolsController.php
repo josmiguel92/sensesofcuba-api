@@ -64,23 +64,23 @@ class AdminToolsController extends AbstractController
                     'icon' => 'fa fa-user-alt'
                 ],
 
-                [
-                    'name' => 'Create default user group',
-                    'link' => $this->generateUrl('admin_tools_create_default_user_group'),
-                    'icon' => 'fa fa-user-alt'
-                ],
+//                [
+//                    'name' => 'Create default user group',
+//                    'link' => $this->generateUrl('admin_tools_create_default_user_group'),
+//                    'icon' => 'fa fa-user-alt'
+//                ],
 
-                [
-                    'name' => 'Merge products child documents',
-                    'link' => $this->generateUrl('admin_tools_merge_products_child_documents'),
-                    'icon' => 'fa fa-invoice'
-                ],
+//                [
+//                    'name' => 'Merge products child documents',
+//                    'link' => $this->generateUrl('admin_tools_merge_products_child_documents'),
+//                    'icon' => 'fa fa-invoice'
+//                ],
 
-                [
-                    'name' => 'Complete english title for products using reference name as public title',
-                    'link' => $this->generateUrl('admin_tools_complete_english_title'),
-                    'icon' => 'fa fa-invoice'
-                ],
+//                [
+//                    'name' => 'Complete english title for products using reference name as public title',
+//                    'link' => $this->generateUrl('admin_tools_complete_english_title'),
+//                    'icon' => 'fa fa-invoice'
+//                ],
 
             ]
         ]);
