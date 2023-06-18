@@ -27,17 +27,17 @@
                         <div class="nav-item">
                             <strong>{{ $t('home.contact.general_contact') }}</strong>
                             <br>
-                            <span>info@sensesofcuba.com</span>
+                            <span>info[at]sensesofcuba.com</span>
                         </div>
                         <div class="nav-item">
                             <strong>{{ $t('home.contact.sales') }}</strong>
                             <br>
-                            <span>sales@sensesofcuba.com</span>
+                            <span>sales[at]sensesofcuba.com</span>
                         </div>
                         <div class="nav-item">
                             <strong>{{ $t('home.contact.product_management') }}</strong>
                             <br>
-                            <span>product@sensesofcuba.com</span>
+                            <span>product[at]sensesofcuba.com</span>
                         </div>
                     </div>
                 </div>
